@@ -28,3 +28,18 @@ async function run() {
   }
 }
 run();
+
+// Inex pagina proberen te renderen.
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.listen(8000)
+app.set("view engine", "ejs");
+app.use("/static", express.static("static"));
+
+
+app.get("/", onhome)
+
+function onhome(req, res){
+    res.render("index.ejs")
+}
