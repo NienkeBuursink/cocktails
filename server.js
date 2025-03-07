@@ -41,5 +41,5 @@ app.use("/static", express.static("static"));
 app.get("/", onhome)
 
 function onhome(req, res){
-    res.render("index.ejs")
+    res.render("pages/index.ejs") //pages has to be added to search for the index file as it is in a seperate folder 
 }
