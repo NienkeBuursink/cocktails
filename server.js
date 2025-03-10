@@ -39,7 +39,7 @@ app.use("/static", express.static("static"));
 
 
 app.get("/", onhome)
-app.post("/searchCocktail", homePage)
+app.post("/searchCocktail", onhome)
 function onhome(req, res){
     res.render("pages/index.ejs") //pages has to be added to search for the index file as it is in a seperate folder 
 }
