@@ -55,8 +55,13 @@ app.post("/login", loggedIn);
 
 
 function onHome(req, res){
+  try {
     res.render("pages/index.ejs"); //pages has to be added to search for the index file as it is in a seperate folder 
+  } catch (error) {
+    console.log(error);
+  }
 }
+    
 
 function login(req, res){
   try {
