@@ -48,7 +48,7 @@ run();
 // Routes
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/", onHome);
-app.post("/searchCocktail", onhome)
+app.post("/searchCocktail", onHome)
 app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
