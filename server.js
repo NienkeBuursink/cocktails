@@ -48,6 +48,7 @@ run();
 // Routes
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/", onHome);
+app.post("/searchCocktail", onhome)
 app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
@@ -152,5 +153,7 @@ async function loggedIn(req, res) {
 }
 
 
+
 // start server
 app.listen(8000);
+
