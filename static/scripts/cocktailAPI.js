@@ -15,7 +15,7 @@ const filterByAlcoholic = "/filter.php?a="
 
 
 const userinput = "marga" //This is the users input from the html to get search options.
-const URL = baseURL + endPoint + userinput;
+const URL = baseURL + searchCocktailByName + userinput;
 
 console.log(URL)
 
@@ -36,8 +36,6 @@ async function getCharacters() {
 	// 				`;
 	// 	list.insertAdjacentHTML('beforeend', characterListElement);
 	// })
-
-
 		
 }
 
