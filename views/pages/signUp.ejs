@@ -12,20 +12,23 @@
 </header>
 
 <main>
-  <p>Give us all your info so you can log in hhehehehehehe</p>
+  <p>Give us all your info so you can sign up hhehehehehehe</p>
 
   <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
   <!-- This is just for testing bcrypt!!! change this later to your liking :) (until row 32)-->
   <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-  <form id="testform" action="/login" method="POST">
+  <form id="testform" action="/signup" method="POST">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required=""><br><br>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="userPassword" required=""><br><br>
 
-    <input type="submit" value="log in!">
-  </form>          
+    <label for="birthday">Date of birth:</label>
+    <input type="date" id="birthday" name="birthday" required=""><br><br>
+
+    <input type="submit" value="Sign up!">
+</form>          
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
  <!-- until here! -->
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->

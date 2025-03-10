@@ -12,34 +12,31 @@ const popularCocktails = "/popular.php"
 const latestCocktails = "/latest.php"
 const searchByIngredient = "/filter.php?i="
 const filterByAlcoholic = "/filter.php?a="
+const list = document.querySelector('ul')
 
 
-const userinput = "marga" //This is the users input from the html to get search options.
-const URL = baseURL + endPoint + userinput;
 
 console.log(URL)
-
 async function getCharacters() {
-	
+    let userinput = document.getElementById("searchBar").value;
+    const URL = baseURL + searchCocktailByName + userinput;
+	console.log(userinput);
 	const response = await fetch(URL);
     const data = await response.json(); 
-    console.log(data);
-    // allDrinks = data
-    // allDrinks.forEach(function(aDrink) {
-	// 	let drinkList = 
-	// 			`
-	// 						<li>
-	// 							<h2>${aDrink.strDrink}</h2>
-    //                             <p>${aDrink.strInstructions}
-	// 							<img src="${aDrink.strImageSource}" alt="${aDrink.strDrink}">
-	// 						</li>
-	// 				`;
-	// 	list.insertAdjacentHTML('beforeend', characterListElement);
-	// })
-
-
+    console.log(data.drinks);
+    allDrinks = data.drinks
+    allDrinks.forEach(function(aDrink) {
+		let drinkList = 
+				`
+							<li>
+								<h2>${aDrink.strDrink}</h2>
+                                <p>${aDrink.strInstructions}
+								<img src="${aDrink.strDrinkThumb}" alt="${aDrink.strDrink}">
+							</li>
+					`;
+		list.insertAdjacentHTML("beforeend", drinkList)
+	})
 		
 }
-
-getCharacters()
-
+const submitButton = document.querySelector("button");
+submitButton.onclick = getCharacters;
