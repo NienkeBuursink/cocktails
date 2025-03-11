@@ -3,8 +3,8 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 require('dotenv').config();
 const xss = require('xss');
-// const html = xss('<script>alert("xss");</script>');
-// console.log(html);
+const html = xss('<script>alert("xss");</script>');
+console.log(html);
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { MongoClient } = require("mongodb");
@@ -15,6 +15,7 @@ const uri = process.env.URI;
 const client = new MongoClient(uri);
 const db = client.db(process.env.DB_NAME);
 // const collection = db.collection(process.env.DB_collection)
+
 
 
 app.use(express.json());
@@ -87,7 +88,7 @@ function signUp(req, res){
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // signing up with bcrypt
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-async function signedUp(req, res) { // function when submitted form
+async function signedUp(req) { // function when submitted form
   try {
     // Destructure form to use password for hashing and separate the rest
     const { userPassword, ...rest } = req.body; 
@@ -125,6 +126,7 @@ async function signedUp(req, res) { // function when submitted form
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function loggedIn(req, res) {
   try {
+    const { username, userPassword } = req.body;
     console.log(req.body);
 
     // find user in database
