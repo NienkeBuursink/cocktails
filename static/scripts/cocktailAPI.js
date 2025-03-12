@@ -6,17 +6,17 @@ const listByFirstLetter = "/search.php?f=";
 const searchIngredientByName = "/search.php?i=";
 const lookupCocktailById = "/lookup.php?i=";
 const lookupIngredientByID = "lookup.php?iid=";
-const oneRandomSearch = "/random.php"
-const tenRandomSearch = "/randomselection.php"
-const popularCocktails = "/popular.php"
-const latestCocktails = "/latest.php"
-const searchByIngredient = "/filter.php?i="
-const filterByAlcoholic = "/filter.php?a="
-const list = document.querySelector('ul')
+const oneRandomSearch = "/random.php";
+const tenRandomSearch = "/randomselection.php";
+const popularCocktails = "/popular.php";
+const latestCocktails = "/latest.php";
+const searchByIngredient = "/filter.php?i=";
+const filterByAlcoholic = "/filter.php?a=";
+const list = document.querySelector('ul');
 
 
 
-console.log(URL)
+console.log(URL);
 async function getCharacters() {
     let userinput = document.getElementById("searchBar").value;
     const URL = baseURL + searchCocktailByName + userinput;
@@ -24,7 +24,7 @@ async function getCharacters() {
 	const response = await fetch(URL);
     const data = await response.json(); 
     console.log(data.drinks);
-    allDrinks = data.drinks
+    allDrinks = data.drinks;
     allDrinks.forEach(function(aDrink) {
 		let drinkList = 
 				`
@@ -34,7 +34,7 @@ async function getCharacters() {
 								<img src="${aDrink.strDrinkThumb}" alt="${aDrink.strDrink}">
 							</li>
 					`;
-		list.insertAdjacentHTML("beforeend", drinkList)
+		list.insertAdjacentHTML("beforeend", drinkList);
 	})
 		
 }
