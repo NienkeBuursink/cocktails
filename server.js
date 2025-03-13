@@ -88,7 +88,7 @@ function signUp(req, res){
 function detailPage(req, res){
   try {
     console.log(req.body);
-    res.render("pages/detailPage");
+    res.render("pages/detailPage",);
   } catch (error) {
     console.log(error);
   }
