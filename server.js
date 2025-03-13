@@ -45,6 +45,21 @@ async function run() {
 }
 run();
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Session keys
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET ,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+  // Resave is for not resaving the session when nothing changes
+  // SaveUninitialized is for saving each NEW session, even when nothing has changed
+  // Dont forget to add the SESSION_SECRET to your own .env file
+
+  
+}))
+
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -56,6 +71,9 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
+
+
+
 
 
 function onHome(req, res){
@@ -84,35 +102,6 @@ function signUp(req, res){
     console.log(error);
   }
 }
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Session keys
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-app.use(session({
-  resave: false,
-  saveUninitialized: true,
-  secret: process.env.SESSION_SECRET ,
-  // Resave is for not resaving the session when nothing changes
-  // SaveUninitialized is for saving each NEW session, even when nothing has changed
-  // Dont forget to add the SESSION_SECRET to your own .env file
-
-  
-}))
-
-
-// app.get('/', function(req, res, next) {
-//   if (req.session.views) {
-//     req.session.views++
-//     res.setHeader('Content-Type', 'text/html')
-//     res.write('<p>views: ' + req.session.views + '</p>')
-//     res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
-//     res.end()
-//     console.log("if")
-//   } else {
-//     req.session.views = 1
-//     res.end('welcome to the session demo. refresh!')
-//     console.log("else")
-//   }
-// })
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // signing up with bcrypt
@@ -174,7 +163,10 @@ async function signedUp(req, res) { // function when submitted form
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // logging in with bcrypt
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 async function loggedIn(req, res) {
+  
   try {
     const { nameOrMail, userPassword } = req.body;
 
@@ -198,10 +190,12 @@ async function loggedIn(req, res) {
 
     // compare passwords
     const isMatch = await bcrypt.compare(userPassword, user.password);
+    console.log(isMatch)
     if (isMatch) {
-      req.session.userLoggedIn = true
-      console.log("match")
-      // req.session.username = 
+      req.session.userLoggedIn = true;
+      req.session.username = user.username;
+      return res.redirect('/account')
+      console.log("match");
       // When there is a match then a session is made for the user.
     } else{
       console.log("nomatch")
@@ -211,22 +205,34 @@ async function loggedIn(req, res) {
 
     // logged in
     console.log("User logged in:", user.username );
-    res.status(200).json({ message: "Login successful", username: user.username });;
+    // res.status(200).json({ message: "Login successful", username: user.username });
 
   } catch (error) {
     console.error(error);
   }
 }
 
+
 const checkingIfUserIsLoggedIn = (req, res, next) => {
+  console.log("Middleware called");
+  console.log("Session:", req.session);
+  console.log("UserLoggedIn:", req.session.userLoggedIn);
+  
   if (req.session.userLoggedIn) {
-    res.render("pages/account")
-    console.log("checkingIf")
+    console.log("User is logged in");
+    next();
   } else {
-    res.redirect("/");
-    console.log("checkingElse")
+    console.log("User is not logged in, redirecting");
+    res.redirect("/login"); 
+    // If you try to go to the account page you'll be redirected to the login page
   }
 };
+
+
+app.get('/account', checkingIfUserIsLoggedIn, (req, res) => {
+  res.render('pages/account.ejs', { username: req.session.username });
+});
+// The code above is used for protected routes
 // start server
 app.listen(8000);
 
