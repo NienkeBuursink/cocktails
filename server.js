@@ -3,12 +3,13 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 require('dotenv').config();
 const xss = require('xss');
-// const html = xss('<script>alert("xss");</script>');
-// console.log(html);
+const html = xss('<script>alert("xss");</script>');
+console.log(html);
 const express = require("express");
 const bcrypt = require("bcrypt");
 const session = require("express-session")
 const { MongoClient } = require("mongodb");
+const validator = require('validator');
 
 const app = express();
 // Replace the uri string with your MongoDB deployment's connection string.
@@ -16,6 +17,7 @@ const uri = process.env.URI;
 const client = new MongoClient(uri);
 const db = client.db(process.env.DB_NAME);
 // const collection = db.collection(process.env.DB_collection)
+
 
 
 app.use(express.json());
@@ -118,20 +120,41 @@ app.use(session({
 async function signedUp(req, res) { // function when submitted form
   try {
     // Destructure form to use password for hashing and separate the rest
-    const { userPassword, ...rest } = req.body; 
+    const { email, username, userPassword, birthday } = req.body;
+    console.log(req.body);
+
+    // Validate inputs
+    if (!validator.isLength(username, { min: 3, max: 20 })) {
+      return res.status(400).json({ error: "Username must be between 3 and 20 characters" });
+    }
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ error: "Invalid email address" });
+    }
+    if (!validator.isStrongPassword(userPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })) {
+      return res.status(400).json({ error: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number." });
+    }
+    if (!validator.isDate(birthday)) {
+      return res.status(400).json({ error: "Date is invalid" });
+    }
+    
 
     // hashing
     console.time("hash");
     const hash = await bcrypt.hash(userPassword, 13);
     console.timeEnd("hash");
 
+    console.log("username:", username);
+    console.log("email:", email);
     console.log("password:", userPassword);
     console.log("hash:", hash);
-    console.log("other data:", rest);
+    console.log("date of birth:", birthday);
+
 
     // Create a new user for mongodb
     const newUser = {
-      ...rest,
+      username,
+      email,
+      birthday,
       password: hash
     };
 
@@ -153,11 +176,20 @@ async function signedUp(req, res) { // function when submitted form
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function loggedIn(req, res) {
   try {
-    console.log(req.body);
+    const { nameOrMail, userPassword } = req.body;
+
+    // Determine if the input is an email or username
+    let query;
+    if (validator.isEmail(nameOrMail)) {
+      query = { email: nameOrMail }; // Search by email
+    } else {
+      query = { username: nameOrMail }; // Search by username
+    }
+
 
     // find user in database
     const collection = db.collection("users");
-    const user = await collection.findOne({ username });
+    const user = await collection.findOne(query);
 
     // check if user exists
     if (!user) {
@@ -178,8 +210,8 @@ async function loggedIn(req, res) {
     }
 
     // logged in
-    console.log("User logged in:", username);
-    res.status(200).json({ message: "Login successful", username });
+    console.log("User logged in:", user.username );
+    res.status(200).json({ message: "Login successful", username: user.username });;
 
   } catch (error) {
     console.error(error);
