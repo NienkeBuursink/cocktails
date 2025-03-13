@@ -55,6 +55,7 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
+app.get("/detailPage", detailPage)
 
 
 function onHome(req, res){
@@ -79,6 +80,15 @@ function signUp(req, res){
   try {
     console.log(req.body);
     res.render("pages/signUp");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function detailPage(req, res){
+  try {
+    console.log(req.body);
+    res.render("pages/detailPage");
   } catch (error) {
     console.log(error);
   }
