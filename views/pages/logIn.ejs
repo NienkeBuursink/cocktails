@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <p>Give us all your info so you can log in hhehehehehehe</p>
+
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <!-- This is just for testing bcrypt!!! change this later to your liking :) (until row 32)-->
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <form id="testform" action="/login" method="POST">
+    <label for="nameOrMail">Username or Email:</label>
+    <input type="text" id="nameOrMail" name="nameOrMail" required=""><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="userPassword" required=""><br><br>
+
+    <input type="submit" value="log in!">
+  </form>          
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+ <!-- until here! -->
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>

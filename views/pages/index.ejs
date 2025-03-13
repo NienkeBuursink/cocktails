@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <p>Welcome to the homepage of cock. Lets get drunk!</p>
+  <form action="/searchCocktail" method="POST">  </form>
+  <label for="searchBar"></label>
+  <input id="searchBar" name="searchBar" type="text">
+  <button type="submit">submit</button>
+
+  <ul>
+
+  </ul>
+  
+
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+  <script src="/static/scripts/cocktailAPI.js" defer></script> 
+  <!-- The script above is for getting access and searching for cocktails -->
+
+</body>
+</html>
