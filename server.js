@@ -7,6 +7,7 @@ const xss = require('xss');
 // console.log(html);
 const express = require("express");
 const bcrypt = require("bcrypt");
+const session = require("express-session")
 const { MongoClient } = require("mongodb");
 
 const app = express();
@@ -81,8 +82,35 @@ function signUp(req, res){
     console.log(error);
   }
 }
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Session keys
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET ,
+  // Resave is for not resaving the session when nothing changes
+  // SaveUninitialized is for saving each NEW session, even when nothing has changed
+  // Dont forget to add the SESSION_SECRET to your own .env file
+
+  
+}))
 
 
+// app.get('/', function(req, res, next) {
+//   if (req.session.views) {
+//     req.session.views++
+//     res.setHeader('Content-Type', 'text/html')
+//     res.write('<p>views: ' + req.session.views + '</p>')
+//     res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
+//     res.end()
+//     console.log("if")
+//   } else {
+//     req.session.views = 1
+//     res.end('welcome to the session demo. refresh!')
+//     console.log("else")
+//   }
+// })
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // signing up with bcrypt
@@ -138,9 +166,15 @@ async function loggedIn(req, res) {
 
     // compare passwords
     const isMatch = await bcrypt.compare(userPassword, user.password);
-    
-    if (!isMatch) {
+    if (isMatch) {
+      req.session.userLoggedIn = true
+      console.log("match")
+      // req.session.username = 
+      // When there is a match then a session is made for the user.
+    } else{
+      console.log("nomatch")
       return res.status(401).json({ error: "username or password does not match" });
+ 
     }
 
     // logged in
@@ -152,8 +186,15 @@ async function loggedIn(req, res) {
   }
 }
 
-
-
+const checkingIfUserIsLoggedIn = (req, res, next) => {
+  if (req.session.userLoggedIn) {
+    res.render("pages/account")
+    console.log("checkingIf")
+  } else {
+    res.redirect("/");
+    console.log("checkingElse")
+  }
+};
 // start server
 app.listen(8000);
 
