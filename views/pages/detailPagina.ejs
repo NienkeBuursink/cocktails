@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+    <h1><%= cocktail.name %></h1>
+    <img src="<%= cocktail.image %>" alt="<%= cocktail.name %>">
+    <p><%= cocktail.description %></p>
+
+    <h2>Ingredients:</h2>
+        <ul>
+            <% cocktail.ingredients.forEach(ingredient => { %>
+                <li><%= ingredient %></li>
+            <% }) %>
+        </ul>
+  
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
