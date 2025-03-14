@@ -1,1 +1,20 @@
-hkhkj
+/*********************/
+/* CUSTOM PROPERTIES */
+/*********************/
+
+:root {
+	--color-accent1: #76D5E2;
+    --color-accent2: #EB81A9;
+	--color-bright:#FEB737;
+	--color-light: #FFEBAE;
+	--color-dark: #543787;
+	--color-midtone: #BCD7FF;
+	--color-black: #240F4A;
+    --color-white: #FFFCF7;;
+}
+
+/* @font-face {
+	font-family: "ESKlarheitKurrent";
+	src: url('../fonts/ESKlarheitKurrent-Regular.ttf');
+	font-weight: 400;
+} */
