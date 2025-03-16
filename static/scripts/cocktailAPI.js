@@ -55,8 +55,12 @@ async function getCocktails() {
                         <h2>${drink.strDrink}</h2>
                         <p>${drink.strInstructions}</p>
                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        <form action="/addFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
+                            <button type="submit">Add to Favorites</button>
+                        </form>
                     </li>
-                `);
+            `);
             });
         } else {
             nameList.innerHTML = "<li>No matching cocktails found</li>";
@@ -77,8 +81,12 @@ async function getCocktails() {
                     ingredientList.insertAdjacentHTML("beforeend", `
                         <li>
                             <h2>${drink.strDrink}</h2>
-							<p>${drink.strInstructions}</p> 
+                            <p>${drink.strInstructions}</p>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                            <form action="/addFavorite" method="post">
+                                <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
+                                <button type="submit">Add to Favorites</button>
+                            </form>
                         </li>
                     `);
                 }); // ^ <p> says undefined, still have to figure that one out
