@@ -55,8 +55,14 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
+app.get("/profile", showProfile)
+app.post("/addFavorite", addFavorite);
 
 
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// basic functions
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function onHome(req, res){
   try {
     res.render("pages/index.ejs"); //pages has to be added to search for the index file as it is in a seperate folder 
@@ -127,7 +133,8 @@ async function signedUp(req, res) { // function when submitted form
       username,
       email,
       birthday,
-      password: hash
+      password: hash,
+      favorites: [] // add empty array to store cocktail ids
     };
 
     // Insert the new user into the database
@@ -183,6 +190,89 @@ async function loggedIn(req, res) {
     console.error(error);
   }
 }
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// favorites
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function addFavorite(req, res) {
+  try {
+    const { cocktailId } = req.body;
+    const username = req.session.user.username;
+
+    // Validate cocktailId
+    if (!cocktailId || typeof cocktailId !== 'string') {
+      return res.status(400).json({ error: "Invalid cocktail ID" });
+    }
+
+    // Update user document to add the cocktail to favorites
+    const result = await db.collection("users").updateOne(
+      { username: username },
+      { $addToSet: { favorites: cocktailId } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ error: "Cocktail already in favorites or user not found" });
+    }
+
+    res.status(200).json({ message: "Cocktail added to favorites" });
+  } catch (error) {
+    console.error("Add favorite error:", error);
+    res.status(500).json({ error: "Failed to add favorite" });
+  }
+}
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// profile
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function showProfile(req, res) {
+  try {
+    const username = req.session.user.username;
+    const user = await db.collection("users").findOne(
+      { username: username },
+      { projection: { username: 1, favorites: 1 } }
+    );
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const favoriteDrinks = await getFavoriteDrinks(user.favorites);
+
+    res.render("pages/profile", { 
+      username: user.username,
+      favorites: favoriteDrinks 
+    });
+
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).send("Error loading profile");
+  }
+}
+
+
+async function getFavoriteDrinks(favoriteIds) {
+  try {
+    const favoriteDrinks = await Promise.all(
+      favoriteIds.map(async (cocktailId) => {
+        const response = await fetch(
+          `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+        );
+        const data = await response.json();
+        return data.drinks[0];
+      })
+    );
+    return favoriteDrinks;
+  } catch (error) {
+    console.error("Error fetching favorite drinks:", error);
+    return [];
+  }
+}
+
+
 
 
 
