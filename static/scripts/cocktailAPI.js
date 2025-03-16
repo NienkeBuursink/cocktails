@@ -14,7 +14,7 @@ const searchByIngredient = "/filter.php?i=";
 const nameList = document.getElementById('cocktailName');
 const ingredientList = document.getElementById('cocktailIngredient');
 const searchBar = document.getElementById("searchBar");
-const submitButton = document.querySelector("button");
+const submitButton = document.getElementById("searchButton");
 
 
 async function getCocktails() {

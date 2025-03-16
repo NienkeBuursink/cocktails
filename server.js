@@ -83,7 +83,6 @@ const checkingIfUserIsLoggedIn = (req, res, next) => {
 // Routes
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/", onHome);
-app.post("/searchCocktail", onHome);
 app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
