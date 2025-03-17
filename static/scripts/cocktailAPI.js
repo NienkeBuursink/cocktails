@@ -16,7 +16,6 @@ const ingredientList = document.getElementById('cocktailIngredient');
 const searchBar = document.getElementById("searchBar");
 const submitButton = document.querySelector("button");
 
-
 async function getCocktails() {
     // Clear previous results
     nameList.innerHTML = "";
