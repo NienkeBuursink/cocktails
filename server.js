@@ -55,7 +55,7 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
-app.get("/detailPage", detailPage)
+app.get("/detailpage", detailPage)
 
 
 function onHome(req, res){
@@ -85,14 +85,27 @@ function signUp(req, res){
   }
 }
 
-function detailPage(req, res){
+async function detailPage(req, res){
   try {
-    console.log(req.body);
-    res.render("pages/detailPage",);
-  } catch (error) {
-    console.log(error);
+    const name = req.query.name || ''; 
+    const nameResponse = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${name}`);
+    const nameData = await nameResponse.json();
+
+    if (!nameData.drinks) {
+      return res.status(404).send("Cocktail niet gevonden");
+    }
+
+    const cocktail = nameData.drinks[0];
+    console.log(cocktail);
+
+    res.render("pages/detailPage", { cocktail });
+  }
+  catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
 }
+
 
 
 

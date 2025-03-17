@@ -12,17 +12,13 @@
 </header>
 
 <main>
-    <h1><%= ${drink.strDrink} %></h1>
-    <img src="<%= ${drink.strDrinkThumb} %>" alt="<%= ${drink.strDrink} %>">
-    <p><%= ${drink.strInstructions} %></p>
 
-    <h2>Ingredients:</h2>
-        <ul>
-            <% cocktail.ingredients.forEach(ingredient => { %>
-                <li><%= ingredient %></li>
-            <% }) %>
-        </ul>
-  
+  <section id="sectionDetailPage">
+    <h1 class="h1DetailPage" ><%= cocktail.strDrink %></h1>
+    <img class="imgDetailPage" src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
+    <p class="InstructionsDetailPage"><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
+  </section>
+
 </main>
 
 <footer>
