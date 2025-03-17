@@ -7,6 +7,7 @@ const html = xss('<script>alert("xss");</script>');
 console.log(html);
 const express = require("express");
 const bcrypt = require("bcrypt");
+const session = require("express-session")
 const { MongoClient } = require("mongodb");
 const validator = require('validator');
 
@@ -46,18 +47,55 @@ run();
 
 
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Session
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET ,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+  // Resave is for not resaving the session when nothing changes
+  // SaveUninitialized is for saving each NEW session, even when nothing has changed
+  // Dont forget to add the SESSION_SECRET to your own .env file
+
+  
+}))
+
+const checkingIfUserIsLoggedIn = (req, res, next) => {
+  console.log("Middleware called");
+  console.log("Session:", req.session);
+  console.log("UserLoggedIn:", req.session.userLoggedIn);
+  
+  if (req.session.userLoggedIn) {
+    console.log("User is logged in");
+    next();
+  } else {
+    console.log("User is not logged in, redirecting");
+    res.redirect("/login"); 
+    // If you try to go to the account page you'll be redirected to the login page
+  }
+};
+
+
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Routes
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/", onHome);
-app.post("/searchCocktail", onHome)
 app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
 app.get("/detailpage", detailPage)
+app.get('/account', checkingIfUserIsLoggedIn, showProfile);
+app.post("/addFavorite", addFavorite);
 
 
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// basic functions
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function onHome(req, res){
   try {
     res.render("pages/index.ejs"); //pages has to be added to search for the index file as it is in a seperate folder 
@@ -85,6 +123,7 @@ function signUp(req, res){
   }
 }
 
+
 async function detailPage(req, res){
   try {
     const name = req.query.name || ''; 
@@ -105,9 +144,6 @@ async function detailPage(req, res){
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 }
-
-
-
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // signing up with bcrypt
@@ -150,7 +186,8 @@ async function signedUp(req, res) { // function when submitted form
       username,
       email,
       birthday,
-      password: hash
+      password: hash,
+      favorites: [] // add empty array to store cocktail ids
     };
 
     // Insert the new user into the database
@@ -170,6 +207,7 @@ async function signedUp(req, res) { // function when submitted form
 // logging in with bcrypt
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function loggedIn(req, res) {
+  
   try {
     const { nameOrMail, userPassword } = req.body;
 
@@ -193,15 +231,20 @@ async function loggedIn(req, res) {
 
     // compare passwords
     const isMatch = await bcrypt.compare(userPassword, user.password);
-    
-    if (!isMatch) {
+    console.log(isMatch);
+    if (isMatch) {
+      req.session.userLoggedIn = true;
+      req.session.username = user.username;
+      // logged in
+      console.log("User logged in:", user.username );
+      // res.status(200).json({ message: "Login successful", username: user.username });
+      return res.redirect('/account');
+      // When there is a match then a session is made for the user.
+    } else{
+      console.log("nomatch");
       return res.status(401).json({ error: "username or password does not match" });
+ 
     }
-
-    // logged in
-    console.log("User logged in:", user.username );
-    res.status(200).json({ message: "Login successful", username: user.username });;
-
   } catch (error) {
     console.error(error);
   }
@@ -209,6 +252,93 @@ async function loggedIn(req, res) {
 
 
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// favorites
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function addFavorite(req, res) {
+  try {
+    const { cocktailId } = req.body;
+    const username = req.session.username;
+
+    // Validate cocktailId
+    if (!cocktailId || typeof cocktailId !== 'string') {
+      return res.status(400).json({ error: "Invalid cocktail ID" });
+    }
+
+    // Update user document to add the cocktail to favorites
+    const result = await db.collection("users").updateOne(
+      { username: username },
+      { $addToSet: { favorites: cocktailId } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ error: "Cocktail already in favorites or user not found" });
+    }
+
+    res.status(200).json({ message: "Cocktail added to favorites" });
+  } catch (error) {
+    console.error("Add favorite error:", error);
+    res.status(500).json({ error: "Failed to add favorite" });
+  }
+}
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// profile
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function showProfile(req, res) {
+  try {
+    const username = req.session.username;
+    const user = await db.collection("users").findOne(
+      { username: username },
+      { projection: { username: 1, favorites: 1 } }
+    );
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const favoriteDrinks = await getFavoriteDrinks(user.favorites);
+
+    res.render("pages/account", { 
+      username: user.username,
+      favorites: favoriteDrinks 
+    });
+
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).send("Error loading profile");
+  }
+}
+
+
+async function getFavoriteDrinks(favoriteIds) {
+  try {
+    if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) { // Check if favorites exists and is an array
+      console.log("No favorites or invalid favorites array.");
+      return []; // Return an empty array if there are no favorites or it's not an array
+    }
+    const favoriteDrinks = await Promise.all(
+      favoriteIds.map(async (cocktailId) => {
+        const response = await fetch(
+          `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+        );
+        const data = await response.json();
+        return data.drinks[0];
+      })
+    );
+    return favoriteDrinks;
+  } catch (error) {
+    console.error("Error fetching favorite drinks:", error);
+    return [];
+  }
+}
+
+
+app.get('/account', checkingIfUserIsLoggedIn, (req, res) => {
+  res.render('pages/account.ejs', { username: req.session.username });
+});
+// The code above is used for protected routes
 // start server
 app.listen(8000);
-
