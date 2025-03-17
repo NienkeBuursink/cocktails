@@ -11,7 +11,6 @@ buttonMenu.addEventListener('click', toggleMenu);
 // functions
 
 function toggleMenu() {
-    console.log("geen poep meer");
     ulMenu.classList.toggle("toonMenu");
     buttonMenu.classList.toggle("toonMenu");
   }
