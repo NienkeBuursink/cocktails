@@ -87,15 +87,15 @@ function signUp(req, res){
 
 async function detailPage(req, res){
   try {
-    const name = req.query.name || ''; 
-    const nameResponse = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${name}`);
-    const nameData = await nameResponse.json();
+    const cocktailName = req.query.name || ''; 
+    const responseCocktailName = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${cocktailName}`);
+    const dataCocktailName = await responseCocktailName.json();
 
-    if (!nameData.drinks) {
+    if (!dataCocktailName.drinks) {
       return res.status(404).send("Cocktail niet gevonden");
     }
 
-    const cocktail = nameData.drinks[0];
+    const cocktail = dataCocktailName.drinks[0];
     console.log(cocktail);
 
     res.render("pages/detailPage", { cocktail });
