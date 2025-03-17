@@ -12,13 +12,32 @@
 </header>
 
 <main>
-  <p>Welcome to the accountpage of cock. Lets get drunk!!!!!!!</p>
-  
+  <h1>Account</h1>
+  <p>Welcome to the account page of <%= username %>. Let's get drunk!!!!!!!</p>
+
+  <h2>Favorite cocktails:</h2>
+
+  <% if (favorites && favorites.length > 0) { %>
+    <ul>
+      <% favorites.forEach(function(drink) { %>
+        <li>
+          <h3><%= drink.strDrink %></h3>
+          <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
+          <p>Alcohol: <%= drink.strAlcoholic %></p>
+          <p>Instructions: <%= drink.strInstructions %></p>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>You haven't added any favorite cocktails yet.</p>
+  <% } %>
 </main>
+
 
 <footer>
   <%- include('../partials/footer'); %>
 </footer>
 
+<script src="/static/scripts/common.js" defer></script> 
 </body>
 </html>
