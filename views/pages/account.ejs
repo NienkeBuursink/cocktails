@@ -25,6 +25,10 @@
           <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
           <p>Alcohol: <%= drink.strAlcoholic %></p>
           <p>Instructions: <%= drink.strInstructions %></p>
+          <form action="/toggleFavorite" method="post">
+            <input type="hidden" name="cocktailId" value="<%= drink.idDrink %>">
+            <button class="heartButton" type="submit">toggle to Favorites</button>
+          </form>
         </li>
       <% }); %>
     </ul>
