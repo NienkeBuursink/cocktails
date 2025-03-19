@@ -1,3 +1,40 @@
 img {
     max-width: 100%;
 }
+
+.intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas: 
+    "img img header"
+    "text text text"
+    "subtext subtext subtext"
+    ". button button";
+
+    gap: 1em;
+  margin: 1em;
+}
+
+.intro img {
+    grid-area: img;
+}
+
+.intro header {
+    grid-area: header;
+    align-self: center;
+}
+
+.intro p:first-of-type {
+    grid-area: text;
+    
+}
+
+.intro p:last-of-type {
+    grid-area: subtext;
+    font-weight: 200;
+}
+
+.intro button{
+    grid-area: button;
+}
