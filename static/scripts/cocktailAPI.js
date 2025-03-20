@@ -52,11 +52,12 @@ async function getCocktails() {
                 nameList.insertAdjacentHTML("beforeend", `
                     <li>
                         <h2>${drink.strDrink}</h2>
-                        <p>${drink.strInstructions}</p>
+                        <p>${drink.strAlcoholic}</p>
+                        <p>${drink.strGlass}</p>
                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-                        <form action="/addFavorite" method="post">
-                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-                            <button type="submit">Add to Favorites</button>
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">toggle to Favorites</button>
                         </form>
                     </li>
             `);
@@ -80,11 +81,12 @@ async function getCocktails() {
                     ingredientList.insertAdjacentHTML("beforeend", `
                         <li>
                             <h2>${drink.strDrink}</h2>
-                            <p>${drink.strInstructions}</p>
+                            <p>${drink.strAlcoholic}</p>
+                            <p>${drink.strGlass}</p>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-                            <form action="/addFavorite" method="post">
-                                <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-                                <button type="submit">Add to Favorites</button>
+                            <form action="/toggleFavorite" method="post">
+                                <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                                <button class="heartButton" type="submit">toggle to Favorites</button>
                             </form>
                         </li>
                     `);
