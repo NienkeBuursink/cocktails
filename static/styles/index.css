@@ -38,3 +38,22 @@ img {
 .intro button{
     grid-area: button;
 }
+
+.carrousel {
+    padding: 1em;
+    display: grid;
+    grid-template-columns: repeat(3, 40vw);
+    grid-template-rows: 1fr;
+    gap: 1rem;
+    overflow: scroll;
+    height: 50vw;
+    scroll-snap-type: both mandatory;
+}
+
+.active {
+	scroll-snap-type: unset;
+}
+
+.carrousel li {
+	scroll-snap-align: center;
+}
