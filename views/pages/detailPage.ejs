@@ -13,11 +13,31 @@
 
 <main>
 
-  <section id="sectionDetailPage">
-    <h1 class="h1DetailPage" ><%= cocktail.strDrink %></h1>
-    <img class="imgDetailPage" src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
-    <p class="InstructionsDetailPage"><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
+  <section>
+    <h1><%= cocktail.strDrink %></h1>
+    <img src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
+    <p><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
   </section>
+
+  <section id="otherUserFavorites">
+    <h2>Other users also liked:</h2>
+    <ul>
+      <% otherFavorites.forEach(function(drink) { %>
+        <li>
+          <a href="/detailPage?id=<%= drink.idDrink %>">
+            <h3><%= drink.strDrink %></h3>
+            <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
+            <p>Alcohol: <%= drink.strAlcoholic %></p>
+          </a>
+          <form action="/toggleFavorite" method="post">
+            <input type="hidden" name="cocktailId" value="<%= drink.idDrink %>">
+            <button class="heartButton" type="submit">toggle to Favorites</button>
+          </form>
+        </li>
+      <% }); %>
+    </ul>
+</section>
+
 
 </main>
 
