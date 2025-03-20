@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "compression": "^1.8.0",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
@@ -21,7 +22,8 @@
   "description": "Cocktail app",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "lintjs": "npx eslint server.js"
   },
   "repository": {
     "type": "git",
