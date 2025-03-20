@@ -87,8 +87,9 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
+app.get("/detailpage", detailPage)
 app.get('/account', checkingIfUserIsLoggedIn, showProfile);
-app.post("/addFavorite", addFavorite);
+app.post("/toggleFavorite", toggleFavorite);
 
 
 
@@ -102,7 +103,6 @@ function onHome(req, res){
     console.log(error);
   }
 }
-    
 
 function login(req, res){
   try {
@@ -119,6 +119,28 @@ function signUp(req, res){
     res.render("pages/signUp");
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+async function detailPage(req, res){
+  try {
+    const cocktailName = req.query.name || ''; 
+    const responseCocktailName = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${cocktailName}`);
+    const dataCocktailName = await responseCocktailName.json();
+
+    if (!dataCocktailName.drinks) {
+      return res.status(404).send("Cocktail not found");
+    }
+
+    const cocktail = dataCocktailName.drinks[0];
+    console.log(cocktail);
+
+    res.render("pages/detailPage", { cocktail });
+  }
+  catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
 }
 
@@ -232,30 +254,71 @@ async function loggedIn(req, res) {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // favorites
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-async function addFavorite(req, res) {
+async function toggleFavorite(req, res) {
   try {
     const { cocktailId } = req.body;
     const username = req.session.username;
 
-    // Validate cocktailId
-    if (!cocktailId || typeof cocktailId !== 'string') {
-      return res.status(400).json({ error: "Invalid cocktail ID" });
+    // Find the user document
+    const user = await db.collection("users").findOne({ username: username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found or session expired" });
     }
 
-    // Update user document to add the cocktail to favorites
-    const result = await db.collection("users").updateOne(
+    // make sure favorites is array
+    let favorites;
+    
+    if (Array.isArray(user.favorites)) {
+      favorites = user.favorites;
+    } else {
+      favorites = [];
+    }
+
+    // make sure cocktailId is a string, since MongoDB might store it as a different type
+    const isFavorite = favorites.includes(String(cocktailId));
+
+    // Call one of two functions based on whether it is favorited
+    if (isFavorite) {
+      return await removeFavorite(username, cocktailId, res);
+    } else {
+      return await addFavorite(username, cocktailId, res);
+    }
+  } catch (error) {
+    console.error("Toggle favorite error:", error);
+    res.status(500).json({ error: "Failed to toggle favorite" });
+  }
+}
+
+
+async function addFavorite(username, cocktailId, res) {
+  try {
+    await db.collection("users").updateOne(
       { username: username },
       { $addToSet: { favorites: cocktailId } }
     );
 
-    if (result.modifiedCount === 0) {
-      return res.status(400).json({ error: "Cocktail already in favorites or user not found" });
-    }
-
     res.status(200).json({ message: "Cocktail added to favorites" });
+
   } catch (error) {
     console.error("Add favorite error:", error);
     res.status(500).json({ error: "Failed to add favorite" });
+  }
+}
+
+
+async function removeFavorite(username, cocktailId, res) {
+  try {
+    await db.collection("users").updateOne(
+      { username: username },
+      { $pull: { favorites: cocktailId } }
+    );
+
+    res.status(200).json({ message: "Cocktail removed from favorites" });
+
+  } catch (error) {
+    console.error("Remove favorite error:", error);
+    res.status(500).json({ error: "Failed to remove favorite" });
   }
 }
 
@@ -292,20 +355,40 @@ async function showProfile(req, res) {
 
 async function getFavoriteDrinks(favoriteIds) {
   try {
-    if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) { // Check if favorites exists and is an array
-      console.log("No favorites or invalid favorites array.");
-      return []; // Return an empty array if there are no favorites or it's not an array
+    if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) {
+      console.log("You haven't added any favorite cocktails yet...");
+      return []; // Return empty array
     }
+
     const favoriteDrinks = await Promise.all(
       favoriteIds.map(async (cocktailId) => {
-        const response = await fetch(
-          `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
-        );
-        const data = await response.json();
-        return data.drinks[0];
+        try {
+          const response = await fetch(
+            `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+          );
+
+          if (!response.ok) {
+            console.warn(`Failed to fetch drink ${cocktailId}, status: ${response.status}`);
+            return null;
+          }
+          
+          const data = await response.json();
+
+          if (!data.drinks || data.drinks.length === 0) {
+            console.warn(`No drink found for ID: ${cocktailId}`);
+            return null;
+          }
+
+          return data.drinks[0];
+
+        } catch (error) {
+          console.error(`Error fetching drink ${cocktailId}:`, error);
+          return null;
+        }
       })
     );
-    return favoriteDrinks;
+
+    return favoriteDrinks.filter((drink) => drink !== null); // Remove null values
   } catch (error) {
     console.error("Error fetching favorite drinks:", error);
     return [];
@@ -313,9 +396,5 @@ async function getFavoriteDrinks(favoriteIds) {
 }
 
 
-app.get('/account', checkingIfUserIsLoggedIn, (req, res) => {
-  res.render('pages/account.ejs', { username: req.session.username });
-});
-// The code above is used for protected routes
 // start server
 app.listen(8000);
