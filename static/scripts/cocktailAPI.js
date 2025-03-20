@@ -51,10 +51,12 @@ async function getCocktails() {
             nameData.drinks.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
                     <li>
-                        <h2>${drink.strDrink}</h2>
-                        <p>${drink.strAlcoholic}</p>
-                        <p>${drink.strGlass}</p>
-                        <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        <a href="/detailPage?id=${drink.idDrink}">
+                            <h2>${drink.strDrink}</h2>
+                            <p>${drink.strAlcoholic}</p>
+                            <p>${drink.strGlass}</p>
+                            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        </a>
                         <form action="/toggleFavorite" method="post">
                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">
                             <button class="heartButton" type="submit">toggle to Favorites</button>
