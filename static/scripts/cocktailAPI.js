@@ -14,8 +14,7 @@ const searchByIngredient = "/filter.php?i=";
 const nameList = document.getElementById('cocktailName');
 const ingredientList = document.getElementById('cocktailIngredient');
 const searchBar = document.getElementById("searchBar");
-const submitButton = document.querySelector("button");
-
+const submitButton = document.getElementById("searchButton");
 
 async function getCocktails() {
     // Clear previous results
@@ -53,10 +52,15 @@ async function getCocktails() {
                 nameList.insertAdjacentHTML("beforeend", `
                     <li>
                         <h2>${drink.strDrink}</h2>
-                        <p>${drink.strInstructions}</p>
+                        <p>${drink.strAlcoholic}</p>
+                        <p>${drink.strGlass}</p>
                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">toggle to Favorites</button>
+                        </form>
                     </li>
-                `);
+            `);
             });
         } else {
             nameList.innerHTML = "<li>No matching cocktails found</li>";
@@ -77,8 +81,13 @@ async function getCocktails() {
                     ingredientList.insertAdjacentHTML("beforeend", `
                         <li>
                             <h2>${drink.strDrink}</h2>
-							<p>${drink.strInstructions}</p> 
+                            <p>${drink.strAlcoholic}</p>
+                            <p>${drink.strGlass}</p>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                            <form action="/toggleFavorite" method="post">
+                                <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                                <button class="heartButton" type="submit">toggle to Favorites</button>
+                            </form>
                         </li>
                     `);
                 }); // ^ <p> says undefined, still have to figure that one out
