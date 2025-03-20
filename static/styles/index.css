@@ -39,7 +39,7 @@ img {
     grid-area: button;
 }
 
-.carrousel {
+.carousel {
     padding: 1em;
     display: grid;
     grid-template-columns: repeat(3, 40vw);
@@ -54,6 +54,6 @@ img {
 	scroll-snap-type: unset;
 }
 
-.carrousel li {
+.carousel li {
 	scroll-snap-align: center;
 }
