@@ -131,7 +131,7 @@ async function detailPage(req, res){
     const dataCocktailName = await responseCocktailName.json();
 
     if (!dataCocktailName.drinks) {
-      return res.status(404).send("Cocktail niet gevonden");
+      return res.status(404).send("Cocktail not found");
     }
 
     const cocktail = dataCocktailName.drinks[0];
