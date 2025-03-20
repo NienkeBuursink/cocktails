@@ -17,6 +17,26 @@ const searchBar = document.getElementById("searchBar");
 const submitButton = document.getElementById("searchButton");
 
 
+async function fetchUserStatus() {
+    const response = await fetch('/api/user-status');
+    return await response.json();
+    console.log("fetching user status")
+}
+
+
+async function fetchCocktails(userStatus) {
+    let apiUrl;
+    if (userStatus.isLoggedIn && userStatus.isAdult) {
+        apiUrl = `${baseURL}/search.php?s=a`;
+        console.log("someone is adult");
+    } else {
+        apiUrl = `${baseURL}/filter.php?a=Non_Alcoholic`;
+        console.log("not logged in or no adult");
+    }
+
+}
+
+
 async function getCocktails() {
     // Clear previous results
     nameList.innerHTML = "";
@@ -47,7 +67,7 @@ async function getCocktails() {
     try {
         const nameResponse = await fetch(nameURL);
         const nameData = await nameResponse.json();
-        
+        console.log(nameData)
         if (nameData.drinks && Array.isArray(nameData.drinks)) {
             nameData.drinks.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
@@ -98,7 +118,23 @@ async function getCocktails() {
             ingredientList.innerHTML = "<li>Error loading ingredient results</li>";
         }
     }
+
 }
+
+
+async function init() {
+    try {
+        const userStatus = await fetchUserStatus();
+        const cocktails = await fetchCocktails(userStatus);
+        // displayCocktails(cocktails);
+        console.log("user status = fetchUserstatus")
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+init();
+
 
 // Event listeners
 submitButton.addEventListener('click', getCocktails);

@@ -27,6 +27,7 @@ app.use("/static", express.static("static"));
 
 
 
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Run MongoDB
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -54,11 +55,15 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET ,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  cookie: { secure: process.env.NODE_ENV === 'production' },
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-
+  cookie: { maxAge: 10000 },
+  rolling: true
+  // Cookie age set to 600000 (10minutes.) 
+  // rolling means that each time the user interact with the server the cookie timer resets.
+  
   
 }))
 
@@ -89,7 +94,14 @@ app.get("/login", login);
 app.post("/login", loggedIn);
 app.get('/account', checkingIfUserIsLoggedIn, showProfile);
 app.post("/addFavorite", addFavorite);
-
+// app.get('/logout', (req, res) => {
+//   req.session.destroy((err) => {
+//     if (err) {
+//       console.error(err);
+//     }
+//     res.redirect('pages/logIn');
+//   });
+// });
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -212,6 +224,9 @@ async function loggedIn(req, res) {
     if (isMatch) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
+      req.session.age = 25; // Example: set user's age
+      res.redirect('/cocktails');
+
       // logged in
       console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
@@ -312,9 +327,32 @@ async function getFavoriteDrinks(favoriteIds) {
   }
 }
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Default mocktails 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// Serve static files (including your JavaScript file)
+
+// User status API endpoint
+app.get('/api/user-status', (req, res) => {
+  res.json({
+    isLoggedIn: !!req.session.userLoggedIn,
+    isAdult: req.session.age >= 18
+    
+
+  });
+  
+});
+
+
+
+
+
+
 
 app.get('/account', checkingIfUserIsLoggedIn, (req, res) => {
   res.render('pages/account.ejs', { username: req.session.username });
+
 });
 // The code above is used for protected routes
 // start server
