@@ -225,7 +225,7 @@ async function loggedIn(req, res) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
       req.session.age = 25; // Example: set user's age
-      res.redirect('/cocktails');
+
 
       // logged in
       console.log("User logged in:", user.username );
@@ -338,10 +338,10 @@ app.get('/api/user-status', (req, res) => {
   res.json({
     isLoggedIn: !!req.session.userLoggedIn,
     isAdult: req.session.age >= 18
-    
+
 
   });
-  
+
 });
 
 
