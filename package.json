@@ -14,7 +14,9 @@
     "@eslint/js": "^9.22.0",
     "eslint": "^9.22.0",
     "globals": "^16.0.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "stylelint": "^16.16.0",
+    "stylelint-config-standard": "^37.0.0"
   },
   "name": "cocktails",
   "version": "1.0.0",

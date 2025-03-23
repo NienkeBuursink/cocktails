@@ -1,7 +1,16 @@
-#sectionDetailPage{
+#section1DetailPage{
     padding: 1rem;
 }
 
-.imgDetailPage{
-    max-width: 100%;
+section img{
+    width: 100%;
+    height: 10rem;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 1rem;
+}
+
+h2 {
+    font-family: "Gaegu", Arial, Helvetica, sans-serif;
+    font-weight: 800;
 }
