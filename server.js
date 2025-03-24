@@ -340,18 +340,18 @@ async function getFavoriteDrinks(favoriteIds) {
       favoriteIds.map(async (cocktailId) => {
         try {
           const response = await fetch(
-            `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+            "https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId
           );
 
           if (!response.ok) {
-            console.warn(`API request failed for cocktail ID ${cocktailId}: ${response.status}`);
+            console.warn("API request failed for cocktail ID" + cocktailId + ":" + response.status);
             return null;
           }
           
           const data = await response.json();
 
           if (!data.drinks || data.drinks.length === 0) {
-            console.warn("No drink found for ID: ${cocktailId}");
+            console.warn("No drink found for ID: " + cocktailId);
             return null;
           }
 
