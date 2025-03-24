@@ -1,30 +1,24 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Setup
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-require('dotenv').config();
-const xss = require('xss');
-const html = xss('<script>alert("xss");</script>');
-// console.log(html);
+require("dotenv").config();
+const xss = require("xss");
+xss('<script>alert("xss");</script>');
 const express = require("express");
 const bcrypt = require("bcrypt");
 const session = require("express-session")
 const { MongoClient } = require("mongodb");
-const validator = require('validator');
-
+const validator = require("validator");
 const app = express();
-// Replace the uri string with your MongoDB deployment's connection string.
+
 const uri = process.env.URI;
 const client = new MongoClient(uri);
 const db = client.db(process.env.DB_NAME);
-// const collection = db.collection(process.env.DB_collection)
-
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use("/static", express.static("static"));
-
 
 
 
@@ -55,7 +49,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET ,
-  cookie: { secure: process.env.NODE_ENV === 'production' },
+  cookie: { secure: process.env.NODE_ENV === "production" }
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
@@ -93,7 +87,7 @@ app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
 app.get("/detailpage", detailPage)
-app.get('/account', checkingIfUserIsLoggedIn, showProfile);
+app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -126,26 +120,6 @@ function signUp(req, res){
 }
 
 
-async function detailPage(req, res){
-  try {
-    const cocktailName = req.query.name || ''; 
-    const responseCocktailName = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${cocktailName}`);
-    const dataCocktailName = await responseCocktailName.json();
-
-    if (!dataCocktailName.drinks) {
-      return res.status(404).send("Cocktail not found");
-    }
-
-    const cocktail = dataCocktailName.drinks[0];
-    console.log(cocktail);
-
-    res.render("pages/detailPage", { cocktail });
-  }
-  catch (error) {
-    console.error('Error fetching data:', error);
-    res.status(500).json({ error: 'Failed to fetch data' });
-  }
-}
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // signing up with bcrypt
@@ -194,9 +168,9 @@ async function signedUp(req, res) { // function when submitted form
 
     // Insert the new user into the database
     const collection = db.collection("users");
-    const result = await collection.insertOne(newUser);
+    await collection.insertOne(newUser);
 
-    console.log(`New user created with id: ${result.insertedId}`);
+    console.log("New user created with id: ${result.insertedId}");
 
   } catch (error) {
     console.error(error);
@@ -392,25 +366,25 @@ async function getFavoriteDrinks(favoriteIds) {
       favoriteIds.map(async (cocktailId) => {
         try {
           const response = await fetch(
-            `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+            "https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId
           );
 
           if (!response.ok) {
-            console.warn(`Failed to fetch drink ${cocktailId}, status: ${response.status}`);
+            console.warn("API request failed for cocktail ID" + cocktailId + ":" + response.status);
             return null;
           }
           
           const data = await response.json();
 
           if (!data.drinks || data.drinks.length === 0) {
-            console.warn(`No drink found for ID: ${cocktailId}`);
+            console.warn("No drink found for ID: " + cocktailId);
             return null;
           }
 
           return data.drinks[0];
 
         } catch (error) {
-          console.error(`Error fetching drink ${cocktailId}:`, error);
+          console.error("Error fetching drink ${cocktailId}:", error);
           return null;
         }
       })
@@ -422,6 +396,96 @@ async function getFavoriteDrinks(favoriteIds) {
     return [];
   }
 }
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Detail page user favorites
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function detailPage(req, res) {
+  try {
+    const cocktailId = req.query.id;
+
+    // Fetch current cocktail details
+    const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId);
+    if (!response.ok) {
+      throw new Error("API request failed for initial cocktail:" + response.status);
+    }
+
+    const dataCocktailName = await response.json();
+
+    if (!dataCocktailName.drinks || dataCocktailName.drinks.length === 0) {
+      return res.status(404).send("Cocktail not found");
+    }
+
+    const cocktail = dataCocktailName.drinks[0];
+
+    // Find users who have favorited this cocktail
+    const usersWithFavorite = await db.collection("users").find({ favorites: cocktailId }).toArray();
+
+
+    // Get favorite cocktail IDs from these users
+    const otherFavoriteIds = [...new Set(usersWithFavorite.flatMap(user => // new set makes sure there are no duplicates. flatmap makes it a single array of users
+      user.favorites.filter(id => id !== cocktailId) // removes og cocktail
+    ))];
+
+
+    // Count the amount of times favorited for each cocktail
+    const cocktailFavoriteCounts = {};
+    for (const user of usersWithFavorite) {
+      for (const favoriteId of user.favorites) {
+        if (cocktailFavoriteCounts[favoriteId]) {
+          cocktailFavoriteCounts[favoriteId]++;
+        } else {
+          cocktailFavoriteCounts[favoriteId] = 1;
+        }
+      }
+    }
+
+    console.log(cocktailFavoriteCounts);
+    
+    // Sort the cocktail IDs based on the number of times they have been favorited in big to small numbers
+    const sortedFavoriteIds = otherFavoriteIds.sort((a, b) => {
+      const countA = cocktailFavoriteCounts[a] || 0;
+      const countB = cocktailFavoriteCounts[b] || 0;
+      return countB - countA; // big to small numbers
+    });
+
+    // Fetch details for favorite cocktails of users
+    const otherFavorites = []; // five drinks will be put in here
+    
+    for (const id of sortedFavoriteIds.slice(0, 5)) {  // second number is the limit of shown cocktails
+      try {
+        const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + id);
+
+        if (!response.ok) {
+          console.warn("API request failed for related cocktail ID" + id + ":" + response.status);
+          continue; // Skip to the next ID
+        }
+
+        const data = await response.json();
+
+        if (data.drinks && data.drinks.length > 0) {
+          otherFavorites.push(data.drinks[0]);
+        } else {
+          console.warn("No data found for related cocktail ID" + id);
+        }
+      } catch (error) {
+        console.error("Error fetching related cocktail ID" + id, error);
+      }
+    }
+
+    res.render("pages/detailPage", {
+      cocktail,
+      otherFavorites
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to fetch data", details: error.message });
+  }
+}
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Default mocktails 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
