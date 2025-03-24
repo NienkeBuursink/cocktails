@@ -11,7 +11,6 @@
   img {
       max-width: 100%;
   }
-
 /*********************/
 /* CUSTOM PROPERTIES */
 /*********************/
@@ -27,7 +26,7 @@
     --color-white: #FFFCF7;
 
     --size-h1: 26px;
-    --size-h2: 30px;
+    --size-h2: 26px;
     --size-h3: 24px;
     --size-text: 19px;
     --size-button: 16px:
@@ -81,16 +80,6 @@ h1, h2, h3, h4 {
     letter-spacing: 0;
 }
 
-h2 {
-    font-size: var(--size-h2);
-    line-height: 125%; 
-    color: var(--color-dark);
-}
-
-button::after {
-    content: ">";
-}
-
 button {
     position: relative;
     font-family: "Calistoga", Arial, Helvetica, sans-serif;
@@ -108,16 +97,12 @@ button {
     background: linear-gradient(100deg, var(--color-accent2) 7.02%, var(--color-bright) 74.11%);
     
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
-    cursor:pointer;
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    padding: 1em;
-
 }
 
 header img {
@@ -127,11 +112,6 @@ header img {
 nav button {
     z-index: 100;
 }
-
-nav button::after {
-    content: none;
-}
-
 
 nav ul {
     
