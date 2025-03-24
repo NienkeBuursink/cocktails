@@ -42,20 +42,19 @@ grid-area: header;
     justify-self: end;
 }
 
+
 .carousel {
     margin: 1rem;
     margin-left: 2.5rem;
     display: grid;
-    grid-template-columns: repeat(6, auto);
-    grid-template-rows: 1fr;
+    /* grid-template-columns: repeat(6, auto); */
+    grid-auto-flow: column;
+    /* grid-template-rows: 1fr; */
     gap: 1rem;
     overflow: scroll;
     scroll-snap-type: x mandatory;
 }
 
-.active {
-	scroll-snap-type: unset;
-}
 
 .carousel li {
 	scroll-snap-align: start;
@@ -72,8 +71,13 @@ grid-area: header;
 
 }
 
-.carousel li p {
-	border-radius: 10px;
+.carousel li h3 {
+    color: var(--color-black);
+    font-size: var(--size-text);
+    font-family: "Gaegu", Arial, Helvetica, sans-serif;
+    letter-spacing: -0.074rem;
+
+	border-radius: 1rem;
     background: rgba(255, 255, 255, 0.50);
     backdrop-filter: blur(2px);
     padding: 0.1rem 0.5rem;
