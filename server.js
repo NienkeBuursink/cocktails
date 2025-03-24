@@ -238,6 +238,7 @@ async function loggedIn(req, res) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
       req.session.age = new Date(user.birthday);
+
       let today = new Date()
 
       today.getFullYear() - req.session.age.getFullYear()
@@ -425,9 +426,6 @@ async function getFavoriteDrinks(favoriteIds) {
 // Default mocktails 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-// Serve static files (including your JavaScript file)
-
-// User status API endpoint
 app.get('/api/user-status', (req, res) => {
   try{
   

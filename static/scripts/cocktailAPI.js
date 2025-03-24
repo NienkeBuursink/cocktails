@@ -124,9 +124,10 @@ async function SearchCocktails(userStatus){
     }
 
 }
+
 let userStatus 
 let filteredCocktails
-async function init() {
+async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
         // displayCocktails(cocktails);
@@ -143,7 +144,7 @@ async function init() {
     }
 }
 
-init();
+pageLoad();
 
 
 // Event listeners
