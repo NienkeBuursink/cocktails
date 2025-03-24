@@ -1,0 +1,31 @@
+
+
+{
+    "extends": ["stylelint-config-standard"],
+    "rules": {
+      "declaration-property-unit-allowed-list": {
+        "/^border/": ["rem"],
+        "/^padding|^gap/": ["rem"]
+      },
+      "unit-allowed-list": ["%", "deg", "rem", "ms"]
+    },
+
+    "plugins": ["stylelint-order"],
+    "rules": {
+    "order/properties-order": [
+      "position",
+      "z-index",
+      "top",
+      "right",
+      "display",
+      "overflow",
+      "width",
+      "height",
+      "border",
+      "padding",
+      "margin",
+      "color",
+      "background"
+      ]
+   }
+  }

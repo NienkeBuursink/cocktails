@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+
+  <section id="sectionDetailPage">
+    <h1 class="h1DetailPage" ><%= cocktail.strDrink %></h1>
+    <img class="imgDetailPage" src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
+    <p class="InstructionsDetailPage"><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
+  </section>
+
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
 require('dotenv').config();
 const xss = require('xss');
 const html = xss('<script>alert("xss");</script>');
-console.log(html);
+// console.log(html);
 const express = require("express");
 const bcrypt = require("bcrypt");
 const session = require("express-session")
@@ -32,13 +32,13 @@ app.use("/static", express.static("static"));
 // Run MongoDB
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function run() {
-  console.log("running...")
+  // console.log("running...")
   try {
     await client.connect();
     // database and collection code goes here
     // find code goes here
     // iterate code goes here
-    console.log("connected to database.");
+    // console.log("connected to database.");
   } catch(error) {
     console.log(error);
     // Ensures that the client will close when you finish/error
@@ -68,9 +68,9 @@ app.use(session({
 }))
 
 const checkingIfUserIsLoggedIn = (req, res, next) => {
-  console.log("Middleware called");
-  console.log("Session:", req.session);
-  console.log("UserLoggedIn:", req.session.userLoggedIn);
+  // console.log("Middleware called");
+  // console.log("Session:", req.session);
+  // console.log("UserLoggedIn:", req.session.userLoggedIn);
   
   if (req.session.userLoggedIn) {
     console.log("User is logged in");
@@ -92,17 +92,9 @@ app.get("/signup", signUp);
 app.post("/signup", signedUp);
 app.get("/login", login);
 app.post("/login", loggedIn);
+app.get("/detailpage", detailPage)
 app.get('/account', checkingIfUserIsLoggedIn, showProfile);
-app.post("/addFavorite", addFavorite);
-// app.get('/logout', (req, res) => {
-//   req.session.destroy((err) => {
-//     if (err) {
-//       console.error(err);
-//     }
-//     res.redirect('pages/logIn');
-//   });
-// });
-
+app.post("/toggleFavorite", toggleFavorite);
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // basic functions
@@ -114,11 +106,10 @@ function onHome(req, res){
     console.log(error);
   }
 }
-    
 
 function login(req, res){
   try {
-    console.log(req.body);
+    // console.log(req.body);
     res.render("pages/logIn");
   } catch (error) {
     console.log(error);
@@ -127,10 +118,32 @@ function login(req, res){
 
 function signUp(req, res){
   try {
-    console.log(req.body);
+    // console.log(req.body);
     res.render("pages/signUp");
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+async function detailPage(req, res){
+  try {
+    const cocktailName = req.query.name || ''; 
+    const responseCocktailName = await fetch(`https://www.thecocktaildb.com/api/json/v2/961249867/search.php?s=${cocktailName}`);
+    const dataCocktailName = await responseCocktailName.json();
+
+    if (!dataCocktailName.drinks) {
+      return res.status(404).send("Cocktail not found");
+    }
+
+    const cocktail = dataCocktailName.drinks[0];
+    console.log(cocktail);
+
+    res.render("pages/detailPage", { cocktail });
+  }
+  catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
 }
 
@@ -141,7 +154,7 @@ async function signedUp(req, res) { // function when submitted form
   try {
     // Destructure form to use password for hashing and separate the rest
     const { email, username, userPassword, birthday } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     // Validate inputs
     if (!validator.isLength(username, { min: 3, max: 20 })) {
@@ -220,20 +233,42 @@ async function loggedIn(req, res) {
 
     // compare passwords
     const isMatch = await bcrypt.compare(userPassword, user.password);
-    console.log(isMatch);
+    // console.log(isMatch);
     if (isMatch) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
-      req.session.age = 25; // Example: set user's age
+      req.session.age = new Date(user.birthday);
+      let today = new Date()
 
+      today.getFullYear() - req.session.age.getFullYear()
 
+      let age = today.getFullYear() -  req.session.age.getFullYear();
+      const monthDiff = today.getMonth() -  req.session.age.getMonth()
+
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() <  req.session.age.getDate())){
+        console.log("above age")
+        age--
+        console.log(age)
+        
+      } else{
+        console.log("under kees")
+        console.log(age)
+      }
+
+      req.session.age = age
+      console.log("req.session.age = ", age)
+      //
+
+      
+      
+      console.log("User logged in:", user.birthday )
       // logged in
-      console.log("User logged in:", user.username );
+      // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
       return res.redirect('/account');
       // When there is a match then a session is made for the user.
     } else{
-      console.log("nomatch");
+      // console.log("nomatch");
       return res.status(401).json({ error: "username or password does not match" });
  
     }
@@ -247,30 +282,71 @@ async function loggedIn(req, res) {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // favorites
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-async function addFavorite(req, res) {
+async function toggleFavorite(req, res) {
   try {
     const { cocktailId } = req.body;
     const username = req.session.username;
 
-    // Validate cocktailId
-    if (!cocktailId || typeof cocktailId !== 'string') {
-      return res.status(400).json({ error: "Invalid cocktail ID" });
+    // Find the user document
+    const user = await db.collection("users").findOne({ username: username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found or session expired" });
     }
 
-    // Update user document to add the cocktail to favorites
-    const result = await db.collection("users").updateOne(
+    // make sure favorites is array
+    let favorites;
+    
+    if (Array.isArray(user.favorites)) {
+      favorites = user.favorites;
+    } else {
+      favorites = [];
+    }
+
+    // make sure cocktailId is a string, since MongoDB might store it as a different type
+    const isFavorite = favorites.includes(String(cocktailId));
+
+    // Call one of two functions based on whether it is favorited
+    if (isFavorite) {
+      return await removeFavorite(username, cocktailId, res);
+    } else {
+      return await addFavorite(username, cocktailId, res);
+    }
+  } catch (error) {
+    console.error("Toggle favorite error:", error);
+    res.status(500).json({ error: "Failed to toggle favorite" });
+  }
+}
+
+
+async function addFavorite(username, cocktailId, res) {
+  try {
+    await db.collection("users").updateOne(
       { username: username },
       { $addToSet: { favorites: cocktailId } }
     );
 
-    if (result.modifiedCount === 0) {
-      return res.status(400).json({ error: "Cocktail already in favorites or user not found" });
-    }
-
     res.status(200).json({ message: "Cocktail added to favorites" });
+
   } catch (error) {
     console.error("Add favorite error:", error);
     res.status(500).json({ error: "Failed to add favorite" });
+  }
+}
+
+
+async function removeFavorite(username, cocktailId, res) {
+  try {
+    await db.collection("users").updateOne(
+      { username: username },
+      { $pull: { favorites: cocktailId } }
+    );
+
+    res.status(200).json({ message: "Cocktail removed from favorites" });
+
+  } catch (error) {
+    console.error("Remove favorite error:", error);
+    res.status(500).json({ error: "Failed to remove favorite" });
   }
 }
 
@@ -307,26 +383,44 @@ async function showProfile(req, res) {
 
 async function getFavoriteDrinks(favoriteIds) {
   try {
-    if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) { // Check if favorites exists and is an array
-      console.log("No favorites or invalid favorites array.");
-      return []; // Return an empty array if there are no favorites or it's not an array
+    if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) {
+      // console.log("You haven't added any favorite cocktails yet...");
+      return []; // Return empty array
     }
     const favoriteDrinks = await Promise.all(
       favoriteIds.map(async (cocktailId) => {
-        const response = await fetch(
-          `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
-        );
-        const data = await response.json();
-        return data.drinks[0];
+        try {
+          const response = await fetch(
+            `https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=${cocktailId}`
+          );
+
+          if (!response.ok) {
+            console.warn(`Failed to fetch drink ${cocktailId}, status: ${response.status}`);
+            return null;
+          }
+          
+          const data = await response.json();
+
+          if (!data.drinks || data.drinks.length === 0) {
+            console.warn(`No drink found for ID: ${cocktailId}`);
+            return null;
+          }
+
+          return data.drinks[0];
+
+        } catch (error) {
+          console.error(`Error fetching drink ${cocktailId}:`, error);
+          return null;
+        }
       })
     );
-    return favoriteDrinks;
+
+    return favoriteDrinks.filter((drink) => drink !== null); // Remove null values
   } catch (error) {
     console.error("Error fetching favorite drinks:", error);
     return [];
   }
 }
-
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Default mocktails 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -335,25 +429,18 @@ async function getFavoriteDrinks(favoriteIds) {
 
 // User status API endpoint
 app.get('/api/user-status', (req, res) => {
-  res.json({
-    isLoggedIn: !!req.session.userLoggedIn,
-    isAdult: req.session.age >= 18
+  try{
+  
+    res.json({
+      isLoggedIn: !!req.session.userLoggedIn,
+      isAdult: req.session.age >= 18
+       });
+    } catch(error){
+      console.error()
 
-
-  });
-
-});
-
-
-
-
-
-
-
-app.get('/account', checkingIfUserIsLoggedIn, (req, res) => {
-  res.render('pages/account.ejs', { username: req.session.username });
+    }
 
 });
-// The code above is used for protected routes
+
 // start server
 app.listen(8000);

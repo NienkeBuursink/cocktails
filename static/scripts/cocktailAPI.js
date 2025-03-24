@@ -1,9 +1,6 @@
 
 const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
-
-
 const searchByIngredient = "/filter.php?i=";
-
 
 const nameList = document.getElementById('cocktailName');
 const ingredientList = document.getElementById('cocktailIngredient');
@@ -110,7 +107,7 @@ async function SearchCocktails(userStatus){
                         <h2>${drink.strDrink}</h2>
                         <p>${drink.strInstructions}</p>
                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-                        <form action="/addFavorite" method="post">
+                        <form action="/toggleFavorite" method="post">
                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
                             <button type="submit">Add to Favorites</button>
                         </form>
@@ -126,116 +123,7 @@ async function SearchCocktails(userStatus){
         nameList.innerHTML = "<li>Error loading name results</li>";
     }
 
-
-
-    // // ingredient search
-    // if (userInput.length > 1) {
-    //     try {
-    //         const ingredientResponse = await fetch(ingredientURL);
-    //         const ingredientData = await ingredientResponse.json();
-            
-    //         if (ingredientData.drinks && Array.isArray(ingredientData.drinks)) {
-    //             ingredientData.drinks.forEach(drink => {
-    //                 ingredientList.insertAdjacentHTML("beforeend", `
-    //                     <li>
-    //                         <h2>${drink.strDrink}</h2>
-    //                         <p>${drink.strInstructions}</p>
-    //                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-    //                         <form action="/addFavorite" method="post">
-    //                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-    //                             <button type="submit">Add to Favorites</button>
-    //                         </form>
-    //                     </li>
-    //                 `);
-    //             }); // ^ <p> says undefined, still have to figure that one out
-    //         } else {
-    //             ingredientList.innerHTML = "<li>No cocktails with this ingredient</li>";
-    //         }
-    //     } catch (error) {
-    //         console.error("Ingredient search error:", error);
-    //         ingredientList.innerHTML = "<li>Error loading ingredient results</li>";
-    //     }
-    // }
-
-// }
 }
-// async function getCocktails(cocktails) {
-
-
-//     // Clear previous results
-//     nameList.innerHTML = "";
-//     ingredientList.innerHTML = "";
-
-//     // Get and validate input
-
-//     // // Build URLs based on search type
-//     // let ingredientURL = "";
-
-//     // if (userInput.length === 1) {
-// 	// 	// Single letter search (name only)
-// 	// 	ingredientURL = ""; // No ingredient search for single letters
-// 	// 	} else {
-// 	// 	// Search both name and ingredient
-// 	// 	ingredientURL = baseURL + searchByIngredient + userInput;
-// 	// }
-
-//     // search by name
-//     try {
-        
-//         if (cocktails && Array.isArray(cocktails)) {
-//             cocktails.forEach(drink => {
-//                 nameList.insertAdjacentHTML("beforeend", `
-//                     <li>
-//                         <h2>${drink.strDrink}</h2>
-//                         <p>${drink.strInstructions}</p>
-//                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-//                         <form action="/addFavorite" method="post">
-//                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-//                             <button type="submit">Add to Favorites</button>
-//                         </form>
-//                     </li>
-//             `);
-//             });
-//         } else {
-//             console.log(cocktails)
-//             console.log(cocktails.strDrink)
-//             nameList.innerHTML = "<li>No matching cocktails found</li>";
-//         }
-//     } catch (error) {
-//         console.error("Name search error:", error);
-//         nameList.innerHTML = "<li>Error loading name results</li>";
-//     }
-
-//     // // ingredient search
-//     // if (userInput.length > 1) {
-//     //     try {
-//     //         const ingredientResponse = await fetch(ingredientURL);
-//     //         const ingredientData = await ingredientResponse.json();
-            
-//     //         if (ingredientData.drinks && Array.isArray(ingredientData.drinks)) {
-//     //             ingredientData.drinks.forEach(drink => {
-//     //                 ingredientList.insertAdjacentHTML("beforeend", `
-//     //                     <li>
-//     //                         <h2>${drink.strDrink}</h2>
-//     //                         <p>${drink.strInstructions}</p>
-//     //                         <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-//     //                         <form action="/addFavorite" method="post">
-//     //                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-//     //                             <button type="submit">Add to Favorites</button>
-//     //                         </form>
-//     //                     </li>
-//     //                 `);
-//     //             }); // ^ <p> says undefined, still have to figure that one out
-//     //         } else {
-//     //             ingredientList.innerHTML = "<li>No cocktails with this ingredient</li>";
-//     //         }
-//     //     } catch (error) {
-//     //         console.error("Ingredient search error:", error);
-//     //         ingredientList.innerHTML = "<li>Error loading ingredient results</li>";
-//     //     }
-//     // }
-
-// }
 let userStatus 
 let filteredCocktails
 async function init() {
