@@ -415,7 +415,7 @@ async function getRelatedFavorites(cocktailId, currentUser) {
     const relatedCocktails = await db.collection("cocktails").find({ 
       _id: { $ne: cocktailId }, // Exclude the main cocktail
       favoritedBy: { 
-        $in: otherUsersFavorited,  // At least one of these users favorited
+        $in: otherUsersFavorited,  // at least one of these users favorited
         $nin: [currentUser]        // currentuser not in array. delete this line? idk
       }
     }).toArray();
