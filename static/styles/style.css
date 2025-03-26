@@ -87,11 +87,11 @@ h2 {
     color: var(--color-dark);
 }
 
-button::after {
+a::after {
     content: ">";
 }
 
-button {
+button, a{
     position: relative;
     font-family: "Calistoga", Arial, Helvetica, sans-serif;
     font-size: var(--size-button);

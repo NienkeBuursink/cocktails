@@ -10,10 +10,10 @@ img {
     "img img header"
     "text text text"
     "subtext subtext subtext"
-    ". button button";
+    "link link link";
 
     gap:0.5rem;
-  margin: 1em;
+    margin: 1em;
 }
 
 .intro img {
@@ -36,8 +36,8 @@ grid-area: header;
     font-weight: 200;
 }
 
-.intro button{
-    grid-area: button;
+.intro a {
+    grid-area: link;
     width: max-content;
     justify-self: end;
 }
