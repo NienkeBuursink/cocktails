@@ -80,7 +80,17 @@ h1, h2, h3, h4 {
     letter-spacing: 0;
 }
 
-button {
+h2 {
+    font-size: var(--size-h2);
+    line-height: 125%; 
+    color: var(--color-dark);
+}
+
+a::after {
+    content: ">";
+}
+
+button, a{
     position: relative;
     font-family: "Calistoga", Arial, Helvetica, sans-serif;
     font-size: var(--size-button);
