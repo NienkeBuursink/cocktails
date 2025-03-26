@@ -20,6 +20,9 @@ async function fetchUserStatus() {
 
 async function fetchCocktails() {
 
+    // Now this fucntion just works for fetching cocktails for the loading of the page.
+    // But should i have a different fucntion for each time i need to call the API, for like the populair drink, or latest, or other categories.
+
     // if (userStatus.isLoggedIn && userStatus.isAdult) {
     //     apiUrl = `${baseURL}/search.php?s=a`;
     //     console.log("someone is adult");
