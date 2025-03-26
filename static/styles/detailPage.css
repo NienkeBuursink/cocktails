@@ -1,4 +1,4 @@
-#section1DetailPage{
+section{
     padding: 1rem;
 }
 
@@ -16,4 +16,10 @@ h1 {
 
 h2 {
     font-size: 1rem;
+    padding: 1rem 0;
 }
+
+#section1DetailPage p{
+    padding-top: 1rem;
+}
+
