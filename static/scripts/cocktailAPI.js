@@ -27,7 +27,7 @@ async function fetchCocktails() {
     // }
 
 
-    const apiUrl = `${baseURL}/search.php?s=`;
+    const apiUrl = baseURL + "/search.php?s=";
     console.log(apiUrl)
     const nameResponse = await fetch(apiUrl);
     const nameData = await nameResponse.json();
@@ -76,7 +76,7 @@ async function SearchCocktails(userStatus){
         nameList.innerHTML = "<li>Please enter a search term</li>";
         return;
     }
-    const searchURL = `${baseURL}/search.php?s=${userInput}`;
+    const searchURL = baseURL + "/search.php?s=" + userInput;
     console.log(searchURL)
     const nameResponse = await fetch(searchURL);
     const nameData = await nameResponse.json();
@@ -111,8 +111,8 @@ async function SearchCocktails(userStatus){
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                         </a>
                         <form action="/toggleFavorite" method="post">
-                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">  <!-- CORRECT! -->
-                            <button type="submit">Add to Favorites</button>
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">toggle to Favorites</button>
                         </form>
                     </li>
             `);
