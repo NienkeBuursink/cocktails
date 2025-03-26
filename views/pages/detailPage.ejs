@@ -22,7 +22,7 @@
   <section id="otherUserFavorites">
     <h2>Other users also liked:</h2>
     <ul>
-      <% otherFavorites.forEach(function(drink) { %>
+      <% relatedFavorites.forEach(function(drink) { %>
         <li>
           <a href="/detailPage?id=<%= drink.idDrink %>">
             <h3><%= drink.strDrink %></h3>
