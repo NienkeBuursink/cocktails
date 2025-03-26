@@ -212,11 +212,7 @@ async function loggedIn(req, res) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
       req.session.age = new Date(user.birthday);
-
       let today = new Date()
-
-      today.getFullYear() - req.session.age.getFullYear()
-
       let age = today.getFullYear() -  req.session.age.getFullYear();
       const monthDiff = today.getMonth() -  req.session.age.getMonth()
 
@@ -229,12 +225,10 @@ async function loggedIn(req, res) {
         console.log("under kees")
         console.log(age)
       }
-
+    
       req.session.age = age
       console.log("req.session.age = ", age)
       //
-
-      
       
       console.log("User logged in:", user.birthday )
       // logged in
