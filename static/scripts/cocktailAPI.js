@@ -1,13 +1,15 @@
 
 const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const searchByIngredient = "/filter.php?i=";
+const populairSearch = "/popular.php"
 
 const nameList = document.getElementById('cocktailName');
 const ingredientList = document.getElementById('cocktailIngredient');
 const searchBar = document.getElementById("searchBar");
 const submitButton = document.getElementById("searchButton");
-
-
+const populairCarouselList = document.querySelector(".carousel");
+let userStatus 
+let filteredCocktails
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
@@ -32,6 +34,8 @@ async function fetchCocktails() {
     const nameResponse = await fetch(apiUrl);
     const nameData = await nameResponse.json();
     
+        // console.log("when cocktails are fetched, nameData is: ", nameData)
+        // console.log("when cocktails are fetched, nameData.drinks is: ", nameData.drinks.slice(0, 100))
     return nameData.drinks;
 
 
@@ -42,15 +46,57 @@ function filterCocktails(cocktails, userStatus) {
     if (userStatus.isLoggedIn && userStatus.isAdult) {
         // Show all cocktails for logged-in adults
         console.log("user logged in and return cocktails")
-        return cocktails;
+        console.log("cocktails are: ", cocktails.drinks)
+        return cocktails
+
         
 
     } else {
         console.log("user not logged in and return  filtered cocktails")
+        console.log("cocktails are this before filter: ", cocktails)
         // Filter out alcoholic drinks for others
-        return cocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+         return cocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+
     }
 }
+
+function showCocktailsOnLoad (filteredCocktails){
+    console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredCocktails)
+    try {
+        if (filteredCocktails && Array.isArray(filteredCocktails)) {
+            filteredCocktails.forEach(drink => {
+            //     populairCarouselList.insertAdjacentHTML("beforeend", `
+            //         <li>
+            //             <a href="/detailPage?id=${drink.idDrink}">
+            //                 <h3>${drink.strDrink}</h2>
+            //                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+            //             </a>
+            //             <form action="/toggleFavorite" method="post">
+            //                 <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+            //                 <button class="heartButton" type="submit">toggle to Favorites</button>
+            //             </form>
+            //         </li>
+            // `);
+
+            populairCarouselList.insertAdjacentHTML("beforeend", `
+                    <li>
+                            <h3>${drink.strDrink}</h2>
+                            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                    </li>
+            `);
+            });
+        } else {
+
+            carouselList.innerHTML = "<li>No matching cocktails found</li>";
+        }
+    } catch (error) {
+        console.error("showCocktailsOnLoad error:", error);
+        carouselList.innerHTML = "<li>Error loading FilteredList results</li>";
+    }
+    
+
+}
+
 
 async function SearchCocktails(userStatus){
 
@@ -128,8 +174,7 @@ async function SearchCocktails(userStatus){
 
 }
 
-let userStatus 
-let filteredCocktails
+
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
@@ -137,9 +182,10 @@ async function pageLoad() {
         console.log(userStatus, ":userstatus")
         const allCocktails = await fetchCocktails(userStatus);
         filteredCocktails = filterCocktails(allCocktails, userStatus);
+        console.log(filteredCocktails, "pageLoad cocktails")
+        showCocktailsOnLoad(filteredCocktails)
         // getCocktails(filteredCocktails);
         // getCocktail will have to be replaced with a function that loads teh cocktials when entering the first page
-
         SearchCocktails(userStatus)
 
     } catch (error) {
