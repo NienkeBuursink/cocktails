@@ -210,6 +210,7 @@ async function loggedIn(req, res) {
     if (isMatch) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
+      req.session.userId = user._id;
       // logged in
       console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
@@ -232,33 +233,33 @@ async function loggedIn(req, res) {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function toggleFavorite(req, res) {
   try {
-    const { cocktailId } = req.body;
+    let { cocktailId } = req.body;
     const username = req.session.username;
 
-    // Find the user document
-    const user = await db.collection("users").findOne({ username: username });
+    // Ensure cocktailId is a string
+    cocktailId = String(cocktailId);  // Convert cocktailId to a string
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found or session expired" });
+    // Find the cocktail document
+    let cocktail = await db.collection("cocktails").findOne({ _id: cocktailId });
+
+    if (!cocktail) { // Create if it doesn't exist yet
+      await db.collection("cocktails").insertOne({
+        _id: cocktailId,
+        favoritedBy: [username],
+      });
+      return res.status(200).json({ message: "Cocktail added to favorites" });
     }
 
-    // make sure favorites is array
-    let favorites;
-    
-    if (Array.isArray(user.favorites)) {
-      favorites = user.favorites;
-    } else {
-      favorites = [];
-    }
+    // Make sure favoritedBy is an array
+    let favoritedBy = Array.isArray(cocktail.favoritedBy) ? cocktail.favoritedBy : [];
 
-    // make sure cocktailId is a string, since MongoDB might store it as a different type
-    const isFavorite = favorites.includes(String(cocktailId));
+    const isFavorite = favoritedBy.includes(username);
 
     // Call one of two functions based on whether it is favorited
     if (isFavorite) {
-      return await removeFavorite(username, cocktailId, res);
+      return await removeFavorite(cocktailId, username, res);
     } else {
-      return await addFavorite(username, cocktailId, res);
+      return await addFavorite(cocktailId, username, res);
     }
   } catch (error) {
     console.error("Toggle favorite error:", error);
@@ -266,12 +267,11 @@ async function toggleFavorite(req, res) {
   }
 }
 
-
-async function addFavorite(username, cocktailId, res) {
+async function addFavorite(cocktailId, username, res) {
   try {
-    await db.collection("users").updateOne(
-      { username: username },
-      { $addToSet: { favorites: cocktailId } }
+    await db.collection("cocktails").updateOne(
+      { _id: cocktailId },
+      { $addToSet: { favoritedBy: username } }
     );
 
     res.status(200).json({ message: "Cocktail added to favorites" });
@@ -282,12 +282,11 @@ async function addFavorite(username, cocktailId, res) {
   }
 }
 
-
-async function removeFavorite(username, cocktailId, res) {
+async function removeFavorite(cocktailId, username, res) {
   try {
-    await db.collection("users").updateOne(
-      { username: username },
-      { $pull: { favorites: cocktailId } }
+    await db.collection("cocktails").updateOne(
+      { _id: cocktailId },
+      { $pull: { favoritedBy: username } }
     );
 
     res.status(200).json({ message: "Cocktail removed from favorites" });
@@ -300,35 +299,10 @@ async function removeFavorite(username, cocktailId, res) {
 
 
 
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// profile
+// profile + favorites of user
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-async function showProfile(req, res) {
-  try {
-    const username = req.session.username;
-    const user = await db.collection("users").findOne(
-      { username: username },
-      { projection: { username: 1, favorites: 1 } }
-    );
-
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-
-    const favoriteDrinks = await getFavoriteDrinks(user.favorites);
-
-    res.render("pages/account", { 
-      username: user.username,
-      favorites: favoriteDrinks 
-    });
-
-  } catch (error) {
-    console.error("Profile error:", error);
-    res.status(500).send("Error loading profile");
-  }
-}
-
-
 async function getFavoriteDrinks(favoriteIds) {
   try {
     if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) {
@@ -351,14 +325,14 @@ async function getFavoriteDrinks(favoriteIds) {
           const data = await response.json();
 
           if (!data.drinks || data.drinks.length === 0) {
-            console.warn("No drink found for ID: " + cocktailId);
+            console.warn("No drink found for ID:" + cocktailId);
             return null;
           }
 
           return data.drinks[0];
 
         } catch (error) {
-          console.error("Error fetching drink ${cocktailId}:", error);
+          console.error("Error fetching drink" + cocktailId + ":" + error);
           return null;
         }
       })
@@ -372,90 +346,123 @@ async function getFavoriteDrinks(favoriteIds) {
 }
 
 
+async function showProfile(req, res) {
+  try {
+    const username = req.session.username;
+
+    // Find all cocktails that the user has favorited
+    const favoriteCocktails = await db.collection("cocktails") // loop through cocktails
+      .find({ favoritedBy: username }) 
+      .toArray(); 
+
+    const favoriteIds = favoriteCocktails.map(cocktail => cocktail._id);
+
+    // Fetch cocktail details from API
+    const favoriteDrinks = await getFavoriteDrinks(favoriteIds);
+
+    res.render("pages/account", { 
+      username: username,
+      favorites: favoriteDrinks 
+    });
+
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).send("Error loading profile");
+  }
+}
+
+
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Detail page user favorites
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+async function fetchCocktailDetails(cocktailId) {
+  try {
+    const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId);
+    if (!response.ok) {
+      throw new Error("API request failed for cocktail ID" + cocktailId + ":" + response.status);
+    }
+
+    const data = await response.json();
+    if (!data.drinks || data.drinks.length === 0) {
+      return null;
+    }
+
+    return data.drinks[0];
+  } catch (error) {
+    console.error("Error fetching cocktail" + cocktailId + ":" + error);
+    return null;
+  }
+}
+
+
+async function getRelatedFavorites(cocktailId, currentUser) {
+  try {
+    const currentCocktail = await db.collection("cocktails").findOne({ _id: cocktailId });
+
+    if (!currentCocktail || !currentCocktail.favoritedBy) {
+      return [];
+    }
+
+    // remove the current user from the list
+    const otherUsersFavorited = currentCocktail.favoritedBy.filter(user => user !== currentUser);
+
+    if (otherUsersFavorited.length === 0) {
+      return []; // No other users favorited this drink
+    }
+
+    // find all cocktails these users favorited (excluding the current cocktail)
+    const relatedCocktails = await db.collection("cocktails").find({ 
+      _id: { $ne: cocktailId }, // Exclude the main cocktail
+      favoritedBy: { 
+        $in: otherUsersFavorited,  // At least one of these users favorited
+        $nin: [currentUser]        // currentuser not in array. delete this line? idk
+      }
+    }).toArray();
+
+    // count how many times each cocktail appears
+    const cocktailCounts = {};
+    for (const cocktail of relatedCocktails) {
+      // count users
+      const differentUsers = new Set(cocktail.favoritedBy);  // Create a Set to get unique users
+      cocktailCounts[cocktail._id] = differentUsers.size;   // Use the size of the Set to count unique users
+    }
+
+    // sort by most favorited and limit to 5
+    const sortedFavoriteIds = Object.keys(cocktailCounts)
+      .sort((a, b) => cocktailCounts[b] - cocktailCounts[a]) // High to low
+      .slice(0, 5);
+
+    // fetch cocktail details
+    const topFiveCocktails = await Promise.all(
+      sortedFavoriteIds.map(fetchCocktailDetails)
+    );
+
+    return topFiveCocktails;
+  } catch (error) {
+    console.error("Error finding related favorites:", error);
+    return [];
+  }
+}
+
+
 async function detailPage(req, res) {
   try {
     const cocktailId = req.query.id;
+    const currentUser = req.session.username;
 
     // Fetch current cocktail details
-    const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId);
-    if (!response.ok) {
-      throw new Error("API request failed for initial cocktail:" + response.status);
-    }
-
-    const dataCocktailName = await response.json();
-
-    if (!dataCocktailName.drinks || dataCocktailName.drinks.length === 0) {
+    const cocktail = await fetchCocktailDetails(cocktailId);
+    if (!cocktail) {
       return res.status(404).send("Cocktail not found");
     }
 
-    const cocktail = dataCocktailName.drinks[0];
+    // Get related favorite cocktails
+    const relatedFavorites = await getRelatedFavorites(cocktailId, currentUser);
 
-    // Find users who have favorited this cocktail
-    const usersWithFavorite = await db.collection("users").find({ favorites: cocktailId }).toArray();
-
-
-    // Get favorite cocktail IDs from these users
-    const otherFavoriteIds = [...new Set(usersWithFavorite.flatMap(user => // new set makes sure there are no duplicates. flatmap makes it a single array of users
-      user.favorites.filter(id => id !== cocktailId) // removes og cocktail
-    ))];
-
-
-    // Count the amount of times favorited for each cocktail
-    const cocktailFavoriteCounts = {};
-    for (const user of usersWithFavorite) {
-      for (const favoriteId of user.favorites) {
-        if (cocktailFavoriteCounts[favoriteId]) {
-          cocktailFavoriteCounts[favoriteId]++;
-        } else {
-          cocktailFavoriteCounts[favoriteId] = 1;
-        }
-      }
-    }
-
-    console.log(cocktailFavoriteCounts);
-    
-    // Sort the cocktail IDs based on the number of times they have been favorited in big to small numbers
-    const sortedFavoriteIds = otherFavoriteIds.sort((a, b) => {
-      const countA = cocktailFavoriteCounts[a] || 0;
-      const countB = cocktailFavoriteCounts[b] || 0;
-      return countB - countA; // big to small numbers
-    });
-
-    // Fetch details for favorite cocktails of users
-    const otherFavorites = []; // five drinks will be put in here
-    
-    for (const id of sortedFavoriteIds.slice(0, 5)) {  // second number is the limit of shown cocktails
-      try {
-        const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + id);
-
-        if (!response.ok) {
-          console.warn("API request failed for related cocktail ID" + id + ":" + response.status);
-          continue; // Skip to the next ID
-        }
-
-        const data = await response.json();
-
-        if (data.drinks && data.drinks.length > 0) {
-          otherFavorites.push(data.drinks[0]);
-        } else {
-          console.warn("No data found for related cocktail ID" + id);
-        }
-      } catch (error) {
-        console.error("Error fetching related cocktail ID" + id, error);
-      }
-    }
-
-    res.render("pages/detailPage", {
-      cocktail,
-      otherFavorites
-    });
-
+    res.render("pages/detailPage", { cocktail, relatedFavorites });
   } catch (error) {
-    console.error("Error:", error);
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch data", details: error.message });
   }
 }
