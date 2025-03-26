@@ -424,8 +424,8 @@ async function getRelatedFavorites(cocktailId, currentUser) {
     const cocktailCounts = {};
     for (const cocktail of relatedCocktails) {
       // count users
-      const differentUsers = new Set(cocktail.favoritedBy);  // Create a Set to get unique users
-      cocktailCounts[cocktail._id] = differentUsers.size;   // Use the size of the Set to count unique users
+      const differentUsers = new Set(cocktail.favoritedBy);  // create a Set to get unique users
+      cocktailCounts[cocktail._id] = differentUsers.size;   // use the size of the Set to count unique users
     }
 
     // sort by most favorited and limit to 5
@@ -451,13 +451,13 @@ async function detailPage(req, res) {
     const cocktailId = req.query.id;
     const currentUser = req.session.username;
 
-    // Fetch current cocktail details
+    // fetch current cocktail details
     const cocktail = await fetchCocktailDetails(cocktailId);
     if (!cocktail) {
       return res.status(404).send("Cocktail not found");
     }
 
-    // Get related favorite cocktails
+    // get related favorite cocktails
     const relatedFavorites = await getRelatedFavorites(cocktailId, currentUser);
 
     res.render("pages/detailPage", { cocktail, relatedFavorites });
