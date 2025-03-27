@@ -10,8 +10,9 @@ section img{
     border-radius: 1rem;
 }
 
-h1 {
+section h1 {
     padding: 1rem 0;
+    color: var(--color-dark);
 }
 
 h2 {
