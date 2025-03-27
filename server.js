@@ -81,9 +81,10 @@ const checkingIfUserIsLoggedIn = (req, res, next) => {
 app.get("/", onHome);
 app.get("/signup", signUp);
 app.post("/signup", signedUp);
-app.get("/login", login);
+app.get("/login", logIn);
 app.post("/login", loggedIn);
-app.get("/detailpage", detailPage)
+app.get("/logout", logOut);
+app.get("/detailpage", detailPage);
 app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
 
@@ -100,7 +101,7 @@ function onHome(req, res){
   }
 }
 
-function login(req, res){
+function logIn(req, res){
   try {
     console.log(req.body);
     res.render("pages/logIn");
@@ -113,6 +114,15 @@ function signUp(req, res){
   try {
     console.log(req.body);
     res.render("pages/signUp");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function logOut(req, res) {
+  try {
+    req.session.userLoggedIn = false;
+    res.redirect("/");
   } catch (error) {
     console.log(error);
   }
@@ -235,6 +245,10 @@ async function toggleFavorite(req, res) {
   try {
     let { cocktailId } = req.body;
     const username = req.session.username;
+
+    if (!username) {
+      return res.status(401).json({ error: "Unauthorized: You must be logged in to toggle favorites" });
+    }
 
     // Ensure cocktailId is a string
     cocktailId = String(cocktailId);  // Convert cocktailId to a string
