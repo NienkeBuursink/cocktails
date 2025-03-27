@@ -90,6 +90,7 @@ app.get("/logout", logOut);
 app.get("/detailpage", detailPage);
 app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
+app.get("/search", search)
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // basic functions
@@ -116,6 +117,13 @@ function signUp(req, res){
     // console.log(req.body);
     res.render("pages/signUp");
   } catch (error) {
+    console.log(error);
+  }
+}
+function search(req, res){
+  try{
+    res.render("pages/search");
+  } catch(error){
     console.log(error);
   }
 }
