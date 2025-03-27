@@ -42,6 +42,63 @@ grid-area: header;
     justify-self: end;
 }
 
+.testButton {
+
+    width: 50vw;
+    aspect-ratio: 1/1;
+
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    grid-template-rows: min-content 1fr;
+    grid-template-areas: 
+    ". like"
+    ". .";
+}
+
+.testButton img {
+    
+    grid-area:1 / 1 / -1 / -1;
+    align-self:stretch;
+}
+
+.testButton button{
+	border-radius: 2rem;
+    background: rgba(255, 255, 255, 0.50);
+    backdrop-filter: blur(2px);
+    padding: 0.1rem 0.5rem;
+    margin: 0.2rem;
+    
+    grid-area: like;
+    width: max-content;
+    justify-self: end;
+    aspect-ratio: 1/1;
+}
+
+
+.testButton button svg {
+    stroke: var(--color-dark);
+    stroke-width: 0.4rem;
+    fill: none;
+    background: none;
+}
+
+@keyframes addFavourite {
+    80%{
+        fill: var(--color-accent2);
+    }
+
+    100%{
+        fill: var(--color-dark);
+    }
+}
+
+button.addFavourite svg {
+    animation-name: addFavourite;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease;
+}
+
 
 .carousel {
     margin: 1rem;
