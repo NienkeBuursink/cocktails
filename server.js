@@ -22,18 +22,17 @@ app.use("/static", express.static("static"));
 
 
 
-
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Run MongoDB
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 async function run() {
-  console.log("running...")
+  // console.log("running...")
   try {
     await client.connect();
     // database and collection code goes here
     // find code goes here
     // iterate code goes here
-    console.log("connected to database.");
+    // console.log("connected to database.");
   } catch(error) {
     console.log(error);
     // Ensures that the client will close when you finish/error
@@ -50,18 +49,22 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET ,
-  cookie: { secure: process.env.NODE_ENV === "production" }
+  cookie: { secure: process.env.NODE_ENV === "production" },
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-
+  cookie: { maxAge: 10000 },
+  rolling: true
+  // Cookie age set to 600000 (10minutes.) 
+  // rolling means that each time the user interact with the server the cookie timer resets.
+  
   
 }))
 
 const checkingIfUserIsLoggedIn = (req, res, next) => {
-  console.log("Middleware called");
-  console.log("Session:", req.session);
-  console.log("UserLoggedIn:", req.session.userLoggedIn);
+  // console.log("Middleware called");
+  // console.log("Session:", req.session);
+  // console.log("UserLoggedIn:", req.session.userLoggedIn);
   
   if (req.session.userLoggedIn) {
     console.log("User is logged in");
@@ -88,8 +91,6 @@ app.get("/detailpage", detailPage);
 app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
 
-
-
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // basic functions
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -103,7 +104,7 @@ function onHome(req, res){
 
 function logIn(req, res){
   try {
-    console.log(req.body);
+    // console.log(req.body);
     res.render("pages/logIn");
   } catch (error) {
     console.log(error);
@@ -112,7 +113,7 @@ function logIn(req, res){
 
 function signUp(req, res){
   try {
-    console.log(req.body);
+    // console.log(req.body);
     res.render("pages/signUp");
   } catch (error) {
     console.log(error);
@@ -137,7 +138,7 @@ async function signedUp(req, res) { // function when submitted form
   try {
     // Destructure form to use password for hashing and separate the rest
     const { email, username, userPassword, birthday } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     // Validate inputs
     if (!validator.isLength(username, { min: 3, max: 20 })) {
@@ -216,18 +217,37 @@ async function loggedIn(req, res) {
 
     // compare passwords
     const isMatch = await bcrypt.compare(userPassword, user.password);
-    console.log(isMatch);
+    // console.log(isMatch);
     if (isMatch) {
       req.session.userLoggedIn = true;
       req.session.username = user.username;
-      req.session.userId = user._id;
+      req.session.age = new Date(user.birthday);
+      let today = new Date()
+      let age = today.getFullYear() -  req.session.age.getFullYear();
+      const monthDiff = today.getMonth() -  req.session.age.getMonth()
+
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() <  req.session.age.getDate())){
+        console.log("above age")
+        age--
+        console.log(age)
+        
+      } else{
+        console.log("under kees")
+        console.log(age)
+      }
+    
+      req.session.age = age
+      console.log("req.session.age = ", age)
+      //
+      
+      console.log("User logged in:", user.birthday )
       // logged in
-      console.log("User logged in:", user.username );
+      // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
       return res.redirect('/account');
       // When there is a match then a session is made for the user.
     } else{
-      console.log("nomatch");
+      // console.log("nomatch");
       return res.status(401).json({ error: "username or password does not match" });
  
     }
@@ -320,10 +340,9 @@ async function removeFavorite(cocktailId, username, res) {
 async function getFavoriteDrinks(favoriteIds) {
   try {
     if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) {
-      console.log("You haven't added any favorite cocktails yet...");
+      // console.log("You haven't added any favorite cocktails yet...");
       return []; // Return empty array
     }
-
     const favoriteDrinks = await Promise.all(
       favoriteIds.map(async (cocktailId) => {
         try {
@@ -481,7 +500,23 @@ async function detailPage(req, res) {
   }
 }
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Default mocktails 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+app.get('/api/user-status', (req, res) => {
+  try{
+  
+    res.json({
+      isLoggedIn: !!req.session.userLoggedIn,
+      isAdult: req.session.age >= 18
+       });
+    } catch(error){
+      console.error()
+
+    }
+
+});
 
 // start server
 app.listen(8000);
