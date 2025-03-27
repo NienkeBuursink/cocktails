@@ -1,4 +1,10 @@
+const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
+const submitButton = document.getElementById("searchButton");
+const searchBar = document.getElementById("searchBar");
+const nameList = document.getElementById('cocktailName');
 
+
+let userStatus 
 
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
@@ -11,7 +17,7 @@ async function SearchCocktails(userStatus){
 
     // Clear previous results
     nameList.innerHTML = "";
-    ingredientList.innerHTML = "";
+    // ingredientList.innerHTML = "";
 
     // Get and validate input
 
@@ -87,18 +93,9 @@ async function SearchCocktails(userStatus){
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
-        await fetchCocktails()
-        // displayCocktails(cocktails);
+
         console.log(userStatus, ":userstatus")
-        console.log(allCocktails, "searchCocktailArray")
 
-        await filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails, userStatus);
-        
-        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, "pageLoad  filtered cocktails")
-
-        showPopulairCocktailsOnLoad(filteredPopulairCocktails)
-        showLatestCocktailsOnLoad(filteredLatestCocktails)
-        introCocktail(filteredCocktails)
 
         SearchCocktails(userStatus)
 

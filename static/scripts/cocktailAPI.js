@@ -33,8 +33,6 @@ async function fetchUserStatus() {
     const APIArray = [populairSearch, latestSearch, normalSearch];
 
 async function fetchCocktails() {
-
-
     try {
         const allResults = await Promise.all(APIArray.map(async (option) => {
             let apiUrl = baseURL + option;

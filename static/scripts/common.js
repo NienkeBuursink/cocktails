@@ -5,7 +5,8 @@ const ulMenu = document.querySelector("nav ul");
 
 
 // eventlisteners
-buttonMenu.addEventListener('click', toggleMenu);
+buttonMenu.addEventListener("click", toggleMenu);
+
 
 
 // functions
