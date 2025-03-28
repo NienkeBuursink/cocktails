@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+  <link rel="stylesheet" href="/static/styles/index.css">
+
+</head>
+
+<body>
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+
+    <label for="searchBar"></label>
+    <input id="searchBar" name="searchBar" type="text">
+    <button id="searchButton" type="submit">submit</button>
+
+  <ul id="cocktailName">
+
+  </ul>
+  <ul id="cocktailIngredient">
+
+  </ul>
+  
+
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+    <script src="/static/scripts/searchAPI.js"></script>
+  <!-- <script src="/static/scripts/cocktailAPI.js" defer></script>  -->
+  <!-- The script above is for getting access and searching for cocktails -->
+  <script src="/static/scripts/common.js" defer></script> 
+</body>
+</html>
