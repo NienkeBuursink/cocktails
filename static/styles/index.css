@@ -59,7 +59,7 @@ grid-area: header;
 .carousel li {
 	scroll-snap-align: start;
     height: 30vw;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1;
    
 
     display: grid;
@@ -68,7 +68,11 @@ grid-area: header;
     grid-template-areas: 
     ". ."
     ". name";
+}
 
+.carousel li a {
+    display: block;
+    text-decoration: none;
 }
 
 .carousel li h3 {
