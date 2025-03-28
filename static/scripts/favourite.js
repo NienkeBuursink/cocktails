@@ -1,4 +1,4 @@
-const favButton = document.querySelector(".testButton button");
+const favButton = document.querySelector(".heartButton");
 console.log(favButton);
 
 favButton.onclick = toggleFavourite;

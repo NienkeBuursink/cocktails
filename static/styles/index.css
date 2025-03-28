@@ -61,7 +61,7 @@ grid-area: header;
     align-self:stretch;
 }
 
-.testButton button{
+.heartButton {
 	border-radius: 2rem;
     background: rgba(255, 255, 255, 0.50);
     backdrop-filter: blur(2px);
@@ -74,29 +74,33 @@ grid-area: header;
     aspect-ratio: 1/1;
 }
 
-
-.testButton button svg {
+.heartButton svg {
     stroke: var(--color-dark);
     stroke-width: 0.4rem;
     fill: none;
     background: none;
+    width: 1.2rem;
 }
 
 @keyframes addFavourite {
     80%{
         fill: var(--color-accent2);
+        transform: scale(1.3);
+
     }
 
     100%{
-        fill: var(--color-dark);
+        fill: var(--color-accent2);
+        transform: scale(1);
     }
 }
 
-button.addFavourite svg {
+button.favourited svg {
     animation-name: addFavourite;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
     animation-iteration-count: 1;
-    animation-timing-function: ease;
+    /* animation-timing-function: ease; */
+    animation-fill-mode: forwards;
 }
 
 
@@ -121,14 +125,19 @@ button.addFavourite svg {
 
     display: grid;
     grid-template-columns: 1fr max-content;
-    grid-template-rows: 1fr min-content;
+    grid-template-rows: min-content 1fr min-content;
     grid-template-areas: 
+    ". favourite"
     ". ."
     ". name";
 
 }
 
-.carousel li h3 {
+.carousel li a {
+    display: contents;
+}
+
+.carousel li a h3 {
     color: var(--color-black);
     font-size: var(--size-text);
     font-family: "Gaegu", Arial, Helvetica, sans-serif;
@@ -140,10 +149,21 @@ button.addFavourite svg {
     padding: 0.1rem 0.5rem;
     margin: 0.3rem;
 
+    max-width: 100%;
+    overflow-wrap: break-word;
+
     grid-area: name;
 }
 
-.carousel li img {
+.carousel li a img {
     grid-area:1 / 1 / -1 / -1;
-    align-self:stretch;
+    align-self: stretch;
+}
+
+.carousel li form {
+    display: contents;
+}
+
+.carousel li form button{
+    grid-area: favourite;
 }
