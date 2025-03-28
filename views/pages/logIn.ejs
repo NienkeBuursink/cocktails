@@ -3,6 +3,7 @@
 
 <head>
   <%- include('../partials/head'); %>
+  <link rel="stylesheet" href="/static/styles/formPages.css">
 </head>
 
 <body>
@@ -12,18 +13,19 @@
 </header>
 
 <main>
+  <div class="loginSignup">
+    <h2>Login</h2>
+    <p>Do not have an account yet? <a href="/signup">Sign up!</a></p>
+    <form id="testform" action="/login" method="POST">
+      <label for="nameOrMail">Username or Email:</label>
+      <input type="text" id="nameOrMail" name="nameOrMail" required="">
 
-  <form id="testform" action="/login" method="POST">
-    <label for="nameOrMail">Username or Email:</label>
-    <input type="text" id="nameOrMail" name="nameOrMail" required=""><br><br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="userPassword" required="">
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="userPassword" required=""><br><br>
-
-    <input type="submit" value="log in!">
-  </form>          
-
-    <a href="/signup">Sign up!</a>
+      <input type="submit" value="log in!">
+    </form>         
+  </div>
 </main>
 
 <footer>
