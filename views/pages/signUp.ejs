@@ -17,17 +17,23 @@
 <main>
   <div class="loginSignup">
     <h2>Sign up</h2>
-    <p>Sign up with your information below to get all functions!</p>
+    <p>Sign up with your information below! If you are under 18 years old, you will only see mocktails.</p>
 
     <form id="testform" action="/signup" method="POST">
 
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required="">
+      <input type="text" id="username" name="username" placeholder="Cocktail123" required="">
 
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required="">
+      <input type="email" id="email" name="email" placeholder="pour@faction.com" required="">
 
       <label for="password">Password:</label>
+      <p>Your password must have:</p>
+      <ul>
+        <li>At least 8 characters</li>
+        <li>One upper- and one lowercase letter</li>
+        <li>A number</li>
+      </ul>
       <input type="password" id="password" name="userPassword" required="">
 
       <label for="birthday">Date of birth:</label>
