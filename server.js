@@ -53,7 +53,7 @@ app.use(session({
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-  cookie: { maxAge: 10000 },
+  cookie: { maxAge: 100000 },
   rolling: true
   // Cookie age set to 600000 (10minutes.) 
   // rolling means that each time the user interact with the server the cookie timer resets.
@@ -170,8 +170,7 @@ async function signedUp(req, res) { // function when submitted form
 
     console.log("username:", username);
     console.log("email:", email);
-    console.log("password:", userPassword);
-    console.log("hash:", hash);
+    console.log("hashed password:", hash);
     console.log("date of birth:", birthday);
 
 

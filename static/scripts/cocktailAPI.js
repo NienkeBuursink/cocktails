@@ -127,24 +127,24 @@ function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
     try {
         if (filteredPopulairCocktails && Array.isArray(filteredPopulairCocktails)) {
             filteredPopulairCocktails.forEach(drink => {
-            //     populairCarouselList.insertAdjacentHTML("beforeend", `
-            //         <li>
-            //             <a href="/detailPage?id=${drink.idDrink}">
-            //                 <h3>${drink.strDrink}</h2>
-            //                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-            //             </a>
-            //             <form action="/toggleFavorite" method="post">
-            //                 <input type="hidden" name="cocktailId" value="${drink.idDrink}">
-            //                 <button class="heartButton" type="submit">toggle to Favorites</button>
-            //             </form>
-            //         </li>
-            // `);
-            populairCarouselList.insertAdjacentHTML("beforeend", `
+                populairCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
+                        <a href="/detailPage?id=${drink.idDrink}">
                             <h3>${drink.strDrink}</h2>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        </a>
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">toggle to Favorites</button>
+                        </form>
                     </li>
             `);
+            // populairCarouselList.insertAdjacentHTML("beforeend", `
+            //         <li>
+            //                 <h3>${drink.strDrink}</h2>
+            //                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+            //         </li>
+            // `);
             });
         } else {
             carouselList.innerHTML = "<li>No matching cocktails found</li>";
