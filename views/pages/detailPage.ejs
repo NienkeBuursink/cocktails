@@ -3,6 +3,7 @@
 
 <head>
   <%- include('../partials/head'); %>
+  <link rel="stylesheet" href="/static/styles/detailPage.css">
 </head>
 
 <body>
@@ -13,21 +14,35 @@
 
 <main>
 
-  <section>
+  <section id="section1DetailPage">
     <h1><%= cocktail.strDrink %></h1>
     <img src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
-    <p><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
+
+    <h2>Ingredients:</h2>
+    <ul>
+        <% for (let i = 1; i <= 15; i++) { %>
+            <% const ingredient = cocktail[`strIngredient${i}`]; %>
+            <% const measure = cocktail[`strMeasure${i}`]; %>
+            <% if (ingredient) { %>
+                <li><%= measure ? measure : '' %> <%= ingredient %></li>
+            <% } %>
+        <% } %>
+    </ul>
+
+    <img class="backgroundImage" src="/static/images/iconBackground.svg" alt="">
+    <img class="backgroundImage2" src="/static/images/iconBackground2.svg" alt="">
+  <p><strong>Instructions:</strong> <%= cocktail.strInstructions %></p>
   </section>
 
   <section id="otherUserFavorites">
     <h2>Other users also liked:</h2>
     <ul>
-      <% otherFavorites.forEach(function(drink) { %>
+      <% relatedFavorites.forEach(function(drink) { %>
         <li>
           <a href="/detailPage?id=<%= drink.idDrink %>">
             <h3><%= drink.strDrink %></h3>
             <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
-            <p>Alcohol: <%= drink.strAlcoholic %></p>
+            <p><%= drink.strAlcoholic %></p>
           </a>
           <form action="/toggleFavorite" method="post">
             <input type="hidden" name="cocktailId" value="<%= drink.idDrink %>">
@@ -38,12 +53,16 @@
     </ul>
 </section>
 
-
 </main>
 
 <footer>
   <%- include('../partials/footer'); %>
 </footer>
+
+<script src="/static/scripts/cocktailAPI.js" defer></script> 
+<!-- The script above is for getting access and searching for cocktails -->
+<script src="/static/scripts/common.js" defer></script> 
+<script src="/static/scripts/carrousel.js" defer></script> 
 
 </body>
 </html>
