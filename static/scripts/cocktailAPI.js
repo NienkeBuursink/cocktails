@@ -141,13 +141,7 @@ function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
                             </button>
                         </form>
                     </li>
-            `);
-            // populairCarouselList.insertAdjacentHTML("beforeend", `
-            //         <li>
-            //                 <h3>${drink.strDrink}</h2>
-            //                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-            //         </li>
-            // `);
+                `);
             });
         } else {
             carouselList.innerHTML = "<li>No matching cocktails found</li>";
@@ -164,24 +158,22 @@ function showLatestCocktailsOnLoad (filteredLatestCocktails){
     try {
         if (filteredLatestCocktails && Array.isArray(filteredLatestCocktails)) {
             filteredLatestCocktails.forEach(drink => {
-            //     populairCarouselList.insertAdjacentHTML("beforeend", `
-            //         <li>
-            //             <a href="/detailPage?id=${drink.idDrink}">
-            //                 <h3>${drink.strDrink}</h2>
-            //                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-            //             </a>
-            //             <form action="/toggleFavorite" method="post">
-            //                 <input type="hidden" name="cocktailId" value="${drink.idDrink}">
-            //                 <button class="heartButton" type="submit">toggle to Favorites</button>
-            //             </form>
-            //         </li>
-            // `);
-            latestCarouselList.insertAdjacentHTML("beforeend", `
+                latestCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
+                        <a href="/detailPage?id=${drink.idDrink}">
                             <h3>${drink.strDrink}</h2>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        </a>
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">
+                                <svg viewBox="0 0 65.68 54.33">
+                                    <path d="M64.68,17.52c0,2.9-.96,5.29-2.28,7.57-1.74,3.02-4.03,5.66-6.62,7.92l-22.88,19.99L6.8,30.27h0c-1.43-1.39-5.79-7.63-5.79-12.75C1,8.4,8.13,1,16.92,1s15.93,7.4,15.93,16.52c0-9.12,7.12-16.52,15.92-16.52s15.92,7.4,15.92,16.52Z"/>
+                                </svg>
+                            </button>
+                        </form>
                     </li>
-            `);
+                `);
             });
         } else {
             carouselList.innerHTML = "<li>No matching cocktails found</li>";
