@@ -186,9 +186,7 @@ async function signedUp(req, res) { // function when submitted form
     // Insert the new user into the database
     const collection = db.collection("users");
     await collection.insertOne(newUser);
-
-    console.log("New user created with id: ${result.insertedId}");
-
+    
   } catch (error) {
     console.error(error);
   }
