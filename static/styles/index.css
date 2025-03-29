@@ -43,22 +43,4 @@ img {
     justify-self: end;
 }
 
-.testButton {
-
-    width: 50vw;
-    aspect-ratio: 1/1;
-
-    display: grid;
-    grid-template-columns: 1fr max-content;
-    grid-template-rows: min-content 1fr;
-    grid-template-areas: 
-    ". like"
-    ". .";
-}
-
-.testButton img {
-    
-    grid-area:1 / 1 / -1 / -1;
-    align-self:stretch;
-}
 

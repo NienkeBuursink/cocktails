@@ -100,8 +100,15 @@ h3 {
     font-size: var(--size-h3);
 }
 
-/* Button and link styling */
-button, .link, input[type="submit"]{
+/* Input Fields */
+input {
+    padding: 0.25rem 0.688rem;
+    border-radius: 1.25rem;
+    border: 3px solid #EB81A9;
+}
+
+/* Buttons and Links */
+button, .link, input[type="submit"] {
     padding: 0.25rem 0.75rem;
 
     color: var(--color-white);
@@ -116,8 +123,6 @@ button, .link, input[type="submit"]{
 
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
     cursor: pointer;
-
-   
 }
 
 .link, input[type="submit"] {
@@ -131,17 +136,13 @@ button, .link, input[type="submit"]{
     }
 }
 
-input {
-    padding: 0.25rem 0.688rem;
-    border-radius: 1.25rem;
-    border: 3px solid #EB81A9;
-}
 
 
+/****************************/
+/* Header Styling           */
+/****************************/
 
-/*********************/
-/* Header styling     */
-/*********************/
+/* Header Layout */
 .header {
     display: flex;
     justify-content: space-between;
@@ -155,7 +156,7 @@ input {
     }
 }
 
-/* Navigation styling */
+/* Navigation */
 nav {
     & button {
         position: relative;
@@ -185,18 +186,20 @@ nav {
     }
 }
 
-
+/****************************/
+/* Favoutite button         */
+/****************************/
 .heartButton {
-	border-radius: 2rem;
+    border-radius: 2rem;
     background: rgba(255, 255, 255, 0.50);
     backdrop-filter: blur(2px);
     padding: 0.1rem 0.5rem;
     margin: 0.2rem;
-    
+
     grid-area: like;
     width: max-content;
     justify-self: end;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1 / 1;
 }
 
 .heartButton svg {
@@ -207,14 +210,14 @@ nav {
     width: 1.2rem;
 }
 
+/* Favorite Animation */
 @keyframes addFavourite {
-    80%{
+    80% {
         fill: var(--color-accent2);
         transform: scale(1.3);
-
     }
 
-    100%{
+    100% {
         fill: var(--color-accent2);
         transform: scale(1);
     }
@@ -224,75 +227,84 @@ button.favourited svg {
     animation-name: addFavourite;
     animation-duration: 0.5s;
     animation-iteration-count: 1;
-    /* animation-timing-function: ease; */
+    animation-timing-function: ease;
     animation-fill-mode: forwards;
 }
 
 
+/****************************/
+/* Simple Carousel Styling  */
+/****************************/
+
+/* Carousel Container */
 .carousel {
     margin: 1rem;
     margin-left: 2.5rem;
+
     display: grid;
-    /* grid-template-columns: repeat(6, auto); */
     grid-auto-flow: column;
-    /* grid-template-rows: 1fr; */
     gap: 1rem;
+
     overflow: scroll;
     scroll-snap-type: x mandatory;
+
+    /* Carousel Items */
+    & li {
+        scroll-snap-align: start;
+        height: 30vw;
+        aspect-ratio: 1 / 1;
+
+        display: grid;
+        grid-template-columns: 1fr max-content;
+        grid-template-rows: min-content 1fr min-content;
+        grid-template-areas: 
+            ". favourite"
+            ". ."
+            ". name";
+
+        & a {
+            display: contents;
+
+            & h3 {
+                color: var(--color-black);
+                font-size: var(--size-text);
+                font-family: "Gaegu", Arial, Helvetica, sans-serif;
+                letter-spacing: var(--spacing-Gaegu);
+
+                border-radius: 1rem;
+                background: rgba(255, 255, 255, 0.50);
+                backdrop-filter: blur(2px);
+                padding: 0.1rem 0.5rem;
+                margin: 0.3rem;
+
+                max-width: 100%;
+                overflow-wrap: break-word;
+
+                grid-area: name;
+            }
+
+            & img {
+                grid-area: 1 / 1 / -1 / -1;
+                align-self: stretch;
+            }
+        }
+
+        /* Favorite Button */
+        & form {
+            display: contents;
+
+            & button {
+                grid-area: favourite;
+            }
+        }
+    }
 }
 
 
-.carousel li {
-	scroll-snap-align: start;
-    height: 30vw;
-    aspect-ratio: 1/1;
-   
+/****************************/
+/* Popup favourited         */
+/****************************/
 
-    display: grid;
-    grid-template-columns: 1fr max-content;
-    grid-template-rows: min-content 1fr min-content;
-    grid-template-areas: 
-    ". favourite"
-    ". ."
-    ". name";
-
-}
-
-.carousel li a {
-    display: contents;
-}
-
-.carousel li a h3 {
-    color: var(--color-black);
-    font-size: var(--size-text);
-    font-family: "Gaegu", Arial, Helvetica, sans-serif;
-    letter-spacing: -0.074rem;
-
-	border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.50);
-    backdrop-filter: blur(2px);
-    padding: 0.1rem 0.5rem;
-    margin: 0.3rem;
-
-    max-width: 100%;
-    overflow-wrap: break-word;
-
-    grid-area: name;
-}
-
-.carousel li a img {
-    grid-area:1 / 1 / -1 / -1;
-    align-self: stretch;
-}
-
-.carousel li form {
-    display: contents;
-}
-
-.carousel li form button{
-    grid-area: favourite;
-}
-/* popup */
 .toast {
     position: fixed;
     display: flex;
@@ -300,51 +312,48 @@ button.favourited svg {
     grid-template-columns: 1fr 1fr;
     bottom: 0;
     width: 95%;
-    background-color: none;
-    color: white; 
-    padding: 2rem;
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(2.5px);
+    color: white;
+    padding: 1.5rem;
+    margin: 2.5%;
     opacity: 0;
     transition: 0.5s ease-in-out;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.60);
-    backdrop-filter: blur(2.5px);
-    padding: 1.5rem;
-    margin: 2.5%;
+
     & p {
         color: var(--color-black);
         font-size: var(--size-text);
         font-family: "Gaegu", Arial, Helvetica, sans-serif;
-        letter-spacing: -0.074rem;
+        letter-spacing: var(--spacing-Gaegu);
         align-self: center;
     }
+
     & a {
-        color: var(--color-black);
-        font-size: var(--size-text);
-        font-family: "Gaegu", Arial, Helvetica, sans-serif;
-        text-decoration: none;
-        letter-spacing: -0.074rem;
+        color: var(--color-white);
         font-family: "Calistoga", Arial, Helvetica, sans-serif;
         font-size: var(--size-button);
-        color: var(--color-white);
+        text-decoration: none;
+
         display: inline-flex;
-        padding: 0.25rem 0.75rem;
         justify-content: center;
         align-items: center;
         gap: 0.563rem;
-        letter-spacing: 0;
-        align-self: center;
+        padding: 0.25rem 0.75rem;
 
-        
         border-radius: 3.75rem;
         border: none;
         background: linear-gradient(100deg, var(--color-accent2) 7.02%, var(--color-bright) 74.11%);
         
         box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
-        cursor:pointer;
-    }
-}
+        cursor: pointer;
 
-.toast.show {
-    opacity: 1;
+        align-self: center;
+    }
+
+    /* Toast Visibility */
+    &.show {
+        opacity: 1;
+    }
 }
 
