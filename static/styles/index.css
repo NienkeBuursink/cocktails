@@ -21,8 +21,9 @@ img {
 }
 
 .intro h2 {
-grid-area: header;
+    grid-area: header;
    align-self: center;
+   line-height: 125%; 
 }
 
 .intro p:first-of-type {
