@@ -6,15 +6,16 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-  }
+}
   
-  img {
-      max-width: 100%;
-  }
+img {
+    max-width: 100%;
+}
+
+
 /*********************/
 /* CUSTOM PROPERTIES */
 /*********************/
-
 :root {
 	--color-accent1: #76D5E2;
     --color-accent2: #EB81A9;
@@ -25,11 +26,11 @@
 	--color-black: #240F4A;
     --color-white: #FFFCF7;
 
-    --size-h1: 26px;
-    --size-h2: 26px;
-    --size-h3: 24px;
-    --size-text: 19px;
-    --size-button: 16px:
+    --size-h1: 2rem;
+    --size-h2: 1.625rem;
+    --size-h3: 1.5rem;
+    --size-text: 1.188rem;
+    --size-button: 1rem:
 }
 
 @font-face {
@@ -73,17 +74,26 @@
 
 h1, h2, h3, h4 {
     font-family: "Calistoga", Arial, Helvetica, sans-serif;
-    color: var(--color-accent1);
-    font-size: var(--size-h1);
+    color: var(--color-dark);
+    /* font-size: var(--size-h1); */
     font-weight: 400;
     line-height: 112%; 
     letter-spacing: 0;
 }
 
+h1 {
+    font-size: var(--size-h1);
+}
+
+
 h2 {
     font-size: var(--size-h2);
     line-height: 125%; 
     color: var(--color-dark);
+}
+
+h3 {
+    font-size: var(--size-h3);
 }
 
 .link::after {
@@ -137,6 +147,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: var(--color-accent1);
 }
 
 header img {

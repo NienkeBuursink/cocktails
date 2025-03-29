@@ -13,7 +13,7 @@ main {
 }
 
 h2 {
-    font-size: var(--size-h1);
+    font-size: var(--size-h2);
 }
 
 .loginSignup {
