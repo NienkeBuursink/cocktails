@@ -12,6 +12,17 @@ main {
     place-items: center;
 }
 
+.header{
+    padding-left: 3rem;
+    position: relative;
+}
+
+.backButton{
+    position: absolute;
+    padding: 0.8rem;
+    z-index: 5;
+}
+
 h2 {
     font-size: var(--size-h1);
 }
