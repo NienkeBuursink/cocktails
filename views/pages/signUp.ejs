@@ -3,40 +3,46 @@
 
 <head>
   <%- include('../partials/head'); %>
+  <link rel="stylesheet" href="/static/styles/formPages.css">
+  <script src="static/scripts/formPages.js"></script>
 </head>
 
 <body>
 
 <header>
   <%- include('../partials/header'); %>
+
 </header>
 
 <main>
-  <p>Give us all your info so you can sign up hhehehehehehe</p>
+  <div class="loginSignup">
+    <h2>Sign up</h2>
+    <p>Sign up with your information below! If you are under 18 years old, you will only see mocktails.</p>
 
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-  <!-- This is just for testing bcrypt!!! change this later to your liking :) (until row 32)-->
-  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-  <form id="testform" action="/signup" method="POST">
+    <form id="testform" action="/signup" method="POST">
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required=""><br><br>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Cocktail123" required="">
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required=""><br><br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="pour@faction.com" required="">
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="userPassword" required=""><br><br>
+      <label for="password">Password:</label>
+      <p>Your password must have:</p>
+      <ul>
+        <li>At least 8 characters</li>
+        <li>One upper- and one lowercase letter</li>
+        <li>A number</li>
+      </ul>
+      <input type="password" id="password" name="userPassword" required="">
 
-    <label for="birthday">Date of birth:</label>
-    <input type="date" id="birthday" name="birthday" required=""><br><br>
+      <label for="birthday">Date of birth:</label>
+      <input type="date" id="birthday" name="birthday" required="">
 
-    <input type="submit" value="Sign up!">
-</form>          
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
- <!-- until here! -->
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
+      <input type="submit" value="Sign up!">
+    </form>         
+  </div>
 </main>
 
 <footer>

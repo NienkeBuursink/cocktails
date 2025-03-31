@@ -21,16 +21,23 @@
     <ul>
       <% favorites.forEach(function(drink) { %>
         <li>
-          <h3><%= drink.strDrink %></h3>
-          <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
-          <p>Alcohol: <%= drink.strAlcoholic %></p>
-          <p>Instructions: <%= drink.strInstructions %></p>
+          <a href="/detailPage?id=<%= drink.idDrink %>">
+            <h3><%= drink.strDrink %></h3>
+            <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
+            <p>Alcohol: <%= drink.strAlcoholic %></p>
+          </a>
+          <form action="/toggleFavorite" method="post">
+            <input type="hidden" name="cocktailId" value="<%= drink.idDrink %>">
+            <button class="heartButton" type="submit">toggle to Favorites</button>
+          </form>
         </li>
       <% }); %>
     </ul>
   <% } else { %>
     <p>You haven't added any favorite cocktails yet.</p>
   <% } %>
+
+  <a href="/logout">Log out</a>
 </main>
 
 
