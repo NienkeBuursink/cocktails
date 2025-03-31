@@ -149,10 +149,23 @@ button, .link, input[type="submit"] {
 .header {
     display: flex;
     justify-content: space-between;
+    padding-left: 3rem;
+    position: relative;
     align-items: center;
     margin: 1rem;
 
     color: var(--color-accent1);
+}
+
+.backButton{
+    position: absolute;
+    padding: 0.8rem;
+    z-index: 5;
+}
+
+header a {
+    order: -1;
+}
 
     & img {
         order: -1;
