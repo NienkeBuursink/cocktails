@@ -6,6 +6,7 @@ let sortSetting = document.querySelector(".sort span")
 
 let userStatus 
 let filteredNameData
+let filteredNameData2
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
@@ -61,7 +62,7 @@ async function SearchCocktails(userStatus){
         console.log(filteredNameData, "after the filter")
     }
 
-    
+
 
     // Sorting and filtering
 
@@ -72,14 +73,29 @@ async function SearchCocktails(userStatus){
         filteredNameData = [...filteredNameData].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
         console.log(sortSetting.textContent, "date")
     }
+    // if ( 1 === 1){
+
+    //     document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+    //         checkbox.addEventListener("change", (filta) => {
+    //             console.log(filta)
+    //         console.log(filta.target.id)
+    //         console.log(filteredNameData, "before")
+    //         filteredNameData2 = filteredNameData.filter(cocktail => cocktail.strAlcoholic === filta.target.id);
+    //         console.log(filteredNameData2, "after")
+    //     });
+    // }) } else{
+    //     console.log("kaas")
+    //     filteredNameData2 = filteredNameData
+    // }
+    
+
+    
 
     try {
         const summarySpan = document.querySelector('.filter summary span'); // Select the span inside the summary
         if (summarySpan) {
             summarySpan.textContent = "(" + filteredNameData.length + " items)"; // Update the text content
         }
-
-ilteredNameData = [...filteredNameData].sort((a, b) => b.popularity - a.popularity);
     
         if (filteredNameData && Array.isArray(filteredNameData)) {
             filteredNameData.forEach(drink => {
@@ -99,7 +115,7 @@ ilteredNameData = [...filteredNameData].sort((a, b) => b.popularity - a.populari
                         </form>
                     </li>
             `);
-        return filteredNameData    
+        return filteredNameData2    
         });
         } else {
 
@@ -123,7 +139,7 @@ async function pageLoad() {
 
 
         SearchCocktails(userStatus)
-        updateSummaryCount(filteredNameData)
+
 
 
     } catch (error) {
@@ -147,8 +163,16 @@ sortButtons.forEach((button) => {
       // Set sortSetting's text content to the clicked button's text content
       sortSetting.textContent = button.textContent;
       SearchCocktails(userStatus);
-      updateSummaryCount(filteredNameData)
       return sortSetting
+    });
+  });
+
+filterButtons = document.querySelectorAll(".filter label")
+  filterButtons.forEach((button) => {
+    // Add an event listener to each button
+    button.addEventListener("click", () => {
+      // Set sortSetting's text content to the clicked button's text content
+      SearchCocktails(userStatus);
     });
   });
 

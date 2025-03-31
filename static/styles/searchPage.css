@@ -32,26 +32,30 @@ main > div{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 1rem, 0.5rem, 0.5rem, 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 /* .filter{
 
 } */
 
-.sort {
-    border: red 1px solid;
 
+.sort {
+
+    border: black solid 1px;
 }
 
-
-.sort summary {
+.filter summary svg{
+    border: 1px solid black;
+}
+.sort summary, .filter summary  {
     position: relative;
     display: flex;
     flex-direction: row;
     padding: 0.25rem;
     align-items: center;
-    border: green 1px solid;
+
 }
 .sort summary *{
     padding-right: .2rem;
@@ -82,6 +86,10 @@ details[open]::details-content {
 /* details[open]{
 } */
 /* sort options */
+
+fieldset{
+    background-color: white;
+}
 .sort fieldset{
     display: flex;
     flex-direction: column;
@@ -103,6 +111,7 @@ input[type="radio"]:checked + label {
 .filter fieldset{
     display: flex;
     flex-direction: column;
+
 }
 
 /* Search results styling */
