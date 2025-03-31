@@ -13,6 +13,14 @@
         "link link link";
     gap: 0.5rem;
     margin: 1em;
+}
+
+.header{
+    padding-left: 0;
+
+
+.header{
+    padding-left: 0;
 
     & img {
         grid-area: img;
