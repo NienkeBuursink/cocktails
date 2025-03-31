@@ -363,4 +363,15 @@ button.favourited svg {
 .toast.show {
     opacity: 1;
 }
+footer{
+    padding: 1rem;
+    background-image: linear-gradient(var(--color-accent2) 20%,var(--color-white));
+}
 
+footer p{
+    padding-top: 2rem;
+}
+
+footer img{
+    width: 6rem;
+}
