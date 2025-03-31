@@ -156,7 +156,7 @@ async function signedUp(req, res) { // function when submitted form
       return res.status(400).json({ error: "Invalid email address" });
     }
     if (!validator.isStrongPassword(userPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })) {
-      return res.status(400).json({ error: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number." });
+      return res.status(400).json({ error: "Password does not meet the criteria" });
     }
     if (!validator.isDate(birthday)) {
       return res.status(400).json({ error: "Date is invalid" });
@@ -302,7 +302,7 @@ async function toggleFavorite(req, res) {
     const username = req.session.username;
 
     if (!username) {
-      return res.status(401).json({ error: "Unauthorized: You must be logged in to toggle favorites" });
+      return res.status(401).json({error: "You must be logged in to favorite cocktails." });
     }
 
     // Ensure cocktailId is a string

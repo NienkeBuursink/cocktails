@@ -1,17 +1,19 @@
-document.addEventListener("DOMContentLoaded", () => { //wait until full page is loaded
-    // favorite buttons
-    document.querySelectorAll(".heartButton").forEach(button => {
-        button.addEventListener("click", async (event) => {
-            event.preventDefault(); // prevents posting immediately and uses this function instead
+document.addEventListener("DOMContentLoaded", () => { // Wait until full page is loaded
 
-            const form = event.target.closest("form"); // closest form before (so above) the button
+    // heartbuttons
+    document.addEventListener("click", async (event) => {
+        if (event.target.closest(".heartButton")) {
+            event.preventDefault(); // makes sure submit does not immediately submits to server, but does this function instead
+
+            const button = event.target;
+            const form = button.closest("form"); //closest from heartbutton (so one above it in code)
             const cocktailId = form.querySelector("input[name='cocktailId']").value;
 
             try {
                 const response = await fetch("/toggleFavorite", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ cocktailId })
+                    headers: { "Content-Type": "application/json" }, // format in which data is sent to server
+                    body: JSON.stringify({ cocktailId }) //actual data
                 });
 
                 const data = await response.json();
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => { //wait until full page is 
                 console.error("Error toggling favorite:", error);
                 showToast("Error toggling favorite.");
             }
-        });
+        }
     });
 
     // submit buttons for signup and login forms
@@ -62,10 +64,16 @@ document.addEventListener("DOMContentLoaded", () => { //wait until full page is 
     });
 });
 
+
 async function handleError(response, errorData) {
     try {
         if (response.status === 401) {
-            showToastNoHref("Username or password does not match");
+            // Check if the error is specifically about favoriting cocktails
+            if (errorData.error === "You must be logged in to favorite cocktails.") {
+                showToastWithHref("You must be logged in to favorite cocktails.", "Go to Account", "/account");
+            } else {
+                showToastNoHref("Username or password does not match");
+            }
         } else if (response.status === 400){
             showToastNoHref(errorData.error);
         } else {
@@ -104,18 +112,16 @@ function showToastWithHref(message) {
       toast.classList.add("show");
     }, 50);
   
-    // Remove the toast after 3 seconds
+    // Remove the toast after 2 seconds
     setTimeout(() => {
       toast.classList.remove("show");
       setTimeout(() => toast.remove(), 500); // Remove element after fade-out
-    }, 2000); // Hide after 3 seconds
+    }, 2000); // Hide after 2 seconds
   }
 
 
-
-
-  // show toast notification without link to account (signup login)
-  function showToastNoHref(message) {
+  // show toast notification without link to account
+function showToastNoHref(message) {
     const toast = document.createElement("div");
     toast.classList.add("toast");
   
@@ -139,5 +145,5 @@ function showToastWithHref(message) {
       toast.classList.remove("show");
       setTimeout(() => toast.remove(), 500); // Remove element after fade-out
     }, 2000); // Hide after 3 seconds
-  }
+}
   
