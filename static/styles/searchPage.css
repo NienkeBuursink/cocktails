@@ -1,0 +1,136 @@
+main section:first-of-type{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    border-bottom: black 1px solid;
+}
+/* main section > *{
+    border: solid 1px green;
+} */
+
+main section input{
+    background-image: url("../images/searchIcon.svg");
+    background-repeat: no-repeat;
+    background-position: 95% center ;
+    background-size: contain;
+}
+main section input:focus{
+    background-image: url("../images/deleteIcon.svg");
+    background-repeat: no-repeat;
+    background-position: 95% center ;
+    background-size: contain;
+}
+
+/* I think it shouldnt be a background iamge because its not clickable ;/ */
+
+
+/* Filter and sort styling */
+main > div{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem, 0.5rem, 0.5rem, 1rem;
+}
+
+/* .filter{
+
+} */
+
+.sort {
+    border: red 1px solid;
+
+}
+
+
+.sort summary {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem;
+    align-items: center;
+    border: green 1px solid;
+}
+.sort summary *{
+    padding-right: .2rem;
+    border-right: 1px black solid;
+}
+
+
+details > summary {
+  cursor: pointer;
+}
+
+
+details::details-content {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-out;
+  }
+  
+details[open]::details-content {
+    height: auto;
+    transition: all 0.5s ease-out;
+    position: absolute;
+    z-index: 2;
+}
+
+
+
+/* details[open]{
+} */
+/* sort options */
+.sort fieldset{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sort label{
+    width: 200px;
+    padding: .1rem;
+    margin-top: .5rem;
+}
+
+input[type="radio"]:checked + label {
+    background-color: lightblue;
+}
+
+/* Filter */
+
+.filter fieldset{
+    display: flex;
+    flex-direction: column;
+}
+
+/* Search results styling */
+
+main ul{
+    display: flex;
+    flex-direction: column;
+    transition: all ease 200ms;
+}
+
+main ul li{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    max-height: 10rem;
+    margin-bottom: 2rem;
+    border: 1px red solid;
+}
+main ul li a{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+}
+main ul li a img{
+
+    position: relative;
+    max-height:10rem;
+    max-width: fit-content;
+
+}

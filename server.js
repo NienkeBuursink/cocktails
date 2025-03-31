@@ -53,7 +53,7 @@ app.use(session({
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-  cookie: { maxAge: 10000 },
+  cookie: { maxAge: 600000 },
   rolling: true
   // Cookie age set to 600000 (10minutes.) 
   // rolling means that each time the user interact with the server the cookie timer resets.
@@ -160,7 +160,6 @@ async function signedUp(req, res) { // function when submitted form
 
     console.log("username:", username);
     console.log("email:", email);
-    console.log("password:", userPassword);
     console.log("hash:", hash);
     console.log("date of birth:", birthday);
 
@@ -177,6 +176,37 @@ async function signedUp(req, res) { // function when submitted form
     // Insert the new user into the database
     const collection = db.collection("users");
     await collection.insertOne(newUser);
+
+
+    let query
+    const user = await collection.findOne(query);
+
+      req.session.userLoggedIn = true;
+      req.session.username = user.username;
+      req.session.age = new Date(user.birthday);
+      let today = new Date()
+      let age = today.getFullYear() -  req.session.age.getFullYear();
+      const monthDiff = today.getMonth() -  req.session.age.getMonth()
+
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() <  req.session.age.getDate())){
+        console.log("above age")
+        age--
+        console.log(age)
+        
+      } else{
+        console.log("under age")
+        console.log(age)
+      }
+    
+      req.session.age = age
+      console.log("req.session.age = ", age)
+      //
+      
+      console.log("User logged in:", user.birthday )
+      // logged in
+      // console.log("User logged in:", user.username );
+      // res.status(200).json({ message: "Login successful", username: user.username });
+      return res.redirect('/account');
 
     console.log("New user created with id: ${result.insertedId}");
 

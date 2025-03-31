@@ -90,9 +90,9 @@ function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails,
         // console.log("allPopulairCocktails are this before filter: ", allPopulairCocktails)
 
         // Filter out alcoholic drinks for others
-        filteredPopulairCocktails = allPopulairCocktails
-        filteredLatestCocktails = allLatestCocktails
-        filteredCocktails =  allCocktails
+        filteredPopulairCocktails = allPopulairCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+        filteredLatestCocktails = allLatestCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+        filteredCocktails =  allCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
         // Need to add .filter to each of these to correctly filter out alcoholic drinks from the alcoholic drinks
 
         // console.log("filteredPopulairCocktails are this after filter: ", filteredPopulairCocktails)

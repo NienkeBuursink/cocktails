@@ -2,16 +2,17 @@ const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const submitButton = document.getElementById("searchButton");
 const searchBar = document.getElementById("searchBar");
 const nameList = document.getElementById('cocktailName');
-
+let sortSetting = document.querySelector(".sort span")
 
 let userStatus 
-
+let filteredNameData
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
     return await response.json();
 
 }
+
 
 async function SearchCocktails(userStatus){
 
@@ -33,10 +34,10 @@ async function SearchCocktails(userStatus){
 	// }
 
     const userInput = searchBar.value.trim();
-    if (!userInput) {
-        nameList.innerHTML = "<li>Please enter a search term</li>";
-        return;
-    }
+    // if (!userInput) {
+    //     nameList.innerHTML = "<li>Please enter a search term</li>";
+    //     return;
+    // }
     const searchURL = baseURL + "/search.php?s=" + userInput;
     console.log(searchURL)
     const nameResponse = await fetch(searchURL);
@@ -45,7 +46,8 @@ async function SearchCocktails(userStatus){
     console.log(nameData)
     console.log(userStatus, ":userstatus")
     console.log(userStatus.isLoggedIn, ":userstatus.isLoggedIn")
-    let filteredNameData
+
+
     if (userStatus.isLoggedIn && userStatus.isAdult) {
         // Show all cocktails for logged-in adults
         console.log("user logged in and return cocktails")
@@ -59,17 +61,37 @@ async function SearchCocktails(userStatus){
         console.log(filteredNameData, "after the filter")
     }
 
+    
+
+    // Sorting and filtering
+
+    if (sortSetting.textContent == "Name"){
+        filteredNameData = [...filteredNameData].sort((a, b) => a.strDrink.localeCompare(b.strDrink));
+        console.log(sortSetting.textContent, "name")
+    } else if (sortSetting.textContent == "Latest"){
+        filteredNameData = [...filteredNameData].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
+        console.log(sortSetting.textContent, "date")
+    }
+
     try {
-        
+        const summarySpan = document.querySelector('.filter summary span'); // Select the span inside the summary
+        if (summarySpan) {
+            summarySpan.textContent = "(" + filteredNameData.length + " items)"; // Update the text content
+        }
+
+ilteredNameData = [...filteredNameData].sort((a, b) => b.popularity - a.popularity);
+    
         if (filteredNameData && Array.isArray(filteredNameData)) {
             filteredNameData.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
                     <li>
                         <a href="/detailPage?id=${drink.idDrink}">
-                            <h2>${drink.strDrink}</h2>
-                            <p>${drink.strAlcoholic}</p>
-                            <p>${drink.strGlass}</p>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                            <div>
+                                <h2>${drink.strDrink}</h2>
+                                <p>${drink.strAlcoholic}</p>
+                                <p>${drink.strGlass}</p>
+                            </div>
                         </a>
                         <form action="/toggleFavorite" method="post">
                             <input type="hidden" name="cocktailId" value="${drink.idDrink}">
@@ -77,7 +99,8 @@ async function SearchCocktails(userStatus){
                         </form>
                     </li>
             `);
-            });
+        return filteredNameData    
+        });
         } else {
 
             nameList.innerHTML = "<li>No matching cocktails found</li>";
@@ -90,6 +113,8 @@ async function SearchCocktails(userStatus){
 }
 
 
+
+
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
@@ -98,6 +123,7 @@ async function pageLoad() {
 
 
         SearchCocktails(userStatus)
+        updateSummaryCount(filteredNameData)
 
 
     } catch (error) {
@@ -108,7 +134,25 @@ async function pageLoad() {
 pageLoad();
 
 // Event listeners
-submitButton.addEventListener('click', () => SearchCocktails(userStatus));
-searchBar.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter');
+const sortButtons = document.querySelectorAll(".sort label")
+
+submitButton.addEventListener("click", () => {
+    SearchCocktails(userStatus);
+// SearchCocktails(userStatus)
+}
+);
+sortButtons.forEach((button) => {
+    // Add an event listener to each button
+    button.addEventListener("click", () => {
+      // Set sortSetting's text content to the clicked button's text content
+      sortSetting.textContent = button.textContent;
+      SearchCocktails(userStatus);
+      updateSummaryCount(filteredNameData)
+      return sortSetting
+    });
+  });
+
+
+searchBar.addEventListener("keypress", (e) => {
+    if (e.key === "Enter");
 });
