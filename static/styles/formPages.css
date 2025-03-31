@@ -1,11 +1,13 @@
+/****************************/
+/* Form Page Styling         */
+/****************************/
+
+/* Global Styles */
 html {
     overflow: hidden;
 }
 
-* {
-    background: none;
-}
-
+/* Log in Section */
 main {
     background-image: url(/static/images/index/introtext.jpg);
     background-size: cover;
@@ -14,30 +16,36 @@ main {
     height: 95vh;
     display: grid;
     place-items: center;
+
+     /* List Items in Main Section */
+     ul li {
+        list-style-type: circle;
+        list-style-position: inside;
+    } 
 }
 
+
+/* Login and Signup Container */
 .loginSignup {
     background: rgba(255, 255, 255, 0.60);
     backdrop-filter: blur(2.5px);
     margin: 1rem;
     padding: 2rem;
     border-radius: 10px;
-}
 
-form {
-    display: grid;
-    & input {
-        margin-bottom: 1.5rem;
-    }
-    & input:last-of-type {
-        display: block;
-        padding: .8rem;
-        border-radius: 10px;
-        margin-bottom: 0;
-    }
-}
+    /* Form Styling */
+    form {
+        display: grid;
 
-main ul li {
-    list-style-type: circle;
-    list-style-position: inside;
+        & input {
+            margin-bottom: 1.5rem;
+
+            &:last-of-type {
+                display: block;
+                padding: 0.8rem;
+                border-radius: 10px;
+                margin-bottom: 0;
+            }
+        }
+    }
 }

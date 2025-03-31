@@ -1,46 +1,42 @@
-img {
-    max-width: 100%;
-}
+/****************************/
+/* Intro Section Styling    */
+/****************************/
 
 .intro {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: repeat(4, auto);
     grid-template-areas: 
-    "img img header"
-    "text text text"
-    "subtext subtext subtext"
-    "link link link";
-
-    gap:0.5rem;
+        "img img header"
+        "text text text"
+        "subtext subtext subtext"
+        "link link link";
+    gap: 0.5rem;
     margin: 1em;
+
+    & img {
+        grid-area: img;
+    }
+
+    & h2 {
+        grid-area: header;
+        align-self: center;
+        line-height: 125%;
+    }
+
+    & p:first-of-type {
+        grid-area: text;
+        margin-top: 1rem;
+    }
+
+    & p:last-of-type {
+        grid-area: subtext;
+        font-weight: 200;
+    }
+
+    & a {
+        grid-area: link;
+        width: max-content;
+        justify-self: end;
+    }
 }
-
-.intro img {
-    grid-area: img;
-}
-
-.intro h2 {
-    grid-area: header;
-   align-self: center;
-   line-height: 125%; 
-}
-
-.intro p:first-of-type {
-    grid-area: text;
-    margin-top: 1rem;
-    
-}
-
-.intro p:last-of-type {
-    grid-area: subtext;
-    font-weight: 200;
-}
-
-.intro a {
-    grid-area: link;
-    width: max-content;
-    justify-self: end;
-}
-
-

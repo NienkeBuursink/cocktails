@@ -67,7 +67,6 @@ img {
 /* Base styling      */
 /*********************/
 * {
-    background: var(--color-white);
     color: var(--color-black);
 
     font-family: "Gaegu", Arial, Helvetica, sans-serif;
@@ -75,6 +74,10 @@ img {
     font-weight: 400;
     line-height: var(--lnHeight-Gaegu); 
     letter-spacing: var(--spacing-Gaegu);
+}
+
+body {
+    background: var(--color-white);
 }
 
 /* Headings Styles */
