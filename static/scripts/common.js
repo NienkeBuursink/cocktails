@@ -12,6 +12,6 @@ buttonMenu.addEventListener("click", toggleMenu);
 // functions
 
 function toggleMenu() {
-    ulMenu.classList.toggle("toonMenu");
-    buttonMenu.classList.toggle("toonMenu");
+    ulMenu.classList.toggle("showMenu");
+    buttonMenu.classList.toggle("showMenu");
   }

@@ -4,67 +4,60 @@
 <head>
   <%- include('../partials/head'); %>
   <link rel="stylesheet" href="/static/styles/index.css">
-
 </head>
 
 <body>
 
-<header>
-  <%- include('../partials/header'); %>
-</header>
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
 
-<main>
+  <main>
+    <section class="intro">
 
-  <article class="intro">
+      <h2>Discover cocktails made for you</h2>
+      <img src="/static/images/index/introtext.jpg" alt="Spritz cocktail on a sunny beach">
+      <!-- bron: https://www.thecocktaildb.com/drink/17215-spritz -->
 
-    <h2>Discover cocktails made for you</h2>
-    <img src="/static/images/index/introtext.jpg" alt="Spritz cocktail on a sunny beach">
-    <!-- bron: https://www.thecocktaildb.com/drink/17215-spritz -->
-
-    <p>Ever wanted to mix the perfect cocktail? Pourfaction helps you find the best cocktail recipes based on your personal preferences.</p>
-    <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
-      Explore endless possibilities, get inspired, and craft your perfect pour.</p>
+      <p>Ever wanted to mix the perfect cocktail? Pourfaction helps you find the best cocktail recipes based on your personal preferences.</p>
+      <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
+        Explore endless possibilities, get inspired, and craft your perfect pour.</p>
 
     <a class="link" href="/search">check it out!</a>
 
-   </article>
+    </section>
 
-   
-   <article>
-    <h2>Popular right now</h2>
-      <ul class="carousel">
-        
-      </ul>
-   </article>
-   <article>
-    <h2>Latest drinks</h2>
-      <ul class="carousel carousel2">
+    <section>
+      <h2>Popular right now</h2>
+        <ul class="carousel popularList"></ul>
+    </section>
 
-      </ul>
-   </article>
+    <section>
+      <h2>Latest drinks</h2>
+      <ul class="carousel latestList"></ul>
+    </section>
+    
 
+    <!-- <section class="searchBar">
+      <label for="searchBar"></label>
+      <input id="searchBar" name="searchBar" type="text">
+      <button id="searchButton" type="submit">submit</button>
 
-    <label for="searchBar"></label>
-    <input id="searchBar" name="searchBar" type="text">
-    <button id="searchButton" type="submit">submit</button>
+      <ul id="cocktailName"></ul>
+      <ul id="cocktailIngredient"> </ul>
+    </section> -->
+      
+  </main>
 
-  <ul id="cocktailName">
-
-  </ul>
-  <ul id="cocktailIngredient">
-
-  </ul>
-  
-
-</main>
-
-<footer>
-  <%- include('../partials/footer'); %>
-</footer>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
 
   <script src="/static/scripts/cocktailAPI.js" defer></script> 
   <!-- The script above is for getting access and searching for cocktails -->
   <script src="/static/scripts/common.js" defer></script> 
   <script src="/static/scripts/carrousel.js" defer></script> 
+  <script src="/static/scripts/favourite.js" defer></script> 
+
 </body>
 </html>
