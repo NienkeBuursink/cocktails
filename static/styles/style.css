@@ -139,7 +139,7 @@ button {
     justify-content: space-between;
 }
 
-header img {
+header a {
     order: -1;
 }
 

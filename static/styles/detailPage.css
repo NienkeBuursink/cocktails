@@ -17,6 +17,17 @@ section h1 {
     background: none;
 }
 
+.header{
+    padding-left: 3rem;
+    position: relative;
+}
+
+.backButton{
+    position: absolute;
+    padding: 0.8rem;
+    z-index: 5;
+}
+
 h2 {
     font-size: 1rem;
     padding: 1rem 0;
