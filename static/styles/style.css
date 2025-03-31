@@ -376,10 +376,6 @@ footer{
     align-items: center; 
 }
 
-footer p:nth-child(3){
-    padding-top: 2rem;
-}
-
 footer img{
     width: 5rem;
 }
