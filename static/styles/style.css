@@ -24,6 +24,7 @@
 	--color-midtone: #BCD7FF;
 	--color-black: #240F4A;
     --color-white: #FFFCF7;
+    --color-light-blue: #F0F1F8;
 
     --size-h1: 26px;
     --size-h2: 26px;
@@ -364,14 +365,21 @@ button.favourited svg {
     opacity: 1;
 }
 footer{
+    margin-top: 1rem;
     padding: 1rem;
-    background-image: linear-gradient(var(--color-accent2) 20%,var(--color-white));
+    background-image: linear-gradient(180deg,
+    var(--color-light-blue)10%,
+    var(--color-white)40%,
+    var(--color-white)50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
-footer p{
+footer p:nth-child(3){
     padding-top: 2rem;
 }
 
 footer img{
-    width: 6rem;
+    width: 5rem;
 }
