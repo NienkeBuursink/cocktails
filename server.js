@@ -215,7 +215,7 @@ async function signedUp(req, res) { // function when submitted form
       // logged in
       // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
-      return res.redirect('/account');
+      return res.json({ message: "Signup successful, redirecting", redirect: "/account" });
     
   } catch (error) {
     console.error(error);
@@ -279,7 +279,7 @@ async function loggedIn(req, res) {
       // logged in
       // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
-      return res.redirect('/account');
+      return res.json({ message: "Login successful, redirecting", redirect: "/account" });
       // When there is a match then a session is made for the user.
     } else{
       // console.log("nomatch");
