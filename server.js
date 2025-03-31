@@ -186,6 +186,36 @@ async function signedUp(req, res) { // function when submitted form
     // Insert the new user into the database
     const collection = db.collection("users");
     await collection.insertOne(newUser);
+
+    let query
+    const user = await collection.findOne(query);
+
+      req.session.userLoggedIn = true;
+      req.session.username = user.username;
+      req.session.age = new Date(user.birthday);
+      let today = new Date()
+      let age = today.getFullYear() -  req.session.age.getFullYear();
+      const monthDiff = today.getMonth() -  req.session.age.getMonth()
+
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() <  req.session.age.getDate())){
+        console.log("above age")
+        age--
+        console.log(age)
+        
+      } else{
+        console.log("under kees")
+        console.log(age)
+      }
+    
+      req.session.age = age
+      console.log("req.session.age = ", age)
+      //
+      
+      console.log("User logged in:", user.birthday )
+      // logged in
+      // console.log("User logged in:", user.username );
+      // res.status(200).json({ message: "Login successful", username: user.username });
+      return res.redirect('/account');
     
   } catch (error) {
     console.error(error);
