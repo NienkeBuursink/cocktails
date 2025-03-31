@@ -17,6 +17,17 @@ section h1 {
     background: none;
 }
 
+.header{
+    padding-left: 3rem;
+    position: relative;
+}
+
+.backButton{
+    position: absolute;
+    padding: 0.8rem;
+    z-index: 5;
+}
+
 h2 {
     font-size: 1rem;
     padding: 1rem 0;
@@ -27,12 +38,12 @@ section ul li{
     background: none;
 }
 
-#section1DetailPage p{
+#mainDetails p{
     padding-top: 1rem;
     /* background: none; */
 }
 
-#section1DetailPage{
+#mainDetails{
     position: relative;
     z-index: 0;
 }

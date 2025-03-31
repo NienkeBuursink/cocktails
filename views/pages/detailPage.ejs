@@ -9,12 +9,15 @@
 <body>
 
 <header>
+  <a href="javascript:history.back()">
+    <img class="backButton" src="/static/images/backButton.svg" alt="back">
+  </a>
   <%- include('../partials/header'); %>
 </header>
 
 <main>
 
-  <section id="section1DetailPage">
+  <section id="mainDetails">
     <h1><%= cocktail.strDrink %></h1>
     <img src="<%= cocktail.strDrinkThumb %>" alt="<%= cocktail.strDrink %>">
 
