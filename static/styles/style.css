@@ -137,6 +137,14 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-left: 3rem;
+    position: relative;
+}
+
+.backButton{
+    position: absolute;
+    padding: 0.8rem;
+    z-index: 5;
 }
 
 header a {
