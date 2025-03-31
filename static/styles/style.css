@@ -24,7 +24,6 @@
 	--color-midtone: #BCD7FF;
 	--color-black: #240F4A;
     --color-white: #FFFCF7;
-    --color-light-blue: #F0F1F8;
 
     --size-h1: 26px;
     --size-h2: 26px;
@@ -146,10 +145,14 @@ button {
     position: absolute;
     padding: 0.8rem;
     z-index: 5;
-}
+    align-items: center;
+    margin: 1rem;
 
-header a {
-    order: -1;
+    color: var(--color-accent1);
+
+    & a {
+        order: -1;
+    }
 }
 
 nav button {
@@ -357,12 +360,15 @@ button.favourited svg {
         background: linear-gradient(100deg, var(--color-accent2) 7.02%, var(--color-bright) 74.11%);
         
         box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
-        cursor:pointer;
-    }
-}
+        cursor: pointer;
 
-.toast.show {
-    opacity: 1;
+        align-self: center;
+    }
+
+    /* Toast Visibility */
+    &.show {
+        opacity: 1;
+    }
 }
 footer{
     margin-top: 1rem;

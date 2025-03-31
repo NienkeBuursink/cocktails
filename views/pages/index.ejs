@@ -9,55 +9,40 @@
 
 <body>
 
-<header>
-  <%- include('../partials/header'); %>
-</header>
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
 
-<main>
+  <main>
+    <section class="intro">
 
-  <section class="intro">
+      <h2>Discover cocktails made for you</h2>
+      <img src="/static/images/index/introtext.jpg" alt="Spritz cocktail on a sunny beach">
+      <!-- bron: https://www.thecocktaildb.com/drink/17215-spritz -->
 
-    <h2>Discover cocktails made for you</h2>
-    <img src="/static/images/index/introtext.jpg" alt="Spritz cocktail on a sunny beach">
-    <!-- bron: https://www.thecocktaildb.com/drink/17215-spritz -->
-
-    <p>Ever wanted to mix the perfect cocktail? Pourfaction helps you find the best cocktail recipes based on your personal preferences.</p>
-    <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
-      Explore endless possibilities, get inspired, and craft your perfect pour.</p>
+      <p>Ever wanted to mix the perfect cocktail? Pourfaction helps you find the best cocktail recipes based on your personal preferences.</p>
+      <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
+        Explore endless possibilities, get inspired, and craft your perfect pour.</p>
 
     <a class="link" href="/search">check it out!</a>
-
-   </section>
-
-   
-   <section class="testButton">
-
-    <img src="/static/images/index/introtext.jpg" alt="">
-    <button class="heartButton">
-      <svg viewBox="0 0 65.68 54.33">
-        <path d="M64.68,17.52c0,2.9-.96,5.29-2.28,7.57-1.74,3.02-4.03,5.66-6.62,7.92l-22.88,19.99L6.8,30.27h0c-1.43-1.39-5.79-7.63-5.79-12.75C1,8.4,8.13,1,16.92,1s15.93,7.4,15.93,16.52c0-9.12,7.12-16.52,15.92-16.52s15.92,7.4,15.92,16.52Z"/>
-      </svg>
-    </button>
 
     </section>
 
     <section>
       <h2>Popular right now</h2>
-        <ul class="carousel popularList">
-        </ul>
+        <ul class="carousel popularList"></ul>
     </section>
 
     <section>
       <h2>Latest drinks</h2>
-      <ul class="carousel latestList">
-      </ul>
+      <ul class="carousel latestList"></ul>
     </section>
-   
+    
 
-
-    <label for="searchBar"></label>
-    <input id="searchBar" name="searchBar" type="text">
-    <button id="searchButton" type="submit">submit</button>
+    <!-- <section class="searchBar">
+      <label for="searchBar"></label>
+      <input id="searchBar" name="searchBar" type="text">
+      <button id="searchButton" type="submit">submit</button>
 
   <ul id="cocktailName">
 
@@ -69,14 +54,15 @@
 
 </main>
 
-<footer>
-  <%- include('../partials/footer'); %>
-</footer>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
 
   <script src="/static/scripts/cocktailAPI.js" defer></script> 
   <!-- The script above is for getting access and searching for cocktails -->
   <script src="/static/scripts/common.js" defer></script> 
   <script src="/static/scripts/carrousel.js" defer></script> 
   <script src="/static/scripts/favourite.js" defer></script> 
+
 </body>
 </html>
