@@ -15,7 +15,7 @@
     margin: 1em;
 }
 
-.header{
+.intro {
     padding-left: 0;
 
     & img {
@@ -43,4 +43,8 @@
         width: max-content;
         justify-self: end;
     }
+}
+
+.popularCarousel, .latestCarousel {
+    margin-left: 1rem;
 }
