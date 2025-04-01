@@ -202,6 +202,34 @@ nav {
             &:nth-child(2) {
                 translate: 0 .5em;
             }
+
+
+            
+        
+/* 
+        header.menuOpen button span:nth-child(1) {
+            translate: 0 0;
+            rotate: 45deg;
+          }
+          
+          header.menuOpen button span:nth-child(2) {
+              
+              scale: 0 1
+          }
+          
+          header.menuOpen button span:nth-child(3) {
+            translate: 0 0;
+            rotate: -45deg;
+          } */
+        }
+
+        &.showMenu {
+             
+            &:nth-child(1){
+                translate: 0 0;
+                rotate: 45deg;
+                background-color: #76D5E2;
+            }    
         }
     }
 
@@ -223,32 +251,7 @@ nav {
         transition: 1s;
 
         &.showMenu {
-            translate: 0%;
-
-            
-            & button span {
-                &:nth-child(1){
-                    translate: 0 0;
-                    rotate: 45deg;
-                    background-color: #76D5E2;
-                }
-                
-            }
-/* 
-            header.menuOpen button span:nth-child(1) {
-                translate: 0 0;
-                rotate: 45deg;
-              }
-              
-              header.menuOpen button span:nth-child(2) {
-                  
-                  scale: 0 1
-              }
-              
-              header.menuOpen button span:nth-child(3) {
-                translate: 0 0;
-                rotate: -45deg;
-              } */
+            translate: 0%;       
         }
     }
 }
