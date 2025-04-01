@@ -15,7 +15,7 @@
     margin: 1em;
 }
 
-.intro{
+.intro {
     padding-left: 0;
 
     & img {
@@ -44,6 +44,11 @@
         justify-self: end;
     }
 }
+
+.popularCarousel, .latestCarousel {
+    margin-left: 1rem;
+}
+
 #popularCarouselContainer {
     position: relative;
     & .loginOverlay {
@@ -62,3 +67,5 @@
         z-index: 1;
     }
 }
+
+
