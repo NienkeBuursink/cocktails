@@ -88,6 +88,8 @@ h1, h2, h3, h4 {
     font-weight: 400;
     line-height: var(--lnHeight-Calistoga); 
     letter-spacing: var(--spacing-Calistoga);
+
+    padding: 1rem 0;
 }
 
 /* Specific Heading Sizes */
@@ -149,13 +151,22 @@ button, .link, input[type="submit"] {
 .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     margin: 1rem;
 
     color: var(--color-accent1);
 
     & img {
         order: -1;
+        object-fit: contain;
+    }
+
+    & h2 {
+        margin: 0;
+    }
+
+    & nav {
+        display: contents;
     }
 }
 
@@ -164,6 +175,34 @@ nav {
     & button {
         position: relative;
         z-index: 100;
+
+        display: grid;
+        place-items:  center;
+  
+        
+        object-fit: contain;
+        
+        & span {
+            display: block;
+            
+            width: 1.5em;
+            height: .2em;
+            border-radius: 2em;
+            background-color: var(--color-white);
+            
+            grid-row-start: 1;
+            grid-column-start: 1;
+            
+            transition: .5s;
+            
+            &:nth-child(1) {
+                translate: 0 -.5em;
+            }
+
+            &:nth-child(2) {
+                translate: 0 .5em;
+            }
+        }
     }
 
     & ul {
@@ -185,6 +224,31 @@ nav {
 
         &.showMenu {
             translate: 0%;
+
+            
+            & button span {
+                &:nth-child(1){
+                    translate: 0 0;
+                    rotate: 45deg;
+                    background-color: #76D5E2;
+                }
+                
+            }
+/* 
+            header.menuOpen button span:nth-child(1) {
+                translate: 0 0;
+                rotate: 45deg;
+              }
+              
+              header.menuOpen button span:nth-child(2) {
+                  
+                  scale: 0 1
+              }
+              
+              header.menuOpen button span:nth-child(3) {
+                translate: 0 0;
+                rotate: -45deg;
+              } */
         }
     }
 }
@@ -242,7 +306,7 @@ button.favourited svg {
 /* Carousel Container */
 .carousel {
     margin: 1rem;
-    margin-left: 2.5rem;
+    margin-left: 2rem;
 
     display: grid;
     grid-auto-flow: column;
