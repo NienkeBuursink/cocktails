@@ -117,7 +117,7 @@ function showToastWithHref(message) {
       toast.classList.remove("show");
       setTimeout(() => toast.remove(), 500); // Remove element after fade-out
     }, 2000); // Hide after 2 seconds
-  }
+}
 
 
   // show toast notification without link to account
