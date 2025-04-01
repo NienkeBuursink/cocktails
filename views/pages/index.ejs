@@ -4,6 +4,7 @@
 <head>
   <%- include('../partials/head'); %>
   <link rel="stylesheet" href="/static/styles/index.css">
+
 </head>
 
 <body>
@@ -23,37 +24,42 @@
       <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
         Explore endless possibilities, get inspired, and craft your perfect pour.</p>
 
-    <a class="link" href="/search">check it out!</a>
+       <a class="link" href="/search">check it out!</a>
 
     </section>
 
-    <section>
+    <section class="popularCarousel">
       <h2>Popular right now</h2>
         <ul class="carousel popularList"></ul>
     </section>
 
-    <section>
+    <section class="latestCarousel">
       <h2>Latest drinks</h2>
       <ul class="carousel latestList"></ul>
     </section>
-    
+      
+  </main>
 
     <!-- <section class="searchBar">
       <label for="searchBar"></label>
       <input id="searchBar" name="searchBar" type="text">
       <button id="searchButton" type="submit">submit</button>
 
-      <ul id="cocktailName"></ul>
-      <ul id="cocktailIngredient"> </ul>
-    </section> -->
-      
-  </main>
+  <ul id="cocktailName">
+
+  </ul>
+  <ul id="cocktailIngredient">
+
+  <!-- </ul> -->
+  
+
+</main>
 
   <footer>
     <%- include('../partials/footer'); %>
   </footer>
 
-  <script src="/static/scripts/cocktailAPI.js" defer></script> 
+  <!-- <script src="/static/scripts/cocktailAPI.js" defer></script>  -->
   <!-- The script above is for getting access and searching for cocktails -->
   <script src="/static/scripts/common.js" defer></script> 
   <script src="/static/scripts/carrousel.js" defer></script> 

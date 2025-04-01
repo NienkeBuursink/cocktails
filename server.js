@@ -156,7 +156,7 @@ async function signedUp(req, res) { // function when submitted form
       return res.status(400).json({ error: "Invalid email address" });
     }
     if (!validator.isStrongPassword(userPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })) {
-      return res.status(400).json({ error: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number." });
+      return res.status(400).json({ error: "Password does not meet the criteria" });
     }
     if (!validator.isDate(birthday)) {
       return res.status(400).json({ error: "Date is invalid" });
@@ -187,7 +187,6 @@ async function signedUp(req, res) { // function when submitted form
     const collection = db.collection("users");
     await collection.insertOne(newUser);
 
-
     let query
     const user = await collection.findOne(query);
 
@@ -204,7 +203,7 @@ async function signedUp(req, res) { // function when submitted form
         console.log(age)
         
       } else{
-        console.log("under age")
+        console.log("under kees")
         console.log(age)
       }
     
@@ -216,10 +215,8 @@ async function signedUp(req, res) { // function when submitted form
       // logged in
       // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
-      return res.redirect('/account');
-
-    console.log("New user created with id: ${result.insertedId}");
-
+      return res.json({ message: "Signup successful, redirecting", redirect: "/account" });
+    
   } catch (error) {
     console.error(error);
   }
@@ -282,7 +279,7 @@ async function loggedIn(req, res) {
       // logged in
       // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
-      return res.redirect('/account');
+      return res.json({ message: "Login successful, redirecting", redirect: "/account" });
       // When there is a match then a session is made for the user.
     } else{
       // console.log("nomatch");
@@ -305,7 +302,7 @@ async function toggleFavorite(req, res) {
     const username = req.session.username;
 
     if (!username) {
-      return res.status(401).json({ error: "Unauthorized: You must be logged in to toggle favorites" });
+      return res.status(401).json({error: "You must be logged in to favorite cocktails." });
     }
 
     // Ensure cocktailId is a string
