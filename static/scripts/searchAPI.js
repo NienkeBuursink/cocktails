@@ -68,12 +68,16 @@ async function appliedFilters(){
         const alcoholicFilter = document.querySelector(".alcoholicFilter")
         const glassFilter = document.querySelector(".glassFilter");
         const categoryFilter = document.querySelector(".categoryFilter");
-        console.log(userStatus)
+        console.log(userStatus);
 
         if(userStatus.isLoggedIn && userStatus.isAdult){
             alcoholicFilter.classList.remove("disabled");
         } else{
-            alcoholicFilter.classList.add("disabled")
+            alcoholicFilter.classList.add("disabled");
+            const nonAlcoholicCheckbox = document.getElementById("Non alcoholic");
+            const logInMessage = document.querySelector(".logInMessage");
+            logInMessage.classList.remove("none");
+            nonAlcoholicCheckbox.checked = true;
         }
 
         const selectedAlcoholicFilter = getCheckedValues(alcoholicFilter);
@@ -138,19 +142,23 @@ async function displayCocktails(){
             console.log("filteredCocktails in making", filteredCocktails)
             filteredCocktails.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
-                <li>
+                <li class="list-item hidden">
                 <a href="/detailPage?id=${drink.idDrink}">
                     <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                     <div>
-                        <h2>${drink.strDrink}</h2>
-                        <p>${drink.strAlcoholic}</p>
+                        <h3>${drink.strDrink}</h3>
+                        <p>${drink.strCategory}</p>
                         <p>${drink.strGlass}</p>
                     </div>
                 </a>
                 <form action="/toggleFavorite" method="post">
-                    <input type="hidden" name="cocktailId" value="${drink.idDrink}">
-                    <button class="heartButton" type="submit">toggle to Favorites</button>
-                </form>
+                <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                <button class="heartButton" type="submit">
+                    <svg viewBox="0 0 65.68 54.33">
+                        <path d="M64.68,17.52c0,2.9-.96,5.29-2.28,7.57-1.74,3.02-4.03,5.66-6.62,7.92l-22.88,19.99L6.8,30.27h0c-1.43-1.39-5.79-7.63-5.79-12.75C1,8.4,8.13,1,16.92,1s15.93,7.4,15.93,16.52c0-9.12,7.12-16.52,15.92-16.52s15.92,7.4,15.92,16.52Z"/>
+                    </svg>
+                </button>
+            </form>
             </li>
             `);
             
@@ -166,7 +174,27 @@ async function displayCocktails(){
 
 }
 
+async function intersectionObser() {
+    const listItems = document.querySelectorAll(".list-item");
+    const observerOptions = {
+      root: null, // Observe relative to the viewport
+      threshold: 0.4, // Trigger when 10% of the item is visible
+    };
+    const observerCallback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          entry.target.classList.remove("hidden");
+          observer.unobserve(entry.target); // Stop observing once animated
+        }
+      });
+    };
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
 
+    listItems.forEach((item) => {
+      observer.observe(item);
+    });
+  };
 
 
 async function pageLoad() {
@@ -178,6 +206,7 @@ async function pageLoad() {
         await appliedFilters(userStatus, filteredCocktails)
         console.log(filteredCocktails, "after sorting")
         await displayCocktails(filteredCocktails)
+        intersectionObser()
     } catch (error) {
         console.error("Error:", error);
     }
@@ -194,6 +223,7 @@ submitButton.addEventListener("click", async ()  => {
     await sorting()
     await appliedFilters(userStatus, filteredCocktails)
     await displayCocktails(filteredCocktails);
+    intersectionObser()
 
 }
 );
@@ -207,7 +237,8 @@ sortButtons.forEach( (button)  =>  {
       await filterCocktailsByAge(allCocktails, userStatus)
       await sorting()
       await appliedFilters(userStatus, filteredCocktails)
-      displayCocktails(filteredCocktails);
+      await displayCocktails(filteredCocktails);
+      intersectionObser()
 
 
     });
@@ -222,7 +253,9 @@ filterButtons = document.querySelectorAll(".filter input")
       await filterCocktailsByAge(allCocktails, userStatus)
       await sorting()
       await appliedFilters(userStatus, filteredCocktails)
-      displayCocktails(filteredCocktails);
+      await displayCocktails(filteredCocktails);
+      intersectionObser()
+      
 
     });
   });
@@ -231,3 +264,4 @@ filterButtons = document.querySelectorAll(".filter input")
 searchBar.addEventListener("keypress", (e) => {
     if (e.key === "Enter");
 });
+

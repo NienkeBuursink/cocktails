@@ -111,12 +111,28 @@ input {
 }
 
 /* Buttons and Links */
-button, .link, input[type="submit"] {
+button, .link, input[type="submit"]{
     padding: 0.25rem 0.75rem;
 
     color: var(--color-white);
     background: linear-gradient(100deg, var(--color-accent2) 7.02%, var(--color-bright) 74.11%);
     
+    border: none;
+    border-radius: 3.75rem;
+
+    font-family: "Calistoga", Arial, Helvetica, sans-serif;
+    font-size: var(--size-button);
+    letter-spacing: var(--spacing-Calistoga);
+
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
+    cursor: pointer;
+}
+
+.sort, .filter{
+    padding: 0.25rem 0.75rem;
+
+    color: var(--color-white);
+    background: linear-gradient(92deg, var(--midtone, #BCD7FF) 0.53%, var(--maybe, #76D5E2) 100%);
     border: none;
     border-radius: 3.75rem;
 
@@ -211,6 +227,7 @@ nav {
     fill: none;
     background: none;
     width: 1.2rem;
+
 }
 
 /* Favorite Animation */

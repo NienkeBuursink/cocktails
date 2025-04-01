@@ -3,7 +3,7 @@ main section:first-of-type{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-bottom: 2rem;
+    padding-bottom: 1.25rem;
     border-bottom: black 1px solid;
 }
 /* main section > *{
@@ -15,6 +15,7 @@ main section input{
     background-repeat: no-repeat;
     background-position: 95% center ;
     background-size: contain;
+    min-width: 70vw;
 }
 main section input:focus{
     background-image: url("../images/deleteIcon.svg");
@@ -36,45 +37,22 @@ main > div{
     margin-top: 0.5rem;
 }
 
-/* .filter{
-
-} */
-.disabled{
+.disabled *, .disabled input{
     pointer-events:none;
     cursor: not-allowed;
-    filter:grayscale(1);
+    /* filter:grayscale(1); */
+    color: lightgray;
 
 }
 
-.sort {
-
-    border: black solid 1px;
-}
-
-.filter summary svg{
-    border: 1px solid black;
-}
-.glassFilter summary{
-    display: flex;
-    flex-direction: column;
-    
+.logInMessage, .logInMessage a {
+    color: var(--color-black);
+    pointer-events: all;
+    cursor: inherit;
 }
 
 
-
-.sort > summary, .filter > summary  {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    padding: 0.25rem;
-    align-items: center;
-
-}
-.sort summary *{
-    padding-right: .2rem;
-    border-right: 1px black solid;
-}
-
+/* animation for summary */
 
 details > summary {
   cursor: pointer;
@@ -106,32 +84,81 @@ details::details-content{
 /* details[open]{
 } */
 /* sort options */
+/* .sort {
+    border: black solid 1px;
+    border-radius: 10px;
+} */
 
-fieldset{
-    background-color: white;
+
+.sort > summary, .filter > summary  {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding: 0.25rem;
+    align-items: center;
+
+}
+.sort > summary{
+    width: 185px;
+
+}
+.sort summary *{
+    padding-right: .2rem;
+    color: var(--color-white);
+
+}
+
+.sort form{
+    display: flex;
+    flex-direction: row;
+    border: var(--color-black)solid 1px;  
+    background-color: var(--color-white); 
+    border-radius: 10px;
 }
 .sort fieldset{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    border: none;
+
 }
 
 .sort label{
-    width: 200px;
-    padding: .1rem;
-    margin-top: .5rem;
+    width: 180px;
+    padding: .3rem;
+    margin-top: .3rem;
 }
 
 input[type="radio"]:checked + label {
-    background-color: var(	--color-accent1);
+    background: linear-gradient(92deg, var(--midtone, #BCD7FF) 0.53%, var(--maybe, #76D5E2) 100%);
+    color: var(--color-white);
 }
 
 /* Filter */
 
+.filter summary *{
+    color: var(--color-white); 
+}
+
+.filter form{
+    display: flex;
+    flex-direction: row;
+    border: var(--color-black) solid 1px;  
+    background-color: var(--color-white); 
+    margin-left: .5rem;
+    border-radius: 10px;
+}
+
 .filter fieldset{
     display: flex;
     flex-direction: column;
+    padding: .5rem;
+    border: none;
+}
 
+.glassFilter summary{
+    display: flex;
+    flex-direction: column; 
 }
 
 /* Search results styling */
@@ -140,26 +167,67 @@ main ul{
     display: flex;
     flex-direction: column;
     transition: all ease 200ms;
+    padding-top: 1rem;
+    background-image: url(/static/images/index/introtext.jpg);
+    height: 70vh;
+    overflow-y: scroll;
 }
 
 main ul li{
     position: relative;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
     max-height: 10rem;
     margin-bottom: 2rem;
-    border: 1px red solid;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(2.5px);
+    max-width: 100vw;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 main ul li a{
     position: relative;
     display: flex;
     flex-direction: row;
-
+    text-decoration: none;
 }
 main ul li a img{
 
     position: relative;
     max-height:10rem;
-    max-width: fit-content;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 
+
+}
+main ul li a div{
+    margin-left: 0.2rem;
+    display:  flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+/* .heartButton{
+    width: auto;
+} */
+
+.list-item {
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+  }
+
+.hidden{
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+.visible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.none{
+    display: none;
 }
