@@ -9,6 +9,9 @@
 <body>
 
 <header>
+  <a href="javascript:history.back()">
+    <img class="backButton" src="/static/images/backButton.svg" alt="back">
+  </a>
   <%- include('../partials/header'); %>
 </header>
 
@@ -18,12 +21,12 @@
     <p>Do not have an account yet? <a href="/signup">Sign up!</a></p>
     <form id="testform" action="/login" method="POST">
       <label for="nameOrMail">Username or Email:</label>
-      <input type="text" id="nameOrMail" name="nameOrMail" placeholder="Cocktail123" required="">
+      <input type="text" id="nameOrMail" name="nameOrMail" placeholder="e.g. Cocktail123" required="">
 
       <label for="password">Password:</label>
       <input type="password" id="password" name="userPassword" required="">
 
-      <input type="submit" value="log in!">
+      <input class="loginSignupButton" type="submit" value="log in!">
     </form>         
   </div>
 </main>

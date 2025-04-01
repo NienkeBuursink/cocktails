@@ -41,6 +41,11 @@ section {
         padding-top: 1rem;
         /* background: none; */
     }
+    & button {
+        position: absolute;
+        right: 1.5rem;
+        top: 2rem;
+    }
 }
 
 /* Background Images */

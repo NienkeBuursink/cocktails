@@ -10,8 +10,10 @@
 <body>
 
 <header>
+  <a href="javascript:history.back()">
+    <img class="backButton" src="/static/images/backButton.svg" alt="back">
+  </a>
   <%- include('../partials/header'); %>
-
 </header>
 
 <main>
@@ -22,16 +24,16 @@
     <form id="testform" action="/signup" method="POST">
 
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Cocktail123" required="">
+      <input type="text" id="username" name="username" placeholder="e.g. Cocktail123" required="">
 
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" placeholder="pour@faction.com" required="">
+      <input type="email" id="email" name="email" placeholder="e.g. pour@faction.com" required="">
 
       <label for="password">Password:</label>
       <p>Your password must have:</p>
       <ul>
         <li>At least 8 characters</li>
-        <li>One upper- and one lowercase letter</li>
+        <li>One upper- and lowercase letter</li>
         <li>A number</li>
       </ul>
       <input type="password" id="password" name="userPassword" required="">
@@ -40,7 +42,7 @@
       <input type="date" id="birthday" name="birthday" required="">
 
 
-      <input type="submit" value="Sign up!">
+      <input class="loginSignupButton" type="submit" value="Sign up!">
     </form>         
   </div>
 </main>
