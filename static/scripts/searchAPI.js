@@ -2,77 +2,107 @@ const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const submitButton = document.getElementById("searchButton");
 const searchBar = document.getElementById("searchBar");
 const nameList = document.getElementById('cocktailName');
-let sortSetting = document.querySelector(".sort span")
+const normalSearch = "/search.php?s=";
+let sortSetting = document.querySelector(".sort span");
+let userStatus;
+let filteredNameData;
+let allCocktails;
 
-let userStatus 
-let filteredNameData
-let filteredNameData2
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
     return await response.json();
+}
 
+async function fetchCocktails() {
+    try{
+        const userInput = searchBar.value.trim(); 
+
+        let apiUrl = baseURL + normalSearch + userInput; 
+
+        const response = await fetch(apiUrl); 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        allCocktails = await response.json(); 
+        allCocktails = allCocktails.drinks
+
+        return allCocktails; 
+
+    } catch(error){
+        console.error("Error fetching cocktails", error)
+    }
+}
+
+async function filterCocktailsByAge(allCocktails, userStatus) {
+    console.log(userStatus)
+    if (userStatus.isLoggedIn && userStatus.isAdult) {
+        // Show all cocktails for logged-in adults
+        filteredCocktails = allCocktails
+        console.log(filteredCocktails)
+    } else {
+        console.log(allCocktails)
+        filteredCocktails =  allCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+        console.log(filteredCocktails)
+        return {filteredCocktails}
+    }
 }
 
 
-async function SearchCocktails(userStatus){
-
-    // Clear previous results
-    nameList.innerHTML = "";
-    // ingredientList.innerHTML = "";
-
-    // Get and validate input
-
-    // // Build URLs based on search type
-    // let ingredientURL = "";
-
-    // if (userInput.length === 1) {
-	// 	// Single letter search (name only)
-	// 	ingredientURL = ""; // No ingredient search for single letters
-	// 	} else {
-	// 	// Search both name and ingredient
-	// 	ingredientURL = baseURL + searchByIngredient + userInput;
-	// }
-
-    const userInput = searchBar.value.trim();
-    // if (!userInput) {
-    //     nameList.innerHTML = "<li>Please enter a search term</li>";
-    //     return;
-    // }
-    const searchURL = baseURL + "/search.php?s=" + userInput;
-    console.log(searchURL)
-    const nameResponse = await fetch(searchURL);
-    const nameData = await nameResponse.json();
-    
-    console.log(nameData)
-    console.log(userStatus, ":userstatus")
-    console.log(userStatus.isLoggedIn, ":userstatus.isLoggedIn")
-
-
-    if (userStatus.isLoggedIn && userStatus.isAdult) {
-        // Show all cocktails for logged-in adults
-        console.log("user logged in and return cocktails")
-        filteredNameData = nameData.drinks
-        
-    } else {
-        console.log("user not logged in and return  filtered cocktails")
-        // Filter out alcoholic drinks for others
-        console.log(nameData.drinks, "before the filter")
-        filteredNameData =  nameData.drinks.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
-        console.log(filteredNameData, "after the filter")
-    }
-
-
-
-    // Sorting and filtering
+async function sorting(){
 
     if (sortSetting.textContent == "Name"){
-        filteredNameData = [...filteredNameData].sort((a, b) => a.strDrink.localeCompare(b.strDrink));
-        console.log(sortSetting.textContent, "name")
+        filteredCocktails = [...filteredCocktails].sort((a, b) => a.strDrink.localeCompare(b.strDrink));
+        console.log(filteredCocktails, "name")
+        return {filteredCocktails}
     } else if (sortSetting.textContent == "Latest"){
-        filteredNameData = [...filteredNameData].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
-        console.log(sortSetting.textContent, "date")
+        filteredCocktails = [...filteredCocktails].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
+        console.log(filteredCocktails, "date")
+        return {filteredCocktails}
     }
+}
+
+
+async function appliedFilters(){
+    try{
+        const alcoholicFilter = document.querySelector(".alcoholicFilter")
+        const glassFilter = document.querySelector(".glassFilter");
+        const categoryFilter = document.querySelector(".categoryFilter");
+        console.log(userStatus)
+
+        if(userStatus.isLoggedIn && userStatus.isAdult){
+            alcoholicFilter.classList.remove("disabled");
+        } else{
+            alcoholicFilter.classList.add("disabled")
+        }
+
+        const selectedAlcoholicFilter = getCheckedValues(alcoholicFilter);
+        const selectedGlassTypes = getCheckedValues(glassFilter);
+        const selectedCategories = getCheckedValues(categoryFilter);
+
+        console.log(selectedGlassTypes, " selected glass types")
+
+        filteredCocktails = filteredCocktails.filter((cocktail) => {
+            const matchesAlcoholicFilter = 
+                selectedAlcoholicFilter.length === 0 || selectedAlcoholicFilter.includes(cocktail.strAlcoholic)
+            const matchesGlassType =
+                selectedGlassTypes.length === 0 || selectedGlassTypes.includes(cocktail.strGlass);
+            const matchesCategory =
+                selectedCategories.length === 0 || selectedCategories.includes(cocktail.strCategory);
+                console.log("matches glass type Results:", matchesGlassType);
+            
+            return matchesGlassType && matchesCategory && matchesAlcoholicFilter;
+        });
+
+        console.log("Filtered Results:", filteredCocktails);
+
+        // Update the display with filtered results
+        displayCocktails(filteredCocktails);
+
+    }catch (error) {
+        console.error("Error adding appliedfiltering:", error);
+    }
+
     // if ( 1 === 1){
 
     //     document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
@@ -85,37 +115,45 @@ async function SearchCocktails(userStatus){
     //     });
     // }) } else{
     //     console.log("kaas")
-    //     filteredNameData2 = filteredNameData
+    //     // filteredCocktails = filteredNameData
     // }
-    
+    // // displayCocktails(filteredCocktails);
+    // // not sure if this code above is needed.
 
-    
+}
 
+function getCheckedValues(fieldset) {
+    const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map((checkbox) => checkbox.id); // Return an array of checked checkbox IDs
+}
+
+async function displayCocktails(){    
     try {
+        nameList.innerHTML = ""
         const summarySpan = document.querySelector('.filter summary span'); // Select the span inside the summary
         if (summarySpan) {
-            summarySpan.textContent = "(" + filteredNameData.length + " items)"; // Update the text content
+            summarySpan.textContent = "(" + filteredCocktails.length + " items)"; // Update the text content
         }
-    
-        if (filteredNameData && Array.isArray(filteredNameData)) {
-            filteredNameData.forEach(drink => {
+        if (filteredCocktails && Array.isArray(filteredCocktails)) {
+            console.log("filteredCocktails in making", filteredCocktails)
+            filteredCocktails.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
-                    <li>
-                        <a href="/detailPage?id=${drink.idDrink}">
-                            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
-                            <div>
-                                <h2>${drink.strDrink}</h2>
-                                <p>${drink.strAlcoholic}</p>
-                                <p>${drink.strGlass}</p>
-                            </div>
-                        </a>
-                        <form action="/toggleFavorite" method="post">
-                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
-                            <button class="heartButton" type="submit">toggle to Favorites</button>
-                        </form>
-                    </li>
+                <li>
+                <a href="/detailPage?id=${drink.idDrink}">
+                    <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                    <div>
+                        <h2>${drink.strDrink}</h2>
+                        <p>${drink.strAlcoholic}</p>
+                        <p>${drink.strGlass}</p>
+                    </div>
+                </a>
+                <form action="/toggleFavorite" method="post">
+                    <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                    <button class="heartButton" type="submit">toggle to Favorites</button>
+                </form>
+            </li>
             `);
-        return filteredNameData2    
+            
         });
         } else {
 
@@ -134,14 +172,12 @@ async function SearchCocktails(userStatus){
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
-
-        console.log(userStatus, ":userstatus")
-
-
-        SearchCocktails(userStatus)
-
-
-
+        await fetchCocktails()
+        await filterCocktailsByAge(allCocktails, userStatus)
+        await sorting(filteredCocktails)
+        await appliedFilters(userStatus, filteredCocktails)
+        console.log(filteredCocktails, "after sorting")
+        await displayCocktails(filteredCocktails)
     } catch (error) {
         console.error("Error:", error);
     }
@@ -152,27 +188,42 @@ pageLoad();
 // Event listeners
 const sortButtons = document.querySelectorAll(".sort label")
 
-submitButton.addEventListener("click", () => {
-    SearchCocktails(userStatus);
-// SearchCocktails(userStatus)
+submitButton.addEventListener("click", async ()  => {
+    await fetchCocktails();
+    await filterCocktailsByAge(allCocktails, userStatus)
+    await sorting()
+    await appliedFilters(userStatus, filteredCocktails)
+    await displayCocktails(filteredCocktails);
+
 }
 );
-sortButtons.forEach((button) => {
+sortButtons.forEach( (button)  =>  {
     // Add an event listener to each button
-    button.addEventListener("click", () => {
+    button.addEventListener("click",async () => {
+        
       // Set sortSetting's text content to the clicked button's text content
       sortSetting.textContent = button.textContent;
-      SearchCocktails(userStatus);
-      return sortSetting
+      await fetchCocktails();
+      await filterCocktailsByAge(allCocktails, userStatus)
+      await sorting()
+      await appliedFilters(userStatus, filteredCocktails)
+      displayCocktails(filteredCocktails);
+
+
     });
   });
 
-filterButtons = document.querySelectorAll(".filter label")
+filterButtons = document.querySelectorAll(".filter input")
   filterButtons.forEach((button) => {
     // Add an event listener to each button
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       // Set sortSetting's text content to the clicked button's text content
-      SearchCocktails(userStatus);
+      await fetchCocktails();
+      await filterCocktailsByAge(allCocktails, userStatus)
+      await sorting()
+      await appliedFilters(userStatus, filteredCocktails)
+      displayCocktails(filteredCocktails);
+
     });
   });
 

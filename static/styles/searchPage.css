@@ -39,7 +39,12 @@ main > div{
 /* .filter{
 
 } */
+.disabled{
+    pointer-events:none;
+    cursor: not-allowed;
+    filter:grayscale(1);
 
+}
 
 .sort {
 
@@ -49,7 +54,15 @@ main > div{
 .filter summary svg{
     border: 1px solid black;
 }
-.sort summary, .filter summary  {
+.glassFilter summary{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+
+
+.sort > summary, .filter > summary  {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -68,13 +81,20 @@ details > summary {
 }
 
 
-details::details-content {
+details::details-content{
     height: 0;
     overflow: hidden;
     transition: all 0.5s ease-out;
-  }
+}
   
-details[open]::details-content {
+.filter[open]::details-content{
+    height: auto;
+    transition: all 0.5s ease-out;
+    position: absolute;
+    z-index: 2;
+}
+
+.sort[open]::details-content{
     height: auto;
     transition: all 0.5s ease-out;
     position: absolute;
@@ -103,7 +123,7 @@ fieldset{
 }
 
 input[type="radio"]:checked + label {
-    background-color: lightblue;
+    background-color: var(	--color-accent1);
 }
 
 /* Filter */

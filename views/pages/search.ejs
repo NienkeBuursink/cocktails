@@ -23,7 +23,7 @@
         <details class="filter">
             <summary><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M11 20q-.425 0-.712-.288T10 19v-6L4.2 5.6q-.375-.5-.112-1.05T5 4h14q.65 0 .913.55T19.8 5.6L14 13v6q0 .425-.288.713T13 20z"/></svg> <span>(0 Drinks)</span></summary>
             <form action="">
-                <fieldset>
+                <fieldset class="alcoholicFilter">
                     <p>Alcoholic</p>
                     <div>
                         <input  type="checkbox" name="filter" id="Alcoholic">
@@ -34,117 +34,28 @@
                         <label for="NonAlcoholic">Non alcoholic</label>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <p>Glass Type</p>
-                    <div>
-                        <input type="checkbox" name="filter" id="HighballGlass">
-                        <label for="HighballGlass">Highball glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="OldFashionedGlass">
-                        <label for="OldFashionedGlass">Old-fashioned glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="CocktailGlass">
-                        <label for="CocktailGlass">Cocktail glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="CopperMug">
-                        <label for="CopperMug">Copper Mug</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="WhiskeyGlass">
-                        <label for="WhiskeyGlass">Whiskey Glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="CollinsGlass">
-                        <label for="CollinsGlass">Collins glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="PousseCafeGlass">
-                        <label for="PousseCafeGlass">Pousse cafe glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="ChampagneFlute">
-                        <label for="ChampagneFlute">Champagne flute</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="WhiskeySourGlass">
-                        <label for="WhiskeySourGlass">Whiskey sour glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="BrandySnifter">
-                        <label for="BrandySnifter">Brandy snifter</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="WhiteWineGlass">
-                        <label for="WhiteWineGlass">White wine glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="NickAndNoraGlass">
-                        <label for="NickAndNoraGlass">Nick and Nora Glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="HurricaneGlass">
-                        <label for="HurricaneGlass">Hurricane glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="CoffeeMug">
-                        <label for="CoffeeMug">Coffee mug</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="ShotGlass">
-                        <label for="ShotGlass">Shot glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="Jar">
-                        <label for="Jar">Jar</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="IrishCoffeeCup">
-                        <label for="IrishCoffeeCup">Irish coffee cup</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="PunchBowl">
-                        <label for="PunchBowl">Punch bowl</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="Pitcher">
-                        <label for="Pitcher">Pitcher</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="PintGlass">
-                        <label for="PintGlass">Pint glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="CordialGlass">
-                        <label for="CordialGlass">Cordial glass</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="filter" id="BeerMug">
-                        <label for="BeerMug">Beer mug </LABEL>
-                </fieldset>
-                <fieldset>
+
+                <fieldset class="categoryFilter">
                             <p>Category</p>
                             <div>
                                 <input type="checkbox" name="filter" id="Cocktail">
                                 <label for="Cocktail">Cocktail</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="OrdinaryDrink">
-                                <label for="OrdinaryDrink">Ordinary Drink</label>
+                                <input type="checkbox" name="filter" id="Ordinary Drink">
+                                <label for="Ordinary Drink">Ordinary Drink</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="PunchPartyDrink">
-                                <label for="PunchPartyDrink">Punch / Party Drink</label>
+                                <input type="checkbox" name="filter" id="Punch / Party Drink">
+                                <label for="Punch / Party Drink">Punch / Party Drink</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="filter" id="Shake">
                                 <label for="Shake">Shake</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="OtherUnknown">
-                                <label for="OtherUnknown">Other / Unknown</label>
+                                <input type="checkbox" name="filter" id="Other / Unknown">
+                                <label for="Other / Unknown">Other / Unknown</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="filter" id="Cocoa">
@@ -155,21 +66,112 @@
                                 <label for="Shot">Shot</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="CoffeeTea">
-                                <label for="CoffeeTea">Coffee / Tea</label>
+                                <input type="checkbox" name="filter" id="Coffee / Tea">
+                                <label for="Coffee / Tea">Coffee / Tea</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="HomemadeLiqueur">
-                                <label for="HomemadeLiqueur">Homemade Liqueur</label>
+                                <input type="checkbox" name="filter" id="Homemade Liqueur">
+                                <label for="Homemade Liqueur">Homemade Liqueur</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="filter" id="Beer">
                                 <label for="Beer">Beer</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="filter" id="SoftDrink">
-                                <label for="SoftDrink">Soft Drink</label>
+                                <input type="checkbox" name="filter" id="Soft Drink">
+                                <label for="Soft Drink">Soft Drink</label>
                             </div>                            
+                </fieldset>
+                <fieldset class="glassFilter">
+                    <p>Glass Type</p>
+                    <div>
+                        <input type="checkbox" name="filter" id="Highball Glass">
+                        <label for="Highball Glass">Highball glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Old-Fashioned glass">
+                        <label for="Old-Fashioned glass">Old-Fashioned glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Cocktail Glass">
+                        <label for="Cocktail Glass">Cocktail glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Copper Mug">
+                        <label for="Copper Mug">Copper Mug</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Whiskey Glass">
+                        <label for="Whiskey Glass">Whiskey Glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Collins glass">
+                        <label for="Collins glass">Collins glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Pousse cafe glass">
+                        <label for="Pousse cafe glass">Pousse cafe glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Champagne Flute">
+                        <label for="Champagne Flute">Champagne flute</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Whiskey sour glass">
+                        <label for="Whiskey sour glass">Whiskey sour glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Brandy snifter">
+                        <label for="Brandy snifter">Brandy snifter</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="White wine glass">
+                        <label for="White wine glass">White wine glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Nick and Nora Glass">
+                        <label for="Nick and Nora Glass">Nick and Nora Glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Hurricane glass">
+                        <label for="Hurricane glass">Hurricane glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Coffee Mug">
+                        <label for="Coffee Mug">Coffee mug</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Shot glass">
+                        <label for="Shot glass">Shot glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Jar">
+                        <label for="Jar">Jar</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Irish coffee cup">
+                        <label for="Irish coffee cup">Irish coffee cup</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Punch Bowl">
+                        <label for="Punch Bowl">Punch bowl</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Pitcher">
+                        <label for="Pitcher">Pitcher</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Pint glass">
+                        <label for="Pint glass">Pint glass</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="filter" id="Cordial glass">
+                        <label for="Cordial glass">Cordial glass</label>
+                    </div> 
+                    <div>
+                        <input type="checkbox" name="filter" id="Beer mug">
+                        <label for="Beer mug">Beer mug </label>
+                     </div>
                 </fieldset>
                 </form>
         </details>
@@ -182,10 +184,8 @@
                 <input hidden type="radio" name="sort" id="nameSort">
                 <label for="nameSort">Name</label>
 
-
                 <input hidden type="radio" name="sort" id="newSort">
                 <label for="newSort">Latest</label>
-            
 
                 <input hidden type="radio" name="sort" id="popularSort">
                 <label for="popularSort">Popular</label>
