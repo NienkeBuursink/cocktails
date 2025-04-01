@@ -223,8 +223,8 @@ nav {
     & ul {
         position: fixed;
         z-index: 2;
-        top: 0;
-        right: 0;
+        top: 0.5rem;
+        right: 0.5rem;
         translate: 150% -50%;
         
         background-color: var(--color-white);
@@ -236,6 +236,10 @@ nav {
 
         list-style: none;
         transition: 1s;
+
+        & li {
+            margin: 0.3rem;
+        }
 
         &.showMenu {
             translate: 0%;       
