@@ -52,12 +52,12 @@ section {
 .backgroundImage {
     position: absolute;
     width: 30%;
-    height: 20%;
+    height: 25%;
     border-radius: 0;
     background: none;
     opacity: 20%;
     top: 2rem;
-    right: -1rem;
+    right: 0;
     z-index: -1;
 }
 
@@ -68,6 +68,23 @@ section {
     border-radius: 0;
     background: none;
     opacity: 20%;
+    right: 0;
     bottom: 0;
     z-index: 0;
+}
+
+.carousel{
+    margin: 1rem 0;
+
+    & li{
+        height: auto; 
+    }
+
+    & li a h3{
+        z-index: 2;
+    }
+}
+
+.heartButton{
+    z-index: 2;
 }
