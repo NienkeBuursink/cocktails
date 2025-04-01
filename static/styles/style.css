@@ -152,11 +152,12 @@ button, .link, input[type="submit"] {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
+    align-items: center;
     margin: 1rem;
 
     color: var(--color-accent1);
 
-    & img {
+    & a {
         order: -1;
         object-fit: contain;
     }
