@@ -173,21 +173,19 @@ button, .link, input[type="submit"] {
 /* Navigation */
 nav {
     & button {
-        position: relative;
+        margin: 0.5rem;
+        aspect-ratio: 1;
         z-index: 100;
 
         display: grid;
         place-items:  center;
   
-        
-        object-fit: contain;
-        
         & span {
             display: block;
             
-            width: 1.5em;
-            height: .2em;
-            border-radius: 2em;
+            width: 1.5rem;
+            height: .15rem;
+            border-radius: 2rem;
             background-color: var(--color-white);
             
             grid-row-start: 1;
@@ -196,39 +194,28 @@ nav {
             transition: .5s;
             
             &:nth-child(1) {
-                translate: 0 -.5em;
+                translate: 0 -.5rem;
             }
 
-            &:nth-child(2) {
-                translate: 0 .5em;
-            }
-
-
-            
-        
-/* 
-        header.menuOpen button span:nth-child(1) {
-            translate: 0 0;
-            rotate: 45deg;
-          }
-          
-          header.menuOpen button span:nth-child(2) {
-              
-              scale: 0 1
-          }
-          
-          header.menuOpen button span:nth-child(3) {
-            translate: 0 0;
-            rotate: -45deg;
-          } */
+            &:nth-child(3) {
+                translate: 0 .5rem;
+            } 
         }
 
-        &.showMenu {
+        &.showMenu span {
              
             &:nth-child(1){
                 translate: 0 0;
                 rotate: 45deg;
-                background-color: #76D5E2;
+            }    
+
+            &:nth-child(2){
+               scale: 0 1;
+            }    
+
+            &:nth-child(3){
+                translate: 0 0;
+                rotate: -45deg;
             }    
         }
     }
