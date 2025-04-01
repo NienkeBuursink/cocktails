@@ -4,6 +4,7 @@
 <head>
   <%- include('../partials/head'); %>
   <link rel="stylesheet" href="/static/styles/index.css">
+
 </head>
 
 <body>
@@ -23,31 +24,22 @@
       <p>Whether you're hosting a fancy dinner, planning a party, or just looking for a new favorite drink, our smart filters and recommendation system make it easy.
         Explore endless possibilities, get inspired, and craft your perfect pour.</p>
 
-      <a class="link" href="#">check it out!</a>
+       <a class="link" href="/search">check it out!</a>
 
     </section>
 
-    <section>
+    <section class="popularCarousel">
       <h2>Popular right now</h2>
         <ul class="carousel popularList"></ul>
     </section>
 
-    <section>
+    <section class="latestCarousel">
       <h2>Latest drinks</h2>
       <ul class="carousel latestList"></ul>
     </section>
-    
-
-    <!-- <section class="searchBar">
-      <label for="searchBar"></label>
-      <input id="searchBar" name="searchBar" type="text">
-      <button id="searchButton" type="submit">submit</button>
-
-      <ul id="cocktailName"></ul>
-      <ul id="cocktailIngredient"> </ul>
-    </section> -->
       
   </main>
+
 
   <footer>
     <%- include('../partials/footer'); %>

@@ -13,6 +13,10 @@
         "link link link";
     gap: 0.5rem;
     margin: 1em;
+}
+
+.intro {
+    padding-left: 0;
 
     & img {
         grid-area: img;
@@ -39,4 +43,8 @@
         width: max-content;
         justify-self: end;
     }
+}
+
+.popularCarousel, .latestCarousel {
+    margin-left: 1rem;
 }

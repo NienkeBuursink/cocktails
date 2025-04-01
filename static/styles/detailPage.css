@@ -4,7 +4,7 @@
 
 /* Subheadings */
 h2 {
-    padding: 1rem 0;
+    /* padding: 1rem 0; */
     background: none;
 }
 
@@ -22,7 +22,7 @@ section {
     }
 
     & h1 {
-        padding: 1rem 0;
+        /* padding: 1rem 0; */
         color: var(--color-dark);
         background: none;
     }
@@ -40,6 +40,11 @@ section {
     & p {
         padding-top: 1rem;
         /* background: none; */
+    }
+    & button {
+        position: absolute;
+        right: 1.5rem;
+        top: 2rem;
     }
 }
 
