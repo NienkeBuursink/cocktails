@@ -26,6 +26,8 @@ img {
 	--color-black: #240F4A;
     --color-white: #FFFCF7;
 
+    --color-white-trans:color-mix(in srgb, var(--color-white) 80%, transparent);
+
     --size-h1: 2rem;
     --size-h2: 1.625rem;
     --size-h3: 1.5rem;
@@ -148,6 +150,13 @@ button, .link, input[type="submit"] {
 /****************************/
 
 /* Header Layout */
+
+/* header {
+    position: sticky;
+    bottom: 0;
+  z-index: 100;
+} */
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -156,6 +165,7 @@ button, .link, input[type="submit"] {
     margin: 1rem;
 
     color: var(--color-accent1);
+    background-color: var(--color-white-trans);
 
     & a {
         order: -1;
@@ -176,7 +186,7 @@ nav {
     & button {
         margin: 0.5rem;
         aspect-ratio: 1;
-        z-index: 100;
+        z-index: 50;
 
         display: grid;
         place-items:  center;
