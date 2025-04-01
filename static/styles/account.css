@@ -1,0 +1,77 @@
+#accountIntro {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    place-content: center;
+    text-align: center;
+    margin: 2rem;
+    gap: 1rem;
+    & h1 {
+        grid-column: 1/4;
+    }
+    & p {
+        grid-column: 2/3;
+        place-self: center;
+    }
+    & img {
+        max-height: 7rem;
+        place-self: center;
+    }
+    & img:nth-of-type(1) {
+        rotate: -20deg;
+    }
+    & img:nth-of-type(2) {
+        grid-row: 2/3;
+        rotate: 20deg;
+    }
+}
+
+#userFavorites ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1rem;
+    place-items: center;
+    & li {
+        height: 40vw;
+        aspect-ratio: 1;
+        display: grid;
+        position: relative;
+        & form {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        & a {
+            display: contents;
+            & h3 {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                color: var(--color-black);
+                font-size: var(--size-text);
+                font-family: "Gaegu", Arial, Helvetica, sans-serif;
+                letter-spacing: -0.074rem;
+
+                border-radius: 1rem;
+                background: rgba(255, 255, 255, 0.50);
+                backdrop-filter: blur(2px);
+                padding: 0.1rem 0.5rem;
+                margin: 0.3rem;
+
+                max-width: 100%;
+                overflow-wrap: break-word;
+            }
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 1rem;
+            }
+        }
+    }
+}
+
+main > a {
+    display: grid;
+    place-self: center;
+    margin: 3rem;
+}
