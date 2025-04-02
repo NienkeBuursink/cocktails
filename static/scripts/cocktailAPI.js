@@ -2,7 +2,10 @@ const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const carouselList = document.getElementsByClassName("carousel")
 const populairCarouselList = document.querySelector(".popularList");
 const latestCarouselList = document.querySelector(".latestList");
+const cocoaCarouselList = document.querySelector(".cocoaList");
+const coffeeCarouselList = document.querySelector(".coffeeList");
 const introImg = document.querySelector(".intro img")
+
 
 let userStatus 
 let filteredCocktails
@@ -11,6 +14,7 @@ let filteredPopulairCocktails
 let allLatestCocktails
 let filteredLatestCocktails
 let allCocktails
+let filteredCocoaCocktails
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
@@ -75,6 +79,8 @@ function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails,
         filteredPopulairCocktails = allPopulairCocktails
         filteredLatestCocktails = allLatestCocktails
         filteredCocktails = allCocktails
+        filteredCocoaCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Cocoa")
+        filteredCoffeeCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Coffee / Tea")
 
         // console.log("filteredCocktails are: ", filteredCocktails)
         
@@ -84,15 +90,18 @@ function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails,
         // console.log("allPopulairCocktails are this before filter: ", allPopulairCocktails)
 
         // Filter out alcoholic drinks for others
-        filteredPopulairCocktails = allPopulairCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
-        filteredLatestCocktails = allLatestCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+        filteredPopulairCocktails = allPopulairCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");       
         filteredCocktails =  allCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
+        filteredLatestCocktails = [...filteredCocktails].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
+        filteredCocoaCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Cocoa")
+        filteredCoffeeCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Coffee / Tea")
+        console.log(filteredCocktails, "filtered cocktials and, fioltered cocoa", filteredCocoaCocktails)
         // Need to add .filter to each of these to correctly filter out alcoholic drinks from the alcoholic drinks
 
         // console.log("filteredPopulairCocktails are this after filter: ", filteredPopulairCocktails)
         // console.log("filteredLatestCocktails are this after filter: ", filteredLatestCocktails)
         // console.log("filteredCocktails are this after filter: ", filteredCocktails)
-        return {filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails}
+        return {filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, filteredCocoaCocktails}
     }
 }
 
@@ -116,6 +125,11 @@ function introCocktail(filteredCocktails){
 // Showing populair drinks in the first carousel
 function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
     console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredPopulairCocktails)
+
+    let drinkCountSpan = document.querySelector('.popularCarousel span'); // Select the span inside the summary
+    if (drinkCountSpan) {
+        drinkCountSpan.textContent = "(" + filteredPopulairCocktails.length + " items)"; // Update the text content
+    }
     try {
         if (filteredPopulairCocktails && Array.isArray(filteredPopulairCocktails)) {
             filteredPopulairCocktails.forEach(drink => {
@@ -148,6 +162,11 @@ function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
 // Showing latest drinks in the second carousel
 function showLatestCocktailsOnLoad (filteredLatestCocktails){
     console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredLatestCocktails)
+
+    let drinkCountSpan = document.querySelector('.latestCarousel span'); // Select the span inside the summary
+    if (drinkCountSpan) {
+        drinkCountSpan.textContent = "(" + filteredLatestCocktails.length + " items)"; // Update the text content
+    }
     try {
         if (filteredLatestCocktails && Array.isArray(filteredLatestCocktails)) {
             filteredLatestCocktails.forEach(drink => {
@@ -177,7 +196,79 @@ function showLatestCocktailsOnLoad (filteredLatestCocktails){
     }
 }
 
+function showCocoaCocktailsOnLoad (filteredCocoaCocktails){
+    console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredCocoaCocktails)
 
+    let drinkCountSpan = document.querySelector('.cocoaCarousel span'); // Select the span inside the summary
+    if (drinkCountSpan) {
+        drinkCountSpan.textContent = "(" + filteredCocoaCocktails.length + " items)"; // Update the text content
+    }
+    try {
+        if (filteredCocoaCocktails && Array.isArray(filteredCocoaCocktails)) {
+            filteredCocoaCocktails.forEach(drink => {
+                cocoaCarouselList.insertAdjacentHTML("beforeend", `
+                    <li>
+                        <a href="/detailPage?id=${drink.idDrink}">
+                            <h3>${drink.strDrink}</h2>
+                            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        </a>
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">
+                                <svg viewBox="0 0 65.68 54.33">
+                                    <path d="M64.68,17.52c0,2.9-.96,5.29-2.28,7.57-1.74,3.02-4.03,5.66-6.62,7.92l-22.88,19.99L6.8,30.27h0c-1.43-1.39-5.79-7.63-5.79-12.75C1,8.4,8.13,1,16.92,1s15.93,7.4,15.93,16.52c0-9.12,7.12-16.52,15.92-16.52s15.92,7.4,15.92,16.52Z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </li>
+                `);
+            });
+        } else {
+            carouselList.innerHTML = "<li>No matching cocktails found</li>";
+        }
+    } catch (error) {
+        console.error("showCocktailsOnLoad error:", error);
+        carouselList.innerHTML = "<li>Error loading FilteredList results</li>";
+    }
+}
+
+function showCoffeeCocktailsOnLoad (filteredCoffeeCocktails){
+    console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredCoffeeCocktails)
+    
+    let drinkCountSpan = document.querySelector('.coffeeCarousel span'); // Select the span inside the summary
+    if (drinkCountSpan) {
+        drinkCountSpan.textContent = "(" + filteredCoffeeCocktails.length + " items)"; // Update the text content
+    }
+
+
+    try {
+        if (filteredCoffeeCocktails && Array.isArray(filteredCoffeeCocktails)) {
+            filteredCoffeeCocktails.forEach(drink => {
+                coffeeCarouselList.insertAdjacentHTML("beforeend", `
+                    <li>
+                        <a href="/detailPage?id=${drink.idDrink}">
+                            <h3>${drink.strDrink}</h2>
+                            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                        </a>
+                        <form action="/toggleFavorite" method="post">
+                            <input type="hidden" name="cocktailId" value="${drink.idDrink}">
+                            <button class="heartButton" type="submit">
+                                <svg viewBox="0 0 65.68 54.33">
+                                    <path d="M64.68,17.52c0,2.9-.96,5.29-2.28,7.57-1.74,3.02-4.03,5.66-6.62,7.92l-22.88,19.99L6.8,30.27h0c-1.43-1.39-5.79-7.63-5.79-12.75C1,8.4,8.13,1,16.92,1s15.93,7.4,15.93,16.52c0-9.12,7.12-16.52,15.92-16.52s15.92,7.4,15.92,16.52Z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </li>
+                `);
+            });
+        } else {
+            carouselList.innerHTML = "<li>No matching cocktails found</li>";
+        }
+    } catch (error) {
+        console.error("showCocktailsOnLoad error:", error);
+        carouselList.innerHTML = "<li>Error loading FilteredList results</li>";
+    }
+}
 
 
 async function pageLoad() {
@@ -190,10 +281,12 @@ async function pageLoad() {
 
         await filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails, userStatus);
         
-        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, "pageLoad  filtered cocktails")
+        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, filteredCocoaCocktails,  "pageLoad  filtered cocktails")
 
         showPopulairCocktailsOnLoad(filteredPopulairCocktails)
         showLatestCocktailsOnLoad(filteredLatestCocktails)
+        showCocoaCocktailsOnLoad(filteredCocoaCocktails)
+        showCoffeeCocktailsOnLoad(filteredCoffeeCocktails)
         introCocktail(filteredCocktails)
 
 
