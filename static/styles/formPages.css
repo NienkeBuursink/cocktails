@@ -2,11 +2,6 @@
 /* Form Page Styling         */
 /****************************/
 
-/* Global Styles */
-html {
-    overflow: hidden;
-}
-
 /* Log in Section */
 main {
     background-image: url(/static/images/index/introtext.jpg);
@@ -32,9 +27,11 @@ main {
     margin: 1rem;
     padding: 1.7rem;
     border-radius: 10px;
-
+    & a {
+        text-decoration: underline;
+    }
     /* Form Styling */
-    form {
+    & form {
         display: grid;
 
         & input {
