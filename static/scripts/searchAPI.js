@@ -218,29 +218,15 @@ pageLoad();
 const sortButtons = document.querySelectorAll(".sort label")
 
 submitButton.addEventListener("click", async ()  => {
-    await fetchCocktails();
-    await filterCocktailsByAge(allCocktails, userStatus)
-    await sorting()
-    await appliedFilters(userStatus, filteredCocktails)
-    await displayCocktails(filteredCocktails);
-    intersectionObser()
-
+    pageLoad()
 }
 );
 sortButtons.forEach( (button)  =>  {
     // Add an event listener to each button
-    button.addEventListener("click",async () => {
-        
+    button.addEventListener("click",async () => {    
       // Set sortSetting's text content to the clicked button's text content
       sortSetting.textContent = button.textContent;
-      await fetchCocktails();
-      await filterCocktailsByAge(allCocktails, userStatus)
-      await sorting()
-      await appliedFilters(userStatus, filteredCocktails)
-      await displayCocktails(filteredCocktails);
-      intersectionObser()
-
-
+      pageLoad()
     });
   });
 
@@ -249,14 +235,7 @@ filterButtons = document.querySelectorAll(".filter input")
     // Add an event listener to each button
     button.addEventListener("click", async () => {
       // Set sortSetting's text content to the clicked button's text content
-      await fetchCocktails();
-      await filterCocktailsByAge(allCocktails, userStatus)
-      await sorting()
-      await appliedFilters(userStatus, filteredCocktails)
-      await displayCocktails(filteredCocktails);
-      intersectionObser()
-      
-
+      pageLoad()
     });
   });
 
