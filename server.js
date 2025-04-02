@@ -270,7 +270,6 @@ async function loggedIn(req, res) {
         console.log("under kees")
         console.log(age)
       }
-    
       req.session.age = age
       console.log("req.session.age = ", age)
       //
@@ -466,6 +465,7 @@ async function fetchCocktailDetails(cocktailId) {
 
 async function getRelatedFavorites(cocktailId, currentUser) {
   try {
+    const userStatus = await fetchUserStatus(); // Fetch login and age status
     const currentCocktail = await db.collection("cocktails").findOne({ _id: cocktailId });
 
     if (!currentCocktail || !currentCocktail.favoritedBy) {
@@ -495,11 +495,25 @@ async function getRelatedFavorites(cocktailId, currentUser) {
       const differentUsers = new Set(cocktail.favoritedBy);  // create a Set to get unique users
       cocktailCounts[cocktail._id] = differentUsers.size;   // use the size of the Set to count unique users
     }
-
+    let sortedFavoriteIds
+    console.log(userStatus.isLoggedIn)
+    console.log(userStatus.isAdult)
+    if(userStatus.isLoggedIn && userStatus.isAdult){
     // sort by most favorited and limit to 5
-    const sortedFavoriteIds = Object.keys(cocktailCounts)
+    let sortedFavoriteIds = Object.keys(cocktailCounts)
       .sort((a, b) => cocktailCounts[b] - cocktailCounts[a]) // High to low
       .slice(0, 5);
+      console.log("if")
+      console.log(sortedFavoriteIds)
+    }   else{
+      let sortedFavoriteIds = Object.keys(cocktailCounts)
+      .filter(cocktail => cocktail.strAlcoholic === "Non alcoholic")
+      .sort((a, b) => cocktailCounts[b] - cocktailCounts[a]) // High to low
+      .slice(0, 5);
+      console.log("else")
+      console.log(sortedFavoriteIds)
+
+    }
 
     // fetch cocktail details
     const topFiveCocktails = await Promise.all(
@@ -539,7 +553,37 @@ async function detailPage(req, res) {
 // Default mocktails 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-app.get('/api/user-status', (req, res) => {
+const createFetchUserStatus = () => {
+  if (typeof window !== "undefined") {
+
+  console.log("iftyperof winodw thing")
+    return async () => {
+      try {
+        const response = await fetch("/api/user-status");
+        console.log(response, " :response")
+        if (!response.ok) {
+          throw new Error("Failed to fetch user status");
+        }
+        
+        const userStatus = await response.json();
+        console.log(userStatus, "user status in createUserstatus")
+        return userStatus; // { isLoggedIn: true/false, isAdult: true/false }
+      } catch (error) {
+        console.error("Error fetching user status:", error);
+        return { isLoggedIn: false, isAdult: false }; // Default fallback
+      }
+    };
+  }
+  console.log("return at end of createferchuserstatus")
+  // Return a fallback function for server-side environments
+  return async () => ({ isLoggedIn: false, isAdult: false });
+};
+
+// Initialize fetchUserStatus using the factory function
+const fetchUserStatus = createFetchUserStatus();
+
+
+app.get("/api/user-status", (req, res) => {
   try{
   
     res.json({

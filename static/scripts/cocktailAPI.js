@@ -16,7 +16,7 @@ let filteredLatestCocktails
 let allCocktails
 let filteredCocoaCocktails
 async function fetchUserStatus() {
-    const response = await fetch('/api/user-status');
+    const response = await fetch("/api/user-status");
     console.log("fetching user status")
     return await response.json();
 
@@ -93,6 +93,7 @@ function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails,
         filteredPopulairCocktails = allPopulairCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");       
         filteredCocktails =  allCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
         filteredLatestCocktails = [...filteredCocktails].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
+        filteredLatestCocktails = filteredLatestCocktails.slice(0, 10);
         filteredCocoaCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Cocoa")
         filteredCoffeeCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Coffee / Tea")
         console.log(filteredCocktails, "filtered cocktials and, fioltered cocoa", filteredCocoaCocktails)
