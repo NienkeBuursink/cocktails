@@ -91,7 +91,7 @@ app.get("/detailpage", detailPage);
 app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
 app.get("/search", search)
-app.get('/api/user-status', fetchUserStatus)
+app.get("/api/user-status", fetchUserStatus)
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Userstatus for clientside javascript 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
