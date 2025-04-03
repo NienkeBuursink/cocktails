@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
                 }
             } catch (error) {
                 console.error("Error toggling favorite:", error);
-                showToast("Error toggling favorite.");
+                showToastNoHref("Error toggling favorite.");
             }
         }
     });
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
                 }
             } catch (error) {
                 console.error("Error submitting form:", error);
-                showToast("Error submitting form.");
+                showToastNoHref("Error submitting form.");
             }
         });
     });

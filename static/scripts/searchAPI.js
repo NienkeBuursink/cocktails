@@ -11,7 +11,7 @@ const sortButtons = document.querySelectorAll(".sort label")
 let sortSetting = document.querySelector(".sort span");
 let filterButtons = document.querySelectorAll(".filter input")
 let userStatus;
-let filteredNameData;
+let filteredCocktails;
 let allCocktails;
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

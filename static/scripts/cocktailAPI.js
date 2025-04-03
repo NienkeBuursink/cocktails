@@ -21,6 +21,7 @@ let allLatestCocktails
 let filteredLatestCocktails
 let allCocktails
 let filteredCocoaCocktails
+let filteredCoffeeCocktails
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Functions
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

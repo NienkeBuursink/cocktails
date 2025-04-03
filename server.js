@@ -49,11 +49,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET ,
-  cookie: { secure: process.env.NODE_ENV === "production" },
+  cookie: { secure: process.env.NODE_ENV === "production", maxAge: 600000 },
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-  cookie: { maxAge: 600000 },
   rolling: true
   // Cookie age set to 600000 (10minutes.) 
   // rolling means that each time the user interact with the server the cookie timer resets.
@@ -560,14 +559,14 @@ async function fetchUserStatus(req, res){
         });
     }
     } catch(error){
-      console.error()
+      console.error(error);
     }
 
 }
 
 
 // 404 template
-app.all("*", (req, res, next) => {
+app.all("*", (req, res) => {
   res.status(404);
   res.render("pages/errorpage",);
   res.send();

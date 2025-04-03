@@ -11,7 +11,7 @@ async function toggleFavorite(userStatus) {
     if(userStatus.isLoggedIn){
     const h1ELement = document.querySelector("h1");
     if(!h1ELement) return;
-    drinkName = h1ELement.textContent.trim();
+    const drinkName = h1ELement.textContent.trim();
     if(userStatus.favoritedDrinks.includes(drinkName)){
         const favoritedButton = h1ELement.parentElement.querySelector(".heartButton");
         favoritedButton.classList.toggle("favourited");
@@ -49,7 +49,7 @@ async function showRelatedFavorites(userStatus) {
 
 async function pageLoad(){
     try{
-        userStatus = await fetchUserStatus();
+        const userStatus = await fetchUserStatus();
         toggleFavorite(userStatus)
         showRelatedFavorites(userStatus);
     } catch(error){
