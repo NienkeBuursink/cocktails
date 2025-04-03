@@ -275,6 +275,15 @@ nav {
     }
 }
 
+.header a:first-of-type {
+    background: var(--color-accent1);
+    aspect-ratio: 1;
+}
+
+.header a:first-of-type::after {
+    content: none;
+}
+
 /****************************/
 /* Favoutite button         */
 /****************************/
