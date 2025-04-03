@@ -19,11 +19,39 @@ async function toggleFavorite(userStatus) {
         return
     }
 }
+async function showRelatedFavorites(userStatus) {
+    const otherFavoritesSection = document.getElementById("otherUserFavorites");
+    console.log(otherFavoritesSection)
+    try {
+        if (!userStatus.isLoggedIn) {
+            otherFavoritesSection.insertAdjacentHTML("beforeend", `
+                <div class="favoritesOverlay">
+                    <p>Sign in to access all features!</p>
+                    <a href="/login" class="login-button">Sign In</a>
+                </div>
+            `);
+            return
+        }
+        if (userStatus.isLoggedIn && !userStatus.isAdult) {
+            otherFavoritesSection.insertAdjacentHTML("beforeend", `
+                <div class="favoritesOverlay">
+                    <p>You must be 18+ to see these cocktails :')</p>
+                </div>
+            `);
+            return
+        }
+    } catch (error) {
+            console.error("showCocktailsOnLoad error:", error);
+            otherFavoritesSection.innerHTML = "Error loading other users favorites";
+    }
+}
+
 
 async function pageLoad(){
     try{
         userStatus = await fetchUserStatus();
         toggleFavorite(userStatus)
+        showRelatedFavorites(userStatus);
     } catch(error){
         console.error("Error:", error);
     }
