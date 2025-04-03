@@ -568,5 +568,12 @@ app.get('/api/user-status',  (req, res)  => {
 
 });
 
+// 404 template
+app.all("*", (req, res, next) => {
+  res.status(404);
+  res.render("pages/errorpage",);
+  res.send();
+})
+
 // start server
 app.listen(8000);
