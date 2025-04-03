@@ -450,7 +450,7 @@ async function fetchCocktailDetails(cocktailId) {
   try {
     const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId);
     if (!response.ok) {
-      throw new Error("API request failed for cocktail ID" + cocktailId + ":" + response.status);
+      throw new Error("API request failed for cocktail ID " + cocktailId + " : " + response.status);
     }
 
     const data = await response.json();
@@ -460,7 +460,7 @@ async function fetchCocktailDetails(cocktailId) {
 
     return data.drinks[0];
   } catch (error) {
-    console.error("Error fetching cocktail" + cocktailId + ":" + error);
+    console.error("Error fetching cocktail " + cocktailId + " : " + error);
     return null;
   }
 }
@@ -541,13 +541,11 @@ async function detailPage(req, res) {
 // Userstatus for clientside javascript 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-app.get('/api/user-status',  (req, res)  => {
+app.get("/api/user-status",  (req, res)  => {
   try{
-
     if(req.session.userLoggedIn){ async () => { 
-       
-       await getFavoriteDrinks()
-       return favoritedDrinks
+       await getFavoriteDrinks();
+       return favoritedDrinks;
     }
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
@@ -563,9 +561,7 @@ app.get('/api/user-status',  (req, res)  => {
 
     } catch(error){
       console.error()
-
     }
-
 });
 
 // 404 template

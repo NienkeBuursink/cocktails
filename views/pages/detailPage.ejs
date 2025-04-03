@@ -4,6 +4,7 @@
 <head>
   <%- include('../partials/head'); %>
   <link rel="stylesheet" href="/static/styles/detailPage.css">
+  <script defer src="static/scripts/detailPage.js"></script>
 </head>
 
 <body>
@@ -43,14 +44,13 @@
 
   <section id="otherUserFavorites">
     <h2>Other users also liked:</h2>
-    <ul>
+    <ul class="carousel">
       <% if (relatedFavorites.length > 0) { %>
         <% relatedFavorites.forEach(function(drink) { %>
           <li>
             <a href="/detailPage?id=<%= drink.idDrink %>">
               <h3><%= drink.strDrink %></h3>
               <img src="<%= drink.strDrinkThumb %>" alt="<%= drink.strDrink %>" width="100">
-              <p><%= drink.strAlcoholic %></p>
             </a>
             <form action="/toggleFavorite" method="post">
               <input type="hidden" name="cocktailId" value="<%= drink.idDrink %>">
@@ -76,7 +76,6 @@
   <%- include('../partials/footer'); %>
 </footer>
 
-<script src="/static/scripts/cocktailAPI.js" defer></script> 
 <!-- The script above is for getting access and searching for cocktails -->
 <script src="/static/scripts/common.js" defer></script> 
 <script src="/static/scripts/carrousel.js" defer></script> 
