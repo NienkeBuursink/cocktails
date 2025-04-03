@@ -150,8 +150,24 @@ function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
                     </li>
                 `);
             });
+            if (!userStatus.isLoggedIn) {
+                populairCarouselList.insertAdjacentHTML("beforebegin", `
+                    <div class="loginOverlay">
+                        <p>Sign in to access all features!</p>
+                        <a href="/login" class="login-button">Sign In</a>
+                    </div>
+                `);
+            }
+            if (userStatus.isLoggedIn && !userStatus.isAdult) {
+                populairCarouselList.insertAdjacentHTML("beforebegin", `
+                    <div class="loginOverlay">
+                        <p>You must be 18+ to see these cocktails :')</p>
+                    </div>
+                `);
+            }
         } else {
-            carouselList.innerHTML = "<li>No matching cocktails found</li>";
+            // Show fallback message if no cocktails are available
+            populairCarouselList.innerHTML = "<li>No matching cocktails found</li>";
         }
     } catch (error) {
         console.error("showCocktailsOnLoad error:", error);
@@ -274,14 +290,14 @@ function showCoffeeCocktailsOnLoad (filteredCoffeeCocktails){
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
-        await fetchCocktails()
+        await fetchCocktails();
         // displayCocktails(cocktails);
-        console.log(userStatus, ":userstatus")
-        console.log(allCocktails, "searchCocktailArray")
+        console.log(userStatus, ":userstatus");
+        console.log(allCocktails, "searchCocktailArray");
 
         await filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails, userStatus);
         
-        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, filteredCocoaCocktails,  "pageLoad  filtered cocktails")
+        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, "pageLoad  filtered cocktails")
 
         showPopulairCocktailsOnLoad(filteredPopulairCocktails)
         showLatestCocktailsOnLoad(filteredLatestCocktails)
