@@ -31,6 +31,22 @@ node server.js
 2. They are able to search for cocktails/mocktails.
 3. They can filter/sort/match.
 
+## For continuation 
+1. Structure: if you want to add a new page, you can do that by navigating to /views/pages/addyourpage.ejs
+2. Best Practices for Code and Structure: Keep the code organized in separate files (e.g., pages in /pages)
+3. Performance and Optimization:
+How to keep the website fast: 
+- Minification: Shrink your files by removing unnecessary spaces, newlines, and comments. 
+- Compress Images: compress images without noticeable quality loss.
+- Use Icons (SVG): Instead of using multiple image files, consider using SVGs for icons as they are small and scalable.
+
+## Further development ideas
+* Improve performance.
+* Add more features: Introduce new functionality..
+* UI/UX Improvements: Update the user interface to make it more user-friendly or visually appealing.
+* Security Enhancements: Improve security.
+* Make the responsive better.
+
 ## Team
 * Nienke B.- Backend Developer
 * Julian v.H. - Backend Developer
