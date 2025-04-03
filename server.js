@@ -541,7 +541,7 @@ async function detailPage(req, res) {
 // Userstatus for clientside javascript 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-app.get('/api/user-status',  (req, res)  => {
+app.get("/api/user-status",  (req, res)  => {
   try{
     if(req.session.userLoggedIn){ async () => { 
        await getFavoriteDrinks();
@@ -550,7 +550,7 @@ app.get('/api/user-status',  (req, res)  => {
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
         isAdult: req.session.age >= 18,
-        favoritedDrinks,}); 
+        favoritedDrinks}); 
     } else{
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
