@@ -197,6 +197,9 @@ main ul li a div{
     flex-direction: column;
     justify-content: space-evenly;
 }
+main ul li a div h3{
+    padding: 0;
+}
 
 .noMatch{
     align-self: center;

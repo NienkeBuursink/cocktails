@@ -132,6 +132,9 @@ button, .link, input[type="submit"]{
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25); 
     cursor: pointer;
 }
+a{
+    text-decoration: none;
+}
 
 .sort, .filter{
     padding: 0.25rem 0.75rem;
@@ -249,7 +252,7 @@ nav {
     }
 
     & ul {
-        position: fixed;
+        position: absolute;
         z-index: 2;
         top: 0.5rem;
         right: 0.5rem;
@@ -380,9 +383,9 @@ button.favourited svg {
                 overflow-wrap: break-word;
                 text-align: center;
                 grid-area: name;
-                overflow: hidden; /* Hide overflowing text */
-                white-space: nowrap; /* Prevent text wrapping */
-                text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+                overflow: hidden; 
+                white-space: nowrap; 
+                text-overflow: ellipsis;
             }
 
             & img {
@@ -464,7 +467,6 @@ button.favourited svg {
 /*********************/
 
 footer{
-    margin-top: 3rem;
     padding: 1rem;
     background-image: linear-gradient(180deg,
     var(--color-light-blue)10%,
