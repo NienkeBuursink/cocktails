@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
                 });
 
                 const data = await response.json();
+                console.log(data)
                 if (response.ok) {
                     animation.classList.toggle("favourited");
                     showToastWithHref(data.message);

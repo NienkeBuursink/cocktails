@@ -1,7 +1,9 @@
 /****************************/
 /* Intro Section Styling    */
 /****************************/
-
+main{
+    margin-bottom: 3rem;
+}
 .intro {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
