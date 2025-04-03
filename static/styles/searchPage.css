@@ -4,7 +4,6 @@ main section:first-of-type{
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 1.25rem;
-    border-bottom: black 1px solid;
 }
 /* main section > *{
     border: solid 1px green;
@@ -78,17 +77,6 @@ details::details-content{
     position: absolute;
     z-index: 2;
 }
-
-
-
-/* details[open]{
-} */
-/* sort options */
-/* .sort {
-    border: black solid 1px;
-    border-radius: 10px;
-} */
-
 
 .sort > summary, .filter > summary  {
     position: relative;
@@ -167,7 +155,8 @@ main ul{
     flex-direction: column;
     transition: all ease 200ms;
     padding-top: 1rem;
-    background-image: url(/static/images/index/introtext.jpg);
+    background-image: url(/static/images/index/lemonWater.jpeg);
+    background-size: cover;
     height: 70vh;
     overflow-y: scroll;
 }

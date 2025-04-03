@@ -350,7 +350,7 @@ button.favourited svg {
         grid-template-areas: 
             ". favourite"
             ". ."
-            ". name";
+            "name name";
 
         & a {
             display: contents;
@@ -369,8 +369,11 @@ button.favourited svg {
 
                 max-width: 100%;
                 overflow-wrap: break-word;
-
+                text-align: center;
                 grid-area: name;
+                overflow: hidden; /* Hide overflowing text */
+                white-space: nowrap; /* Prevent text wrapping */
+                text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
             }
 
             & img {
