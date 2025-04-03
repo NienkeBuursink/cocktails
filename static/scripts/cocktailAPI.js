@@ -17,7 +17,8 @@ let allCocktails
 let filteredCocoaCocktails
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
-    console.log("fetching user status")
+    console.log("fetching user status -->")
+    
     return await response.json();
 
 }
@@ -90,9 +91,11 @@ function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails,
         // console.log("allPopulairCocktails are this before filter: ", allPopulairCocktails)
 
         // Filter out alcoholic drinks for others
-        filteredPopulairCocktails = allPopulairCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");       
+        filteredPopulairCocktails = allPopulairCocktails      
         filteredCocktails =  allCocktails.filter(cocktail => cocktail.strAlcoholic === "Non alcoholic");
-        filteredLatestCocktails = [...filteredCocktails].sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified));
+        filteredLatestCocktails = [...filteredCocktails]
+        .sort((a, b) => new Date(b.dateModified) - new Date(a.dateModified))
+        .slice(0, 10);
         filteredCocoaCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Cocoa")
         filteredCoffeeCocktails = filteredCocktails.filter(cocktail => cocktail.strCategory === "Coffee / Tea")
         console.log(filteredCocktails, "filtered cocktials and, fioltered cocoa", filteredCocoaCocktails)
@@ -136,7 +139,7 @@ function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
                 populairCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
                         <a href="/detailPage?id=${drink.idDrink}">
-                            <h3>${drink.strDrink}</h2>
+                            <h3>${drink.strDrink}</h3>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                         </a>
                         <form action="/toggleFavorite" method="post">
@@ -189,7 +192,7 @@ function showLatestCocktailsOnLoad (filteredLatestCocktails){
                 latestCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
                         <a href="/detailPage?id=${drink.idDrink}">
-                            <h3>${drink.strDrink}</h2>
+                            <h3>${drink.strDrink}</h3>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                         </a>
                         <form action="/toggleFavorite" method="post">
@@ -225,7 +228,7 @@ function showCocoaCocktailsOnLoad (filteredCocoaCocktails){
                 cocoaCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
                         <a href="/detailPage?id=${drink.idDrink}">
-                            <h3>${drink.strDrink}</h2>
+                            <h3>${drink.strDrink}</h3>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                         </a>
                         <form action="/toggleFavorite" method="post">
@@ -263,7 +266,7 @@ function showCoffeeCocktailsOnLoad (filteredCoffeeCocktails){
                 coffeeCarouselList.insertAdjacentHTML("beforeend", `
                     <li>
                         <a href="/detailPage?id=${drink.idDrink}">
-                            <h3>${drink.strDrink}</h2>
+                            <h3>${drink.strDrink}</h3>
                             <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
                         </a>
                         <form action="/toggleFavorite" method="post">
@@ -286,6 +289,18 @@ function showCoffeeCocktailsOnLoad (filteredCoffeeCocktails){
     }
 }
 
+async function toggleFavorite(userStatus) {
+    const everyListItem = document.querySelectorAll("li");  
+    everyListItem.forEach((listItem) => {
+      const h3Element = listItem.querySelector("h3");
+      if (!h3Element) return;
+      const drinkName = h3Element.textContent.trim();
+      if (userStatus.favoritedDrinks.includes(drinkName)) {
+        const favoritedButton = listItem.querySelector(".heartButton");
+        favoritedButton.classList.toggle("favourited");
+      }
+    });
+  }
 
 async function pageLoad() {
     try {
@@ -304,6 +319,7 @@ async function pageLoad() {
         showCocoaCocktailsOnLoad(filteredCocoaCocktails)
         showCoffeeCocktailsOnLoad(filteredCoffeeCocktails)
         introCocktail(filteredCocktails)
+        toggleFavorite(userStatus)
 
 
     } catch (error) {

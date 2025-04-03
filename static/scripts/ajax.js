@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => { // Wait until full page is loaded
-
+    
     // heartbuttons
     document.addEventListener("click", async (event) => {
         if (event.target.closest(".heartButton")) {
             event.preventDefault(); // makes sure submit does not immediately submits to server, but does this function instead
-
+            
             const button = event.target;
+            const animation = button.closest("button")
             const form = button.closest("form"); //closest from heartbutton (so one above it in code)
             const cocktailId = form.querySelector("input[name='cocktailId']").value;
 
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
 
                 const data = await response.json();
                 if (response.ok) {
+                    animation.classList.toggle("favourited");
                     showToastWithHref(data.message);
                 } else {
                     handleError(response, data);

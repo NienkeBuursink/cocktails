@@ -372,6 +372,7 @@ async function removeFavorite(cocktailId, username, res) {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // profile + favorites of user
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+let favoritedDrinks
 async function getFavoriteDrinks(favoriteIds) {
   try {
     if (!Array.isArray(favoriteIds) || favoriteIds.length === 0) {
@@ -406,6 +407,7 @@ async function getFavoriteDrinks(favoriteIds) {
       })
     );
 
+    favoritedDrinks = favoriteDrinks.map(drink => drink.strDrink)
     return favoriteDrinks.filter((drink) => drink !== null); // Remove null values
   } catch (error) {
     console.error("Error fetching favorite drinks:", error);
@@ -424,6 +426,7 @@ async function showProfile(req, res) {
       .toArray(); 
 
     const favoriteIds = favoriteCocktails.map(cocktail => cocktail._id);
+    console.log(favoriteIds, "kaas")
 
     // Fetch cocktail details from API
     const favoriteDrinks = await getFavoriteDrinks(favoriteIds);
@@ -539,13 +542,28 @@ async function detailPage(req, res) {
 // Default mocktails 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-app.get('/api/user-status', (req, res) => {
+app.get('/api/user-status',  (req, res)  => {
   try{
-  
-    res.json({
-      isLoggedIn: !!req.session.userLoggedIn,
-      isAdult: req.session.age >= 18
-       });
+
+    if(req.session.userLoggedIn){ async () => { 
+       
+       await getFavoriteDrinks()
+       return favoritedDrinks
+    }
+      console.log(favoritedDrinks, "if")
+      res.json({
+        isLoggedIn: !!req.session.userLoggedIn,
+        isAdult: req.session.age >= 18,
+        favoritedDrinks}); 
+    } else{
+      console.log(favoritedDrinks, "else")
+      res.json({
+        isLoggedIn: !!req.session.userLoggedIn,
+        isAdult: req.session.age >= 18,
+        });
+
+    }
+
     } catch(error){
       console.error()
 

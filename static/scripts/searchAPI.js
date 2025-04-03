@@ -106,24 +106,6 @@ async function appliedFilters(){
     }catch (error) {
         console.error("Error adding appliedfiltering:", error);
     }
-
-    // if ( 1 === 1){
-
-    //     document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
-    //         checkbox.addEventListener("change", (filta) => {
-    //             console.log(filta)
-    //         console.log(filta.target.id)
-    //         console.log(filteredNameData, "before")
-    //         filteredNameData2 = filteredNameData.filter(cocktail => cocktail.strAlcoholic === filta.target.id);
-    //         console.log(filteredNameData2, "after")
-    //     });
-    // }) } else{
-    //     console.log("kaas")
-    //     // filteredCocktails = filteredNameData
-    // }
-    // // displayCocktails(filteredCocktails);
-    // // not sure if this code above is needed.
-
 }
 
 function getCheckedValues(fieldset) {
@@ -196,6 +178,19 @@ async function intersectionObser() {
     });
   };
 
+  async function toggleFavorite(userStatus) {
+    const everyListItem = document.querySelectorAll("li");  
+    everyListItem.forEach((listItem) => {
+      const h3Element = listItem.querySelector("h3");
+      if (!h3Element) return;
+      const drinkName = h3Element.textContent.trim();
+      if (userStatus.favoritedDrinks.includes(drinkName)) {
+        const favoritedButton = listItem.querySelector(".heartButton");
+        favoritedButton.classList.toggle("favourited");
+      }
+    });
+  }
+
 
 async function pageLoad() {
     try {
@@ -206,6 +201,7 @@ async function pageLoad() {
         await appliedFilters(userStatus, filteredCocktails)
         console.log(filteredCocktails, "after sorting")
         await displayCocktails(filteredCocktails)
+        toggleFavorite(userStatus)
         intersectionObser()
     } catch (error) {
         console.error("Error:", error);
