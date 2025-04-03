@@ -426,7 +426,6 @@ async function showProfile(req, res) {
       .toArray(); 
 
     const favoriteIds = favoriteCocktails.map(cocktail => cocktail._id);
-    console.log(favoriteIds, "kaas")
 
     // Fetch cocktail details from API
     const favoriteDrinks = await getFavoriteDrinks(favoriteIds);
@@ -539,7 +538,7 @@ async function detailPage(req, res) {
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Default mocktails 
+// Userstatus for clientside javascript 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.get('/api/user-status',  (req, res)  => {
@@ -550,13 +549,11 @@ app.get('/api/user-status',  (req, res)  => {
        await getFavoriteDrinks()
        return favoritedDrinks
     }
-      console.log(favoritedDrinks, "if")
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
         isAdult: req.session.age >= 18,
         favoritedDrinks}); 
     } else{
-      console.log(favoritedDrinks, "else")
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
         isAdult: req.session.age >= 18,

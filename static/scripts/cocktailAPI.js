@@ -1,3 +1,6 @@
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Setup
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const carouselList = document.getElementsByClassName("carousel")
 const populairCarouselList = document.querySelector(".popularList");
@@ -5,7 +8,10 @@ const latestCarouselList = document.querySelector(".latestList");
 const cocoaCarouselList = document.querySelector(".cocoaList");
 const coffeeCarouselList = document.querySelector(".coffeeList");
 const introImg = document.querySelector(".intro img")
-
+const populairSearch = "/popular.php";
+const latestSearch = "/latest.php";
+const normalSearch = "/search.php?s=";
+const APIArray = [populairSearch, latestSearch, normalSearch];
 
 let userStatus 
 let filteredCocktails
@@ -15,21 +21,18 @@ let allLatestCocktails
 let filteredLatestCocktails
 let allCocktails
 let filteredCocoaCocktails
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Functions
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// Fetching Userstatus from server
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
-    console.log("fetching user status -->")
-    
+    console.log("fetching user status")
     return await response.json();
-
 }
-    // Now this fucntion just works for fetching cocktails for the loading of the page.
-    // But should i have a different fucntion for each time i need to call the API, for like the populair drink, or latest, or other categories.
 
-    const populairSearch = "/popular.php";
-    const latestSearch = "/latest.php";
-    const normalSearch = "/search.php?s=";
-    const APIArray = [populairSearch, latestSearch, normalSearch];
-
+// Fetching Cocktails from the API
 async function fetchCocktails() {
     
     try {
@@ -50,26 +53,10 @@ async function fetchCocktails() {
     } catch (error) {
         console.error("Error fetching cocktails:", error);
     }
-
-
-
-    // const apiUrl = baseURL + "/search.php?s=";
-    // console.log(apiUrl)
-    // const nameResponse = await fetch(apiUrl);
-    // allCocktails = await nameResponse.json();
-    // allCocktails = allCocktails.drinks
-
-    // allPopulairCocktails = 
-    // console.log("allcocktails in fetchcocktails: ", allCocktails)
-    
-        // console.log("when cocktails are fetched, nameData is: ", nameData)
-        // console.log("when cocktails are fetched, nameData.drinks is: ", nameData.drinks.slice(0, 100))
-    // return searchCocktailArray.drinks;
-
-
 }
 
-
+// Filtering between alcoholic and non alcoholic drinks based on userStatus
+// Result of this function is an array of drinks called "filteredCocktails" 
 function filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails, userStatus) {
     
     if (userStatus.isLoggedIn && userStatus.isAdult) {
@@ -290,6 +277,7 @@ function showCoffeeCocktailsOnLoad (filteredCoffeeCocktails){
 }
 
 async function toggleFavorite(userStatus) {
+    if(userStatus.isLoggedIn){
     const everyListItem = document.querySelectorAll("li");  
     everyListItem.forEach((listItem) => {
       const h3Element = listItem.querySelector("h3");
@@ -298,29 +286,23 @@ async function toggleFavorite(userStatus) {
       if (userStatus.favoritedDrinks.includes(drinkName)) {
         const favoritedButton = listItem.querySelector(".heartButton");
         favoritedButton.classList.toggle("favourited");
-      }
-    });
-  }
+      } });
+    } else{
+        return
+    }
+}
 
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
         await fetchCocktails();
-        // displayCocktails(cocktails);
-        console.log(userStatus, ":userstatus");
-        console.log(allCocktails, "searchCocktailArray");
-
         await filterCocktails(allLatestCocktails, allPopulairCocktails, allCocktails, userStatus);
-        
-        console.log(filteredCocktails, filteredLatestCocktails, filteredPopulairCocktails, "pageLoad  filtered cocktails")
-
         showPopulairCocktailsOnLoad(filteredPopulairCocktails)
         showLatestCocktailsOnLoad(filteredLatestCocktails)
         showCocoaCocktailsOnLoad(filteredCocoaCocktails)
         showCoffeeCocktailsOnLoad(filteredCoffeeCocktails)
         introCocktail(filteredCocktails)
         toggleFavorite(userStatus)
-
 
     } catch (error) {
         console.error("Error:", error);

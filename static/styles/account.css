@@ -24,7 +24,9 @@
         rotate: 20deg;
     }
 }
-
+#userFavorites h2{
+    margin-left: 1rem;
+}
 #userFavorites ul {
     display: grid;
     grid-template-columns: 1fr 1fr;
