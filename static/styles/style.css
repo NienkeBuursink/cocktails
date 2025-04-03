@@ -450,6 +450,6 @@ footer img{
     width: 5rem;
 }
 
-footer p:nth-of-type(2){
+footer p{
     text-align: center;
 }
