@@ -1,19 +1,31 @@
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Setup
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 const baseURL = "https://www.thecocktaildb.com/api/json/v2/961249867";
 const submitButton = document.getElementById("searchButton");
 const searchBar = document.getElementById("searchBar");
 const nameList = document.getElementById('cocktailName');
 const normalSearch = "/search.php?s=";
+const sortButtons = document.querySelectorAll(".sort label")
 let sortSetting = document.querySelector(".sort span");
+let filterButtons = document.querySelectorAll(".filter input")
 let userStatus;
 let filteredNameData;
 let allCocktails;
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Functions
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// Fetching Userstatus from server
 async function fetchUserStatus() {
     const response = await fetch('/api/user-status');
     console.log("fetching user status")
     return await response.json();
 }
 
+// Fetching Cocktails from the API
 async function fetchCocktails() {
     try{
         const userInput = searchBar.value.trim(); 
@@ -26,6 +38,11 @@ async function fetchCocktails() {
         }
         allCocktails = await response.json(); 
         allCocktails = allCocktails.drinks
+        // If the user input doesnt retrieve any cocktails, It way give allCocktails an empty array instead of null.
+        // If allCocktails = null. Filter and sorting functions wont work.
+        if(allCocktails == null){
+            allCocktails =[]
+        }
 
         return allCocktails; 
 
@@ -34,6 +51,8 @@ async function fetchCocktails() {
     }
 }
 
+// Filtering between alcoholic and non alcoholic drinks based on userStatus
+// Result of this function is an array of drinks called "filteredCocktails" 
 async function filterCocktailsByAge(allCocktails, userStatus) {
     console.log(userStatus)
     if (userStatus.isLoggedIn && userStatus.isAdult) {
@@ -48,9 +67,8 @@ async function filterCocktailsByAge(allCocktails, userStatus) {
     }
 }
 
-
+// Sorting the filteredCocktails array based on the sorting option currently selected
 async function sorting(){
-
     if (sortSetting.textContent == "Name"){
         filteredCocktails = [...filteredCocktails].sort((a, b) => a.strDrink.localeCompare(b.strDrink));
         console.log(filteredCocktails, "name")
@@ -62,14 +80,15 @@ async function sorting(){
     }
 }
 
-
+// Checking the filters that have been applied by the user and filtering out the filteredCocktails
 async function appliedFilters(){
     try{
+        // defining the current filter fieldsets
         const alcoholicFilter = document.querySelector(".alcoholicFilter")
         const glassFilter = document.querySelector(".glassFilter");
         const categoryFilter = document.querySelector(".categoryFilter");
-        console.log(userStatus);
 
+        // Changing the alcoholic filter to a disabled state if the user is not logged or adult
         if(userStatus.isLoggedIn && userStatus.isAdult){
             alcoholicFilter.classList.remove("disabled");
         } else{
@@ -79,13 +98,12 @@ async function appliedFilters(){
             logInMessage.classList.remove("none");
             nonAlcoholicCheckbox.checked = true;
         }
-
+        // Getting the checked values and defining them
         const selectedAlcoholicFilter = getCheckedValues(alcoholicFilter);
         const selectedGlassTypes = getCheckedValues(glassFilter);
         const selectedCategories = getCheckedValues(categoryFilter);
 
-        console.log(selectedGlassTypes, " selected glass types")
-
+        // filtering out the checked values from the filteredCocktails array 
         filteredCocktails = filteredCocktails.filter((cocktail) => {
             const matchesAlcoholicFilter = 
                 selectedAlcoholicFilter.length === 0 || selectedAlcoholicFilter.includes(cocktail.strAlcoholic)
@@ -107,20 +125,25 @@ async function appliedFilters(){
         console.error("Error adding appliedfiltering:", error);
     }
 }
-
+// Return an array of checked checkbox IDs
 function getCheckedValues(fieldset) {
     const checkboxes = fieldset.querySelectorAll('input[type="checkbox"]:checked');
-    return Array.from(checkboxes).map((checkbox) => checkbox.id); // Return an array of checked checkbox IDs
+    return Array.from(checkboxes).map((checkbox) => checkbox.id); 
 }
 
+// Adding a list item for each cocktail in the filteredCocktails array.
 async function displayCocktails(){    
     try {
+        // Clearing the current list
         nameList.innerHTML = ""
+
+        // Showing the amount of cocktails in the array in the filterbutton
         const summarySpan = document.querySelector('.filter summary span'); // Select the span inside the summary
         if (summarySpan) {
             summarySpan.textContent = "(" + filteredCocktails.length + " items)"; // Update the text content
         }
-        if (filteredCocktails && Array.isArray(filteredCocktails)) {
+        // Checking if the filteredCocktails is an array an then inserting html for each drink
+        if (filteredCocktails && Array.isArray(filteredCocktails) && summarySpan.textContent !== "(0 items)") {
             console.log("filteredCocktails in making", filteredCocktails)
             filteredCocktails.forEach(drink => {
                 nameList.insertAdjacentHTML("beforeend", `
@@ -146,39 +169,42 @@ async function displayCocktails(){
             
         });
         } else {
-
-            nameList.innerHTML = "<li>No matching cocktails found</li>";
-        }
+            nameList.innerHTML = `<li class="noMatch" >Sorry, no matching cocktails found. Check you filters or inputs</li>`;
+        } 
     } catch (error) {
         console.error("Name search error:", error);
         nameList.innerHTML = "<li>Error loading name results</li>";
     }
 
 }
-
+// An intersection observer to give a smooth scrolling experience
 async function intersectionObser() {
     const listItems = document.querySelectorAll(".list-item");
     const observerOptions = {
-      root: null, // Observe relative to the viewport
-      threshold: 0.4, // Trigger when 10% of the item is visible
+      // Observe relative to the viewport
+      root: null, 
+      // Trigger when 40% of the item is visible
+      threshold: 0.4, 
     };
     const observerCallback = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("visible");
           entry.target.classList.remove("hidden");
-          observer.unobserve(entry.target); // Stop observing once animated
+          // Stop observing once animated
+          observer.unobserve(entry.target); 
         }
       });
     };
     const observer = new IntersectionObserver(observerCallback, observerOptions);
-
     listItems.forEach((item) => {
       observer.observe(item);
     });
   };
 
-  async function toggleFavorite(userStatus) {
+// Checks if the loaded cocktails are in the users favorite list, and adds the heart icon to them
+async function toggleFavorite(userStatus) {
+    if(userStatus.isLoggedIn){
     const everyListItem = document.querySelectorAll("li");  
     everyListItem.forEach((listItem) => {
       const h3Element = listItem.querySelector("h3");
@@ -187,11 +213,13 @@ async function intersectionObser() {
       if (userStatus.favoritedDrinks.includes(drinkName)) {
         const favoritedButton = listItem.querySelector(".heartButton");
         favoritedButton.classList.toggle("favourited");
-      }
-    });
-  }
+      } });
+    } else{
+        return
+    }
+}
 
-
+// loads all the functions at the start of the page
 async function pageLoad() {
     try {
         userStatus = await fetchUserStatus();
@@ -199,7 +227,6 @@ async function pageLoad() {
         await filterCocktailsByAge(allCocktails, userStatus)
         await sorting(filteredCocktails)
         await appliedFilters(userStatus, filteredCocktails)
-        console.log(filteredCocktails, "after sorting")
         await displayCocktails(filteredCocktails)
         toggleFavorite(userStatus)
         intersectionObser()
@@ -210,9 +237,12 @@ async function pageLoad() {
 
 pageLoad();
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Event listeners
-const sortButtons = document.querySelectorAll(".sort label")
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+// Every time an input is done, like a filter is added, or a sorting option is selected, It will run the pageload function
+// This way the list always updates without having to do an extra button input.
 submitButton.addEventListener("click", async ()  => {
     pageLoad()
 }
@@ -226,8 +256,8 @@ sortButtons.forEach( (button)  =>  {
     });
   });
 
-filterButtons = document.querySelectorAll(".filter input")
-  filterButtons.forEach((button) => {
+
+filterButtons.forEach((button) => {
     // Add an event listener to each button
     button.addEventListener("click", async () => {
       // Set sortSetting's text content to the clicked button's text content
@@ -235,8 +265,8 @@ filterButtons = document.querySelectorAll(".filter input")
     });
   });
 
-
 searchBar.addEventListener("keypress", (e) => {
-    if (e.key === "Enter");
-});
-
+    if (e.key === "Enter"){
+        pageLoad()
+    };}
+);

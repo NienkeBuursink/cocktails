@@ -198,6 +198,13 @@ main ul li a div{
     justify-content: space-evenly;
 }
 
+.noMatch{
+    align-self: center;
+    text-align: center;
+    padding: .5rem;
+    margin: 1rem;
+}
+
 /* .heartButton{
     width: auto;
 } */
