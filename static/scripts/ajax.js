@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => { // Wait until full page is loaded
-
+    
     // heartbuttons
     document.addEventListener("click", async (event) => {
         if (event.target.closest(".heartButton")) {
             event.preventDefault(); // makes sure submit does not immediately submits to server, but does this function instead
-
+            
             const button = event.target;
+            const animation = button.closest("button")
             const form = button.closest("form"); //closest from heartbutton (so one above it in code)
             const cocktailId = form.querySelector("input[name='cocktailId']").value;
 
@@ -17,14 +18,16 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
                 });
 
                 const data = await response.json();
+                console.log(data)
                 if (response.ok) {
+                    animation.classList.toggle("favourited");
                     showToastWithHref(data.message);
                 } else {
                     handleError(response, data);
                 }
             } catch (error) {
                 console.error("Error toggling favorite:", error);
-                showToast("Error toggling favorite.");
+                showToastNoHref("Error toggling favorite.");
             }
         }
     });
@@ -58,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => { // Wait until full page is
                 }
             } catch (error) {
                 console.error("Error submitting form:", error);
-                showToast("Error submitting form.");
+                showToastNoHref("Error submitting form.");
             }
         });
     });
@@ -117,7 +120,7 @@ function showToastWithHref(message) {
       toast.classList.remove("show");
       setTimeout(() => toast.remove(), 500); // Remove element after fade-out
     }, 2000); // Hide after 2 seconds
-  }
+}
 
 
   // show toast notification without link to account

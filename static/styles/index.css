@@ -1,7 +1,9 @@
 /****************************/
 /* Intro Section Styling    */
 /****************************/
-
+main{
+    margin-bottom: 3rem;
+}
 .intro {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -45,6 +47,30 @@
     }
 }
 
-.popularCarousel, .latestCarousel {
+main section h2 {
     margin-left: 1rem;
 }
+
+#popularCarouselContainer {
+    position: relative;
+    & .loginOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--color-white);
+        opacity: .8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        z-index: 1;
+        & a {
+            text-decoration: underline;
+        }
+    }
+}
+
+
