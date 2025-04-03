@@ -54,4 +54,4 @@ How to keep the website fast:
 * Matthew D. - Frontend Developer
 
 ## License
-- 
+- MIT License
