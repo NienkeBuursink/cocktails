@@ -249,7 +249,7 @@ nav {
     }
 
     & ul {
-        position: fixed;
+        position: absolute;
         z-index: 2;
         top: 0.5rem;
         right: 0.5rem;
