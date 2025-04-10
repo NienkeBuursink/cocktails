@@ -49,11 +49,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET ,
-  cookie: { secure: process.env.NODE_ENV === "production" },
+  cookie: { secure: process.env.NODE_ENV === "production", maxAge: 600000 },
   // Resave is for not resaving the session when nothing changes
   // SaveUninitialized is for saving each NEW session, even when nothing has changed
   // Dont forget to add the SESSION_SECRET to your own .env file
-  cookie: { maxAge: 600000 },
   rolling: true
   // Cookie age set to 600000 (10minutes.) 
   // rolling means that each time the user interact with the server the cookie timer resets.
@@ -91,6 +90,14 @@ app.get("/detailpage", detailPage);
 app.get("/account", checkingIfUserIsLoggedIn, showProfile);
 app.post("/toggleFavorite", toggleFavorite);
 app.get("/search", search)
+app.get("/api/user-status", fetchUserStatus)
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Userstatus for clientside javascript 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // basic functions
@@ -130,7 +137,7 @@ function search(req, res){
 
 function logOut(req, res) {
   try {
-    req.session.userLoggedIn = false;
+    req.session.destroy()
     res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -187,23 +194,18 @@ async function signedUp(req, res) { // function when submitted form
     const collection = db.collection("users");
     await collection.insertOne(newUser);
 
-    let query
-    const user = await collection.findOne(query);
-
-      req.session.userLoggedIn = true;
-      req.session.username = user.username;
-      req.session.age = new Date(user.birthday);
-      let today = new Date()
-      let age = today.getFullYear() -  req.session.age.getFullYear();
-      const monthDiff = today.getMonth() -  req.session.age.getMonth()
+    req.session.userLoggedIn = true;
+    req.session.username = newUser.username;
+    req.session.age = new Date(newUser.birthday);
+    let today = new Date()
+    let age = today.getFullYear() -  req.session.age.getFullYear();
+    const monthDiff = today.getMonth() -  req.session.age.getMonth()
 
       if(monthDiff < 0 || (monthDiff === 0 && today.getDate() <  req.session.age.getDate())){
-        console.log("above age")
         age--
         console.log(age)
         
       } else{
-        console.log("under kees")
         console.log(age)
       }
     
@@ -211,7 +213,7 @@ async function signedUp(req, res) { // function when submitted form
       console.log("req.session.age = ", age)
       //
       
-      console.log("User logged in:", user.birthday )
+      console.log("User logged in:", newUser.birthday )
       // logged in
       // console.log("User logged in:", user.username );
       // res.status(200).json({ message: "Login successful", username: user.username });
@@ -300,6 +302,7 @@ async function toggleFavorite(req, res) {
   try {
     let { cocktailId } = req.body;
     const username = req.session.username;
+    console.log(username)
 
     if (!username) {
       return res.status(401).json({error: "You must be logged in to favorite cocktails." });
@@ -450,7 +453,7 @@ async function fetchCocktailDetails(cocktailId) {
   try {
     const response = await fetch("https://www.thecocktaildb.com/api/json/v2/961249867/lookup.php?i=" + cocktailId);
     if (!response.ok) {
-      throw new Error("API request failed for cocktail ID" + cocktailId + ":" + response.status);
+      throw new Error("API request failed for cocktail ID " + cocktailId + " : " + response.status);
     }
 
     const data = await response.json();
@@ -460,7 +463,7 @@ async function fetchCocktailDetails(cocktailId) {
 
     return data.drinks[0];
   } catch (error) {
-    console.error("Error fetching cocktail" + cocktailId + ":" + error);
+    console.error("Error fetching cocktail " + cocktailId + " : " + error);
     return null;
   }
 }
@@ -537,17 +540,13 @@ async function detailPage(req, res) {
   }
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Userstatus for clientside javascript 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-app.get('/api/user-status',  (req, res)  => {
+async function fetchUserStatus(req, res){
   try{
-
     if(req.session.userLoggedIn){ async () => { 
-       
        await getFavoriteDrinks()
        return favoritedDrinks
+
     }
       res.json({
         isLoggedIn: !!req.session.userLoggedIn,
@@ -558,18 +557,16 @@ app.get('/api/user-status',  (req, res)  => {
         isLoggedIn: !!req.session.userLoggedIn,
         isAdult: req.session.age >= 18,
         });
-
     }
-
     } catch(error){
-      console.error()
-
+      console.error(error);
     }
 
-});
+}
+
 
 // 404 template
-app.all("*", (req, res, next) => {
+app.all("*", (req, res) => {
   res.status(404);
   res.render("pages/errorpage",);
   res.send();

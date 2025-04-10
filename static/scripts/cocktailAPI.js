@@ -21,6 +21,7 @@ let allLatestCocktails
 let filteredLatestCocktails
 let allCocktails
 let filteredCocoaCocktails
+let filteredCoffeeCocktails
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Functions
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -114,7 +115,6 @@ function introCocktail(filteredCocktails){
 
 // Showing populair drinks in the first carousel
 function showPopulairCocktailsOnLoad (filteredPopulairCocktails){
-    console.log(" showCocktialsOnLoad, filteredCocktails are: ",  filteredPopulairCocktails)
 
     let drinkCountSpan = document.querySelector('.popularCarousel span'); // Select the span inside the summary
     if (drinkCountSpan) {

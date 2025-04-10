@@ -75,5 +75,6 @@
 main > a {
     display: grid;
     place-self: center;
+    text-decoration: underline;
     margin: 3rem;
 }
